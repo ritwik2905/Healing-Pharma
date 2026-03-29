@@ -1,0 +1,71 @@
+{
+  "logo": {
+    "text": "Healing Doc Pharma",
+    "image": ""
+  },
+  "hero": {
+    "title": "Quality Healthcare Solutions for Everyone",
+    "description": "Healing Doc Pharma is committed to delivering high-quality pharmaceutical products that improve lives and promote wellness across communities.",
+    "image": "/modern-pharmacy-healthcare-professional.jpg"
+  },
+  "directors": [
+    {
+      "id": "1",
+      "name": "Dr. Rajesh Kumar",
+      "title": "Managing Director",
+      "initials": "RK",
+      "description": "With over 25 years of experience in pharmaceutical manufacturing, Dr. Kumar leads our vision of providing accessible healthcare solutions to communities nationwide.",
+      "image": "",
+      "color": "primary"
+    },
+    {
+      "id": "2",
+      "name": "Ms. Priya Sharma",
+      "title": "Director of Operations",
+      "initials": "PS",
+      "description": "Ms. Sharma brings 18 years of operational excellence, ensuring quality standards and efficient distribution across all our service channels.",
+      "image": "",
+      "color": "accent"
+    },
+    {
+      "id": "3",
+      "name": "Dr. Amit Mehta",
+      "title": "Director of Research & Development",
+      "initials": "AM",
+      "description": "Dr. Mehta heads our R&D division with a focus on innovation and developing pharmaceutical solutions that meet evolving healthcare needs.",
+      "image": "",
+      "color": "success"
+    },
+    {
+      "id": "4",
+      "name": "Mr. Vikram Singh",
+      "title": "Director of Sales & Marketing",
+      "initials": "VS",
+      "description": "Mr. Singh leads our market expansion strategy with 16 years of pharmaceutical sales expertise, building strong relationships with healthcare providers nationwide.",
+      "image": "",
+      "color": "primary"
+    },
+    {
+      "id": "5",
+      "name": "Dr. Neha Gupta",
+      "title": "Chief Quality Officer",
+      "initials": "NG",
+      "description": "Dr. Gupta ensures stringent quality control and regulatory compliance with 20 years of pharmaceutical quality management and certification expertise.",
+      "image": "",
+      "color": "accent"
+    }
+  ],
+  "chairman": {
+    "name": "Mr Aryan Chaubey",
+    "title": "Chairman & Founder",
+    "description": "Mr. Aryan Chaubey is the founder and visionary behind Healing Doc Pharma. With 30+ years of pharmaceutical industry experience, he has established the company as a trusted name in quality healthcare solutions. His leadership and commitment to excellence have driven the company's growth and success.",
+    "image": ""
+  },
+  "contact": {
+    "address": "123 Pharmaceutical Park, Medical District, New Delhi - 110001, India",
+    "phone": "+91 11 1234 5678",
+    "email": "info@Healingdocpharma.com",
+    "fax": "+91 11 1234 5679",
+    "hours": "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 9:00 AM - 2:00 PM\nSunday: Closed"
+  }
+}
