@@ -33,19 +33,13 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2">
-            {logo?.image ? (
-              <Image
-                src={logo.image || "/placeholder.svg"}
-                alt={logo.text}
-                width={40}
-                height={40}
-                className="object-contain"
-              />
-            ) : (
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">{logo?.text?.[0] || "H"}</span>
-              </div>
-            )}
+            <Image
+              src={logo?.image || "/logo.jpeg"}
+              alt={logo?.text || "Healing Doc Pharma"}
+              width={40}
+              height={40}
+              className="object-contain rounded"
+            />
             <span className="font-bold text-xl text-foreground">{logo?.text || "Healing Doc Pharma"}</span>
           </Link>
 

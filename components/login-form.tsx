@@ -23,18 +23,18 @@ export function LoginForm() {
     setError("")
     setIsLoading(true)
 
-    console.log("[v0] Login attempt for username:", username)
+    console.log("Login attempt for username:", username)
 
     const result = await loginAdmin(username, password)
 
-    console.log("[v0] Login result:", result)
+    console.log("Login result:", result)
 
     if (result.success) {
-      console.log("[v0] Login successful, redirecting to admin")
+      console.log("Login successful, redirecting to admin")
       router.push("/admin")
       router.refresh()
     } else {
-      console.log("[v0] Login failed:", result.error)
+      console.log("Login failed:", result.error)
       setError(result.error || "Login failed")
     }
 

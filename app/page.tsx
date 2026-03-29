@@ -423,9 +423,7 @@ export default async function Home() {
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">H</span>
-                </div>
+                <img src="/logo.jpeg" alt="Healing Doc Pharma" className="w-10 h-10 object-contain rounded" />
                 <span className="font-bold text-xl text-foreground">Healing Doc Pharma</span>
               </div>
               <p className="text-muted-foreground">Quality healthcare solutions for a healthier tomorrow.</p>

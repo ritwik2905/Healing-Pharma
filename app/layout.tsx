@@ -13,20 +13,17 @@ export const metadata: Metadata = {
   title: "Healing Doc Pharma - Quality Healthcare Solutions",
   description:
     "Leading pharmaceutical company providing quality medicines and healthcare solutions. Government supplies, institutional sales, GEM registered, and general trade.",
-  generator: "v0.app",
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
+        url: "/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
       },
       {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
+        url: "/icon-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
       },
     ],
     apple: "/apple-icon.png",
@@ -39,7 +36,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const settings = await getSiteSettings()
-  const logo = settings?.logo || { text: "Healing Doc Pharma", image: "" }
+  const logo = settings?.logo || { text: "Healing Doc Pharma", image: "/logo.jpeg" }
 
   return (
     <html lang="en">

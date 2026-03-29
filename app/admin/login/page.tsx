@@ -10,13 +10,13 @@ export const metadata = {
 export const dynamic = "force-dynamic"
 
 export default async function AdminLoginPage() {
-  console.log("[v0] Login page accessed")
+  console.log("Login page accessed")
 
   const isAuthenticated = await isAdminAuthenticated()
-  console.log("[v0] Already authenticated:", isAuthenticated)
+  console.log("Already authenticated:", isAuthenticated)
 
   if (isAuthenticated) {
-    console.log("[v0] Already authenticated, redirecting to admin")
+    console.log("Already authenticated, redirecting to admin")
     redirect("/admin")
   }
 
