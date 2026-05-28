@@ -2,8 +2,9 @@ import Link from "next/link"
 import Image from "next/image"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, CalendarDays } from "lucide-react"
+import { ArrowRight, CalendarDays, Newspaper } from "lucide-react"
 import type { BlogPost } from "@/lib/blog-actions"
+import { hasRealImage } from "@/lib/image-utils"
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
@@ -14,15 +15,22 @@ export function BlogCard({ post }: { post: BlogPost }) {
     <Link href={`/blog/${post.slug}`} className="group block h-full">
       <Card className="overflow-hidden h-full flex flex-col hover:shadow-xl transition-all hover:-translate-y-1">
         <div className="relative aspect-[16/9] overflow-hidden bg-muted">
-          <Image
-            src={post.coverImage || "/placeholder.jpg"}
-            alt={post.title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          {hasRealImage(post.coverImage) ? (
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/15 via-accent/10 to-surface">
+              <Newspaper className="w-12 h-12 text-primary/50" />
+            </div>
+          )}
           <Badge className="absolute top-3 left-3 bg-primary text-white">{post.category}</Badge>
         </div>
+
         <div className="p-5 flex flex-col flex-1">
           <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
             <CalendarDays className="w-3.5 h-3.5" />

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, CalendarDays, User } from "lucide-react"
 import { getBlogPostBySlug } from "@/lib/blog-actions"
+import { hasRealImage } from "@/lib/image-utils"
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>
@@ -56,7 +57,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </span>
         </div>
 
-        {post.coverImage && (
+        {hasRealImage(post.coverImage) && (
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-10 shadow-lg">
             <Image
               src={post.coverImage}

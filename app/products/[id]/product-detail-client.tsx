@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { ProductImage } from "@/components/product-image"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, Package, Pill, AlertCircle, FileDown, PhoneCall } from "lucide-react"
@@ -30,10 +30,9 @@ export function ProductDetailClient({ product }: { product: Product }) {
         <div className="grid lg:grid-cols-2 gap-12">
           <div className="relative">
             <div className="relative aspect-square bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl overflow-hidden sticky top-24 p-6">
-              <Image
-                src={product.image || "/placeholder.svg"}
-                alt={product.name}
-                fill
+              <ProductImage
+                src={product.image}
+                name={product.name}
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain p-6"

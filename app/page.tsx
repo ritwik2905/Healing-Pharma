@@ -160,41 +160,43 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* About teaser */}
+      {/* About teaser — light stat panel */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl order-last lg:order-first">
-              <Image
-                src="/hospital-healthcare-institution.jpg"
-                alt="About Healingdoc Pharma"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
-                About Us
-              </span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-5 text-balance">
-                A Rapidly Growing Name in Quality Healthcare
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                Healingdoc Pharma Pvt. Ltd. believes healthcare is not just a business — it is a responsibility towards
-                society. Driven by innovation and integrity, we deliver trusted pharmaceutical formulations that
-                healthcare professionals and patients can rely upon.
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                With WHO-GMP certified manufacturing, ethical business practices and a pan-India distribution network, we
-                aim to make healthcare more accessible and reliable for everyone.
-              </p>
-              <Link href="/about">
-                <Button variant="outline" className="gap-2 bg-transparent">
-                  Learn More About Us
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
+          <div className="rounded-3xl border border-border bg-gradient-to-br from-primary/5 via-accent/5 to-surface p-8 lg:p-14">
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+              <div>
+                <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
+                  About Us
+                </span>
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-5 text-balance">
+                  A Rapidly Growing Name in Quality Healthcare
+                </h2>
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  We believe healthcare is not just a business — it is a responsibility towards society. With WHO-GMP
+                  certified manufacturing, ethical practices and a pan-India network, we make healthcare more accessible
+                  and reliable for everyone.
+                </p>
+                <Link href="/about">
+                  <Button className="gap-2">
+                    Learn More About Us
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { value: "WHO-GMP", label: "Certified Facilities" },
+                  { value: "24+", label: "Quality Products" },
+                  { value: "Pan-India", label: "Distribution" },
+                  { value: "100%", label: "Ethical Practices" },
+                ].map((s) => (
+                  <Card key={s.label} className="p-5 text-center bg-background/70 backdrop-blur">
+                    <div className="text-xl lg:text-2xl font-bold text-primary mb-1">{s.value}</div>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{s.label}</p>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>

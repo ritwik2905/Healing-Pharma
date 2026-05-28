@@ -1,19 +1,18 @@
 import Link from "next/link"
-import Image from "next/image"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight } from "lucide-react"
 import type { Product } from "@/lib/product-actions"
+import { ProductImage } from "@/components/product-image"
 
 export function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/products/${product.id}`} className="group block h-full">
       <Card className="overflow-hidden h-full flex flex-col hover:shadow-xl transition-all hover:-translate-y-1">
         <div className="relative aspect-[4/3] bg-gradient-to-br from-primary/5 to-accent/5 p-4">
-          <Image
-            src={product.image || "/placeholder.svg"}
-            alt={product.name}
-            fill
+          <ProductImage
+            src={product.image}
+            name={product.name}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
           />

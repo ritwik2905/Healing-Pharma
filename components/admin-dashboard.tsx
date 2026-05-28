@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import Image from "next/image"
 import { Card } from "@/components/ui/card"
+import { ProductImage } from "@/components/product-image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -266,12 +266,12 @@ export function AdminDashboard({ products, inquiries, testimonials, blogPosts }:
                         <td className="p-4">
                           <div className="flex items-center gap-3">
                             <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-surface shrink-0">
-                              <Image
-                                src={product.image || "/placeholder.svg"}
-                                alt={product.name}
-                                fill
+                              <ProductImage
+                                src={product.image}
+                                name={product.name}
                                 sizes="48px"
                                 className="object-contain p-1"
+                                compact
                               />
                             </div>
                             <div>
