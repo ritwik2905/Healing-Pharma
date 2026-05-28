@@ -43,7 +43,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     batchNumber: product?.batchNumber || "",
     composition: product?.composition || "",
     dosage: product?.dosage || "",
-    image: product?.image || "/placeholder.svg?height=400&width=400",
+    image: product?.image || "/placeholder.jpg",
     price: product?.price || "",
     inStock: product?.inStock ?? true,
   })
@@ -66,7 +66,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   }
 
   return (
-    <Card className="w-full max-w-3xl p-8 max-h-[90vh] overflow-y-auto">
+    <Card className="w-full max-w-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-foreground">{product ? "Edit Product" : "Add New Product"}</h2>
         <Button variant="ghost" size="sm" onClick={onClose}>
@@ -203,7 +203,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
             id="image"
             value={formData.image}
             onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-            placeholder="/placeholder.svg?height=400&width=400"
+            placeholder="/placeholder.jpg or https://..."
             className="mt-2"
           />
         </div>

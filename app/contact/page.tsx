@@ -74,17 +74,19 @@ export default async function ContactPage() {
                 </div>
               </Card>
 
-              <Card className="p-6 hover:shadow-lg transition-shadow">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                    <Fax className="w-6 h-6 text-primary" />
+              {contact.fax && (
+                <Card className="p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex gap-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                      <Fax className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-2">Fax</h3>
+                      <p className="text-muted-foreground">{contact.fax}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-2">Fax</h3>
-                    <p className="text-muted-foreground">{contact.fax}</p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              )}
 
               <Card className="p-6 hover:shadow-lg transition-shadow">
                 <div className="flex gap-4">

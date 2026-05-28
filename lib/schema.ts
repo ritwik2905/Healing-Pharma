@@ -1,4 +1,4 @@
-import { pgTable, text, boolean, timestamp, jsonb, serial } from "drizzle-orm/pg-core"
+import { pgTable, text, boolean, timestamp, jsonb, serial, integer } from "drizzle-orm/pg-core"
 
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
@@ -33,4 +33,28 @@ export const siteSettings = pgTable("site_settings", {
   id: serial("id").primaryKey(),
   key: text("key").notNull().unique(),
   value: jsonb("value").notNull(),
+})
+
+export const testimonials = pgTable("testimonials", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  role: text("role").notNull(),
+  message: text("message").notNull(),
+  rating: integer("rating").notNull().default(5),
+  image: text("image").notNull().default(""),
+  featured: boolean("featured").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+})
+
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  excerpt: text("excerpt").notNull(),
+  content: text("content").notNull(),
+  coverImage: text("cover_image").notNull().default(""),
+  author: text("author").notNull().default("Healingdoc Pharma"),
+  category: text("category").notNull().default("News"),
+  published: boolean("published").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow(),
 })

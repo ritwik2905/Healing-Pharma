@@ -1,13 +1,12 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import Link from "next/link"
-import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
 import type { Product } from "@/lib/product-actions"
+import { ProductCard } from "@/components/product-card"
 
 export function ProductsClient({ products }: { products: Product[] }) {
   const [searchQuery, setSearchQuery] = useState("")
@@ -95,42 +94,9 @@ export function ProductsClient({ products }: { products: Product[] }) {
 
           {/* Products Grid */}
           {filteredProducts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {filteredProducts.map((product) => (
-                <Card key={product.id} className="overflow-hidden group hover:shadow-xl transition-all">
-                  <Link href={`/products/${product.id}`}>
-                    <div className="relative h-64 bg-surface overflow-hidden">
-                      <img
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      {product.inStock ? (
-                        <Badge className="absolute top-4 right-4 bg-success text-white">In Stock</Badge>
-                      ) : (
-                        <Badge className="absolute top-4 right-4 bg-destructive text-white">Out of Stock</Badge>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <Badge variant="outline" className="mb-3">
-                        {product.category}
-                      </Badge>
-                      <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                        {product.name}
-                      </h3>
-                      <p className="text-muted-foreground mb-4 line-clamp-2">{product.description}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-2xl font-bold text-primary">{product.price}</span>
-                        <Button
-                          variant="ghost"
-                          className="group-hover:bg-primary group-hover:text-white transition-colors"
-                        >
-                          View Details
-                        </Button>
-                      </div>
-                    </div>
-                  </Link>
-                </Card>
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (

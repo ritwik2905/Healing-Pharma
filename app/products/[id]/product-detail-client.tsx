@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -28,11 +29,14 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
         <div className="grid lg:grid-cols-2 gap-12">
           <div className="relative">
-            <div className="aspect-square bg-surface rounded-2xl overflow-hidden sticky top-24">
-              <img
+            <div className="relative aspect-square bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl overflow-hidden sticky top-24 p-6">
+              <Image
                 src={product.image || "/placeholder.svg"}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain p-6"
               />
               {product.inStock ? (
                 <Badge className="absolute top-6 right-6 bg-success text-white text-base px-4 py-2">In Stock</Badge>
