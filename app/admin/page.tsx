@@ -9,6 +9,7 @@ import { getBlogPosts } from "@/lib/blog-actions"
 export const metadata = {
   title: "Admin Panel - Healingdoc Pharma",
   description: "Manage products and inventory",
+  robots: { index: false, follow: false },
 }
 
 export const dynamic = "force-dynamic"

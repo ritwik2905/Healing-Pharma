@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ArrowRight, Check } from "lucide-react"
 import { SERVICES, COLOR_CLASSES } from "@/lib/site-content"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata = {
-  title: "Our Services - Healingdoc Pharma",
+export const metadata = pageMetadata({
+  title: "Our Services",
   description:
     "Government supplies, institutional sales, GeM registered procurement and general trade — comprehensive pharmaceutical supply solutions from Healingdoc Pharma.",
-}
+  path: "/services",
+})
 
 export default function ServicesPage() {
   return (

@@ -5,6 +5,7 @@ import { LoginForm } from "@/components/login-form"
 export const metadata = {
   title: "Admin Login - Healingdoc Pharma",
   description: "Login to admin panel",
+  robots: { index: false, follow: false },
 }
 
 export const dynamic = "force-dynamic"

@@ -1,12 +1,14 @@
 import { BookOpen } from "lucide-react"
 import { getBlogPosts } from "@/lib/blog-actions"
 import { BlogCard } from "@/components/blog-card"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata = {
-  title: "Blog - Healingdoc Pharma",
+export const metadata = pageMetadata({
+  title: "Blog",
   description:
     "Health tips, awareness articles and company updates from Healingdoc Pharma Pvt. Ltd.",
-}
+  path: "/blog",
+})
 
 export const dynamic = "force-dynamic"
 

@@ -13,6 +13,14 @@ import { ProductCard } from "@/components/product-card"
 import { TestimonialCard } from "@/components/testimonial-card"
 import { BlogCard } from "@/components/blog-card"
 import { SectionHeading } from "@/components/section-heading"
+import { pageMetadata } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: "Quality, Affordable Medicines — WHO-GMP Certified",
+  description:
+    "Healingdoc Pharma Pvt. Ltd. delivers WHO-GMP certified, affordable medicines across India — pain relief, anti-infectives, dermatology, gastro, respiratory care and nutraceuticals. Government supplies, institutional sales & GEM registered.",
+  path: "/",
+})
 
 export default async function Home() {
   const [allProducts, settings, testimonials, posts] = await Promise.all([

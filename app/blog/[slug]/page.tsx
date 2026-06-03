@@ -6,16 +6,36 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, CalendarDays, User } from "lucide-react"
 import { getBlogPostBySlug } from "@/lib/blog-actions"
 import { hasRealImage } from "@/lib/image-utils"
+import { pageMetadata, siteConfig, absoluteUrl } from "@/lib/seo"
+import type { Metadata } from "next"
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps) {
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
   const post = await getBlogPostBySlug(slug)
-  if (!post) return { title: "Article Not Found - Healingdoc Pharma" }
-  return { title: `${post.title} - Healingdoc Pharma`, description: post.excerpt }
+  if (!post) {
+    return pageMetadata({ title: "Article Not Found", path: `/blog/${slug}`, noIndex: true })
+  }
+  const image = hasRealImage(post.coverImage) ? post.coverImage : siteConfig.ogImage
+  const meta = pageMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/blog/${post.slug}`,
+    image,
+  })
+  return {
+    ...meta,
+    openGraph: {
+      ...meta.openGraph,
+      type: "article",
+      authors: [post.author],
+      publishedTime: post.createdAt,
+      section: post.category,
+    },
+  }
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -32,8 +52,30 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     year: "numeric",
   })
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    image: hasRealImage(post.coverImage) ? absoluteUrl(post.coverImage) : absoluteUrl(siteConfig.ogImage),
+    datePublished: post.createdAt,
+    dateModified: post.createdAt,
+    author: { "@type": "Organization", name: post.author || siteConfig.legalName },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.legalName,
+      logo: { "@type": "ImageObject", url: absoluteUrl("/logo.jpeg") },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(`/blog/${post.slug}`) },
+    articleSection: post.category,
+  }
+
   return (
     <main className="bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <Link href="/blog">
           <Button variant="ghost" className="mb-8 gap-2 -ml-3">

@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageSquareQuote } from "lucide-react"
 import { getTestimonials } from "@/lib/testimonial-actions"
 import { TestimonialCard } from "@/components/testimonial-card"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata = {
-  title: "Testimonials - Healingdoc Pharma",
+export const metadata = pageMetadata({
+  title: "Testimonials",
   description:
     "Hear from the doctors, distributors and healthcare partners who trust Healingdoc Pharma for quality pharmaceutical products.",
-}
+  path: "/testimonials",
+})
 
 export const dynamic = "force-dynamic"
 

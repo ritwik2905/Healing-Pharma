@@ -6,12 +6,14 @@ import { ArrowRight, ShieldCheck, Heart, Handshake, Target, Quote } from "lucide
 import { getSiteSettings } from "@/lib/site-settings-actions"
 import { COLOR_CLASSES, type ThemeColor } from "@/lib/site-content"
 import { hasRealImage } from "@/lib/image-utils"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata = {
-  title: "About Us - Healingdoc Pharma",
+export const metadata = pageMetadata({
+  title: "About Us",
   description:
     "Healingdoc Pharma Pvt. Ltd. is a rapidly growing pharmaceutical company committed to quality, affordable medicines manufactured at WHO-GMP certified facilities.",
-}
+  path: "/about",
+})
 
 const STATS = [
   { value: "WHO-GMP", label: "Certified Manufacturing" },

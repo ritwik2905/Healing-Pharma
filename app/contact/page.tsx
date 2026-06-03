@@ -2,6 +2,14 @@ import { MapPin, Phone, Mail, Fan as Fax, Clock } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { getSiteSettings } from "@/lib/site-settings-actions"
 import { ContactForm } from "@/components/contact-form"
+import { pageMetadata } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: "Contact Us",
+  description:
+    "Get in touch with Healingdoc Pharma Pvt. Ltd. for product enquiries, distribution partnerships, institutional and government supplies. Call, email or visit our Delhi office.",
+  path: "/contact",
+})
 
 export default async function ContactPage() {
   const settings = await getSiteSettings()
