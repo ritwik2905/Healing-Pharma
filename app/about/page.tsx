@@ -38,19 +38,19 @@ export default async function AboutPage() {
   return (
     <main className="bg-background">
       {/* Hero band */}
-      <section className="relative bg-gradient-to-br from-primary via-primary to-primary-dark text-white pt-16 lg:pt-24 pb-28 lg:pb-36 overflow-hidden">
+      <section className="relative bg-brand-gradient-hero text-white pt-16 lg:pt-24 pb-28 lg:pb-36 overflow-hidden">
         <div className="absolute inset-0 opacity-10" aria-hidden>
           <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white blur-3xl" />
           <div className="absolute -bottom-32 -left-16 w-80 h-80 rounded-full bg-accent blur-3xl" />
         </div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block text-sm font-semibold uppercase tracking-wider text-white/80 mb-4">
+          <span className="inline-block text-sm font-semibold uppercase tracking-wider text-white/80 mb-4 animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">
             About Healingdoc Pharma
           </span>
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-balance leading-[1.1]">
+          <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-balance leading-[1.1] animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100">
             Caring for Life, Every Day
           </h1>
-          <p className="text-lg lg:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg lg:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200">
             A rapidly growing pharmaceutical company built on trust, quality and ethical business practices — delivering
             affordable, innovative medicines across India.
           </p>
@@ -62,7 +62,7 @@ export default async function AboutPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             {STATS.map((s) => (
-              <Card key={s.label} className="p-6 text-center shadow-xl">
+              <Card key={s.label} className="reveal hover-lift p-6 text-center shadow-xl">
                 <div className="text-2xl lg:text-3xl font-bold text-primary mb-1">{s.value}</div>
                 <p className="text-sm text-muted-foreground">{s.label}</p>
               </Card>
@@ -75,7 +75,7 @@ export default async function AboutPage() {
       {chairman && (
         <section className="py-16 lg:py-24">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="glass-card relative overflow-hidden p-8 lg:p-12">
+            <Card className="reveal glass-card relative overflow-hidden p-8 lg:p-12">
               {/* Brand-tinted glow behind the frosted card */}
               <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
                 <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-primary/15 blur-3xl" />
@@ -116,11 +116,11 @@ export default async function AboutPage() {
       <section className="pb-16 lg:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div>
+            <div className="reveal">
               <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
                 Who We Are
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-5 text-balance">
+              <h2 className="text-3xl lg:text-4xl font-bold text-brand-gradient mb-5 text-balance">
                 A Trusted Name in the Pharmaceutical Industry
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
@@ -143,7 +143,7 @@ export default async function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
+            <div className="reveal relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="/pharmacy-retail-store-medicine.jpg"
                 alt="Healingdoc Pharma quality medicines"
@@ -163,14 +163,14 @@ export default async function AboutPage() {
             <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
               Our Commitments
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground text-balance">
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand-gradient text-balance">
               The Principles That Guide Us
             </h2>
           </div>
           <div className="divide-y divide-border rounded-2xl border border-border bg-background">
             {COMMITMENTS.map((c) => (
-              <div key={c.title} className="flex items-start gap-5 p-6 lg:p-7">
-                <div className={`w-12 h-12 shrink-0 rounded-xl ${COLOR_CLASSES[c.color].softBg} flex items-center justify-center`}>
+              <div key={c.title} className="reveal group flex items-start gap-5 p-6 lg:p-7">
+                <div className={`w-12 h-12 shrink-0 rounded-xl ${COLOR_CLASSES[c.color].softBg} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}>
                   <c.icon className={`w-6 h-6 ${COLOR_CLASSES[c.color].text}`} />
                 </div>
                 <div>
@@ -188,7 +188,7 @@ export default async function AboutPage() {
         <section className="py-16 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mx-auto max-w-2xl mb-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground text-balance">Our Leadership Team</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-brand-gradient text-balance mx-auto">Our Leadership Team</h2>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {directors.map((director) => {
@@ -196,7 +196,7 @@ export default async function AboutPage() {
                   ? director.color
                   : "primary") as ThemeColor
                 return (
-                  <Card key={director.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <Card key={director.id} className="reveal hover-lift overflow-hidden">
                     <div className="relative h-56 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
                       {hasRealImage(director.image) ? (
                         <Image src={director.image} alt={director.name} fill className="object-cover" sizes="(max-width: 1024px) 50vw, 33vw" />
@@ -220,8 +220,8 @@ export default async function AboutPage() {
       )}
 
       {/* Mission + CTA band */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-primary to-primary-dark text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-16 lg:py-24 bg-brand-gradient text-white">
+        <div className="reveal max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="inline-block text-sm font-semibold uppercase tracking-wider text-white/80 mb-3">
             Our Mission
           </span>

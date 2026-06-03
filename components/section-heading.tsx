@@ -12,7 +12,7 @@ export function SectionHeading({ eyebrow, title, description, align = "center", 
   return (
     <div
       className={cn(
-        "mb-10 lg:mb-14",
+        "reveal mb-10 lg:mb-14",
         align === "center" ? "text-center mx-auto max-w-3xl" : "max-w-3xl",
         className,
       )}
@@ -22,7 +22,14 @@ export function SectionHeading({ eyebrow, title, description, align = "center", 
           {eyebrow}
         </span>
       )}
-      <h2 className="text-3xl lg:text-4xl font-bold text-foreground text-balance">{title}</h2>
+      <h2
+        className={cn(
+          "text-3xl lg:text-4xl font-bold text-brand-gradient text-balance",
+          align === "center" && "mx-auto",
+        )}
+      >
+        {title}
+      </h2>
       {description && <p className="text-lg text-muted-foreground mt-4 leading-relaxed">{description}</p>}
     </div>
   )

@@ -17,10 +17,10 @@ export default function ServicesPage() {
   return (
     <main className="bg-background">
       {/* Header */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-16 lg:py-20">
+      <section className="bg-brand-gradient text-white py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance">Our Services</h1>
-          <p className="text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">Our Services</h1>
+          <p className="text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-150">
             Comprehensive pharmaceutical supply solutions tailored for government, institutions and trade partners.
           </p>
         </div>
@@ -33,7 +33,7 @@ export default function ServicesPage() {
             {SERVICES.map((service, index) => (
               <div
                 key={service.title}
-                className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-center"
+                className="reveal group grid lg:grid-cols-2 gap-8 lg:gap-14 items-center"
               >
                 <div className={`relative aspect-[16/10] rounded-2xl overflow-hidden shadow-xl ${index % 2 === 1 ? "lg:order-last" : ""}`}>
                   <Image
@@ -45,10 +45,10 @@ export default function ServicesPage() {
                   />
                 </div>
                 <div>
-                  <div className={`w-14 h-14 ${COLOR_CLASSES[service.color].solidBg} rounded-xl flex items-center justify-center mb-5`}>
+                  <div className={`w-14 h-14 ${COLOR_CLASSES[service.color].solidBg} rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}>
                     <service.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">{service.title}</h2>
+                  <h2 className="text-2xl lg:text-3xl font-bold text-brand-gradient mb-4">{service.title}</h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">{service.description}</p>
                   <ul className="space-y-3">
                     {service.points.map((point) => (
@@ -68,8 +68,8 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-primary to-primary-dark text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-16 lg:py-24 bg-brand-gradient text-white">
+        <div className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-5 text-balance">Let's Work Together</h2>
           <p className="text-lg mb-8 text-white/90 max-w-2xl mx-auto leading-relaxed">
             Whether you represent a government body, hospital, or retail network, we have a supply solution for you.

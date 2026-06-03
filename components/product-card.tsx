@@ -7,7 +7,7 @@ import { ProductImage } from "@/components/product-image"
 
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <Link href={`/products/${product.id}`} className="group block h-full">
+    <Link href={`/products/${product.id}`} className="reveal group block h-full">
       <Card className="glass-card overflow-hidden h-full flex flex-col transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-accent/20 hover:border-primary/30">
         <div className="relative aspect-[4/3] bg-gradient-to-br from-primary/10 via-surface to-accent/10 p-4">
           <ProductImage

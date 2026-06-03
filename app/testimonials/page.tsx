@@ -20,10 +20,10 @@ export default async function TestimonialsPage() {
   return (
     <main className="bg-background">
       {/* Header */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-16 lg:py-20">
+      <section className="bg-brand-gradient text-white py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance">What Our Partners Say</h1>
-          <p className="text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">What Our Partners Say</h1>
+          <p className="text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-150">
             Trusted by healthcare professionals, distributors and institutions across India.
           </p>
         </div>

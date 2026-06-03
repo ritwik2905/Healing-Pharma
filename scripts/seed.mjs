@@ -396,7 +396,7 @@ async function seed() {
       value: JSON.stringify({
         address: "136, 1st Floor, Block AW, Sanjay Gandhi Transport Nagar, Delhi - 110042",
         phone: "9667949517, 7903521151",
-        email: "info@healingdocpharma.com",
+        email: "healingdocpharma@gmail.com",
         fax: "",
         hours: "Monday - Saturday: 9:00 AM - 6:00 PM\nSunday: Closed"
       })

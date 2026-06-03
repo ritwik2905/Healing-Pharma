@@ -148,6 +148,17 @@
   video {
     max-width: 100%;
   }
+  /* Accessibility: honour reduced-motion by collapsing all motion to ~instant */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer components {
@@ -187,15 +198,106 @@
     -webkit-backdrop-filter: blur(16px) saturate(170%);
   }
 
-  /* Brand gradient text for headings/wordmark */
+  /* Brand gradient text for headings/wordmark — mirrors the logo: green → blue */
   .text-brand-gradient {
     background-image: linear-gradient(
       90deg,
-      var(--primary) 0%,
-      var(--accent) 100%
+      var(--accent) 0%,
+      color-mix(in oklch, var(--accent), var(--primary)) 48%,
+      var(--primary) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /* shrink the box to the text so the gradient sweeps across the letters
+       (not the full container) — every heading reads green→blue regardless of
+       length. Stays block-level, so it never collapses next to an eyebrow. */
+    width: fit-content;
+    max-width: 100%;
+    /* stop descenders (g, y, p) from being clipped by background-clip */
+    padding-bottom: 0.06em;
+  }
+
+  /* Brand gradient surface — the logo's green→blue, deepened so white text stays
+     legible. Used on the footer, hero banners and CTA bands so the whole site
+     matches the logo / theme colour exactly. */
+  .bg-brand-gradient {
+    background-image: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--accent), black 12%) 0%,
+      var(--primary) 55%,
+      var(--primary-dark) 100%
+    );
+  }
+
+  /* Animated, richer variant for the big hero/CTA bands */
+  .bg-brand-gradient-hero {
+    background-image: linear-gradient(
+      125deg,
+      color-mix(in oklch, var(--accent), black 8%) 0%,
+      var(--accent) 22%,
+      var(--primary) 60%,
+      var(--primary-dark) 100%
+    );
+  }
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────
+   Performant, tasteful interactivity. Everything respects
+   prefers-reduced-motion, and the scroll reveals are progressive
+   enhancement — where scroll-driven animations aren't supported the
+   content simply stays visible (never hidden). */
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 30px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes brand-pan {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@layer components {
+  /* Hover lift with a soft brand-tinted shadow — for cards & tiles */
+  .hover-lift {
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hover-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 45px -18px color-mix(in oklch, var(--primary) 45%, transparent);
+    }
+  }
+
+  /* A continuously panning brand gradient — used sparingly (the wordmark).
+     Pair with .text-brand-gradient, which supplies the gradient + clip. */
+  @media (prefers-reduced-motion: no-preference) {
+    .text-brand-gradient-animated {
+      background-size: 220% auto;
+      animation: brand-pan 6s ease-in-out infinite alternate;
+    }
+  }
+
+  /* Scroll reveal: fades + rises an element as it scrolls into view.
+     Uses the independent `translate` property so it coexists with any
+     `transform`-based hover effect on the same element. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: reveal-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
+      }
+    }
   }
 }

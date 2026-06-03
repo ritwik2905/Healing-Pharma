@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
+import { Search, X, LayoutGrid } from "lucide-react"
+import { cn } from "@/lib/utils"
 import type { Product } from "@/lib/product-actions"
 import { ProductCard } from "@/components/product-card"
 
@@ -12,15 +12,29 @@ export function ProductsClient({ products }: { products: Product[] }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
 
-  const categories = Array.from(new Set(products.map((p) => p.category)))
+  // Unique categories in first-appearance order, each with its total count.
+  const categories = useMemo(() => {
+    const order: string[] = []
+    const counts: Record<string, number> = {}
+    for (const p of products) {
+      if (!(p.category in counts)) {
+        counts[p.category] = 0
+        order.push(p.category)
+      }
+      counts[p.category] += 1
+    }
+    return order.map((name) => ({ name, count: counts[name] }))
+  }, [products])
 
   const filteredProducts = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
     return products.filter((product) => {
       const matchesSearch =
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.composition?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchQuery.toLowerCase())
+        !q ||
+        product.name.toLowerCase().includes(q) ||
+        product.description.toLowerCase().includes(q) ||
+        product.composition?.toLowerCase().includes(q) ||
+        product.category.toLowerCase().includes(q)
 
       const matchesCategory = selectedCategory === "all" || product.category === selectedCategory
 
@@ -28,14 +42,32 @@ export function ProductsClient({ products }: { products: Product[] }) {
     })
   }, [searchQuery, selectedCategory, products])
 
+  // Group the filtered products by category, preserving the category order.
+  const groupedProducts = useMemo(() => {
+    return categories
+      .map((c) => ({
+        category: c.name,
+        items: filteredProducts.filter((p) => p.category === c.name),
+      }))
+      .filter((g) => g.items.length > 0)
+  }, [categories, filteredProducts])
+
+  const hasResults = filteredProducts.length > 0
+  const isFiltering = searchQuery.trim() !== "" || selectedCategory !== "all"
+
+  const clearFilters = () => {
+    setSearchQuery("")
+    setSelectedCategory("all")
+  }
+
   return (
     <main className="min-h-screen">
       {/* Header Section */}
-      <section className="bg-gradient-to-br from-primary/10 via-accent/5 to-background py-16 lg:py-24">
+      <section className="bg-gradient-to-br from-accent/10 via-primary/5 to-background py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 text-balance">Our Products</h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <h1 className="text-4xl lg:text-6xl font-bold text-brand-gradient mb-6 text-balance animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">Our Products</h1>
+            <p className="text-xl text-muted-foreground leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-150">
               Explore our comprehensive range of quality pharmaceutical products, manufactured to the highest standards
               and available for government supplies, institutional sales, and general trade.
             </p>
@@ -43,9 +75,10 @@ export function ProductsClient({ products }: { products: Product[] }) {
         </div>
       </section>
 
-      {/* Products Grid */}
-      <section className="py-16 bg-background">
+      {/* Products */}
+      <section className="py-12 lg:py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Search */}
           <div className="mb-8">
             <div className="relative max-w-2xl">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
@@ -54,49 +87,93 @@ export function ProductsClient({ products }: { products: Product[] }) {
                 placeholder="Search medicines by name, composition, or category..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-lg"
+                className="pl-12 pr-12 h-14 text-base lg:text-lg"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
           </div>
 
           {/* Category Filter */}
-          <div className="mb-12">
-            <h2 className="text-sm font-semibold text-muted-foreground mb-4">CATEGORIES</h2>
-            <div className="flex flex-wrap gap-2">
-              <Badge
-                variant={selectedCategory === "all" ? "secondary" : "outline"}
-                className="text-sm px-4 py-2 cursor-pointer hover:bg-secondary transition-colors"
+          <div className="mb-10">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+              Browse by Category
+            </h2>
+            <div className="flex flex-wrap gap-2.5">
+              <CategoryChip
+                label="All Products"
+                count={products.length}
+                icon
+                active={selectedCategory === "all"}
                 onClick={() => setSelectedCategory("all")}
-              >
-                All Products ({products.length})
-              </Badge>
+              />
               {categories.map((category) => (
-                <Badge
-                  key={category}
-                  variant={selectedCategory === category ? "secondary" : "outline"}
-                  className="text-sm px-4 py-2 cursor-pointer hover:bg-secondary transition-colors"
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Badge>
+                <CategoryChip
+                  key={category.name}
+                  label={category.name}
+                  count={category.count}
+                  active={selectedCategory === category.name}
+                  onClick={() => setSelectedCategory(category.name)}
+                />
               ))}
             </div>
           </div>
 
-          {searchQuery && (
-            <div className="mb-6">
+          {/* Result summary */}
+          {isFiltering && hasResults && (
+            <div className="mb-8 flex items-center justify-between gap-4 flex-wrap">
               <p className="text-muted-foreground">
-                Found <span className="font-semibold text-foreground">{filteredProducts.length}</span>{" "}
-                {filteredProducts.length === 1 ? "product" : "products"} matching &quot;{searchQuery}&quot;
+                Showing <span className="font-semibold text-foreground">{filteredProducts.length}</span>{" "}
+                {filteredProducts.length === 1 ? "product" : "products"}
+                {searchQuery && (
+                  <>
+                    {" "}
+                    for &quot;<span className="font-semibold text-foreground">{searchQuery}</span>&quot;
+                  </>
+                )}
+                {selectedCategory !== "all" && (
+                  <>
+                    {" "}
+                    in <span className="font-semibold text-foreground">{selectedCategory}</span>
+                  </>
+                )}
               </p>
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-1.5">
+                <X className="h-4 w-4" />
+                Clear filters
+              </Button>
             </div>
           )}
 
-          {/* Products Grid */}
-          {filteredProducts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+          {/* Grouped products */}
+          {hasResults ? (
+            <div className="space-y-14 lg:space-y-20">
+              {groupedProducts.map((group) => (
+                <div key={group.category} className="scroll-mt-24">
+                  {/* Category heading */}
+                  <div className="reveal flex items-center gap-4 mb-6 lg:mb-8">
+                    <h3 className="text-2xl lg:text-3xl font-bold text-brand-gradient whitespace-nowrap">
+                      {group.category}
+                    </h3>
+                    <span className="inline-flex items-center justify-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                      {group.items.length}
+                    </span>
+                    <span className="hidden sm:block h-px flex-1 bg-gradient-to-r from-border to-transparent" />
+                  </div>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    {group.items.map((product) => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           ) : (
@@ -108,18 +185,50 @@ export function ProductsClient({ products }: { products: Product[] }) {
               <p className="text-muted-foreground mb-6">
                 Try adjusting your search or filter to find what you&apos;re looking for
               </p>
-              <Button
-                onClick={() => {
-                  setSearchQuery("")
-                  setSelectedCategory("all")
-                }}
-              >
-                Clear Search
-              </Button>
+              <Button onClick={clearFilters}>Clear Search</Button>
             </div>
           )}
         </div>
       </section>
     </main>
+  )
+}
+
+function CategoryChip({
+  label,
+  count,
+  active,
+  onClick,
+  icon = false,
+}: {
+  label: string
+  count: number
+  active: boolean
+  onClick: () => void
+  icon?: boolean
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all",
+        active
+          ? "bg-brand-gradient text-white border-transparent shadow-md shadow-primary/25"
+          : "bg-card text-foreground border-border hover:border-primary/40 hover:text-primary hover:bg-primary/5",
+      )}
+    >
+      {icon && <LayoutGrid className="h-4 w-4" />}
+      <span>{label}</span>
+      <span
+        className={cn(
+          "inline-flex items-center justify-center rounded-full px-1.5 min-w-5 h-5 text-xs font-semibold",
+          active ? "bg-white/25 text-white" : "bg-muted text-muted-foreground",
+        )}
+      >
+        {count}
+      </span>
+    </button>
   )
 }

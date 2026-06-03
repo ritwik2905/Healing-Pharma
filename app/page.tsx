@@ -51,15 +51,15 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <div>
-              <Badge variant="outline" className="mb-5 gap-2 py-1.5">
+              <Badge variant="outline" className="mb-5 gap-2 py-1.5 animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">
                 <ShieldCheck className="w-4 h-4 text-success" />
                 WHO-GMP Certified Manufacturing
               </Badge>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-brand-gradient mb-6 text-balance leading-[1.1] animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100">
                 {hero.title}
               </h1>
-              <p className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed">{hero.description}</p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <p className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200">{hero.description}</p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-300">
                 <Link href="/products">
                   <Button size="lg" className="gap-2 w-full sm:w-auto">
                     Explore Products
@@ -72,13 +72,13 @@ export default async function Home() {
                   </Button>
                 </Link>
               </div>
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-8 text-sm text-muted-foreground">
+              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-8 text-sm text-muted-foreground animate-in fade-in fill-mode-both duration-700 delay-500">
                 <span className="flex items-center gap-2"><BadgeCheck className="w-4 h-4 text-primary" /> Quality Assured</span>
                 <span className="flex items-center gap-2"><Truck className="w-4 h-4 text-primary" /> Pan-India Supply</span>
                 <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-primary" /> Ethical Practices</span>
               </div>
             </div>
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 fill-mode-both duration-1000 delay-200">
               <Image
                 src={hero.image || "/modern-pharmacy-healthcare-professional.jpg"}
                 alt="Healthcare professionals at Healingdoc Pharma"
@@ -102,8 +102,8 @@ export default async function Home() {
           />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {FEATURES.map((f) => (
-              <Card key={f.title} className="p-6 text-center hover:shadow-lg transition-shadow">
-                <div className={`w-14 h-14 ${COLOR_CLASSES[f.color].softBg} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Card key={f.title} className="reveal hover-lift group p-6 text-center">
+                <div className={`w-14 h-14 ${COLOR_CLASSES[f.color].softBg} rounded-full flex items-center justify-center mx-auto mb-4 transition-transform duration-300 group-hover:scale-110`}>
                   <f.icon className={`w-7 h-7 ${COLOR_CLASSES[f.color].text}`} />
                 </div>
                 <h3 className="text-lg font-bold text-foreground mb-2">{f.title}</h3>
@@ -148,8 +148,8 @@ export default async function Home() {
           />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {SERVICES.map((s) => (
-              <Card key={s.title} className="p-6 hover:shadow-lg transition-shadow">
-                <div className={`w-12 h-12 ${COLOR_CLASSES[s.color].solidBg} rounded-lg flex items-center justify-center mb-4`}>
+              <Card key={s.title} className="reveal hover-lift group p-6">
+                <div className={`w-12 h-12 ${COLOR_CLASSES[s.color].solidBg} rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}>
                   <s.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground mb-2">{s.title}</h3>
@@ -171,13 +171,13 @@ export default async function Home() {
       {/* About teaser — light stat panel */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-border bg-gradient-to-br from-primary/5 via-accent/5 to-surface p-8 lg:p-14">
+          <div className="reveal rounded-3xl border border-border bg-gradient-to-br from-primary/5 via-accent/5 to-surface p-8 lg:p-14">
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
               <div>
                 <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
                   About Us
                 </span>
-                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-5 text-balance">
+                <h2 className="text-3xl lg:text-4xl font-bold text-brand-gradient mb-5 text-balance">
                   A Rapidly Growing Name in Quality Healthcare
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-6">
@@ -199,7 +199,7 @@ export default async function Home() {
                   { value: "Pan-India", label: "Distribution" },
                   { value: "100%", label: "Ethical Practices" },
                 ].map((s) => (
-                  <Card key={s.label} className="p-5 text-center bg-background/70 backdrop-blur">
+                  <Card key={s.label} className="reveal hover-lift p-5 text-center bg-background/70 backdrop-blur">
                     <div className="text-xl lg:text-2xl font-bold text-primary mb-1">{s.value}</div>
                     <p className="text-xs sm:text-sm text-muted-foreground">{s.label}</p>
                   </Card>
@@ -263,8 +263,8 @@ export default async function Home() {
       )}
 
       {/* CTA */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-primary to-primary-dark text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-16 lg:py-24 bg-brand-gradient-hero text-white">
+        <div className="reveal max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-5xl font-bold mb-5 text-balance">Ready to Partner With Us?</h2>
           <p className="text-lg lg:text-xl mb-8 text-white/90 max-w-2xl mx-auto leading-relaxed">
             Join the healthcare providers, distributors and institutions who trust Healingdoc Pharma for quality

@@ -43,7 +43,7 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
               className="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded"
               priority
             />
-            <span className="font-bold text-base sm:text-xl text-brand-gradient whitespace-nowrap">
+            <span className="font-bold text-base sm:text-xl text-brand-gradient text-brand-gradient-animated whitespace-nowrap">
               {logo?.text || "Healingdoc Pharma"}
             </span>
           </Link>

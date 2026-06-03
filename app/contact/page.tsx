@@ -16,7 +16,7 @@ export default async function ContactPage() {
   const contact = settings?.contact || {
     address: "123 Pharmaceutical Park, Medical District, New Delhi - 110001, India",
     phone: "+91 11 1234 5678",
-    email: "info@Healingdocpharma.com",
+    email: "healingdocpharma@gmail.com",
     fax: "+91 11 1234 5679",
     hours: "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 9:00 AM - 2:00 PM\nSunday: Closed",
   }
@@ -24,10 +24,10 @@ export default async function ContactPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
+      <div className="bg-brand-gradient text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance">Contact Us</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">Contact Us</h1>
+          <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-150">
             Get in touch with us for any queries or assistance
           </p>
         </div>
@@ -38,15 +38,15 @@ export default async function ContactPage() {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Details */}
           <div className="space-y-8">
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">Get In Touch</h2>
+            <div className="reveal">
+              <h2 className="text-3xl font-bold text-brand-gradient mb-6">Get In Touch</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 We're here to help and answer any questions you might have. We look forward to hearing from you.
               </p>
             </div>
 
             <div className="space-y-6">
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="reveal hover-lift p-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                     <MapPin className="w-6 h-6 text-primary" />
@@ -58,7 +58,7 @@ export default async function ContactPage() {
                 </div>
               </Card>
 
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="reveal hover-lift p-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center shrink-0">
                     <Phone className="w-6 h-6 text-success" />
@@ -70,7 +70,7 @@ export default async function ContactPage() {
                 </div>
               </Card>
 
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="reveal hover-lift p-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
                     <Mail className="w-6 h-6 text-accent" />
@@ -83,7 +83,7 @@ export default async function ContactPage() {
               </Card>
 
               {contact.fax && (
-                <Card className="p-6 hover:shadow-lg transition-shadow">
+                <Card className="reveal hover-lift p-6">
                   <div className="flex gap-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                       <Fax className="w-6 h-6 text-primary" />
@@ -96,7 +96,7 @@ export default async function ContactPage() {
                 </Card>
               )}
 
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="reveal hover-lift p-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center shrink-0">
                     <Clock className="w-6 h-6 text-success" />

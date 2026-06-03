@@ -12,7 +12,7 @@ function formatDate(iso: string) {
 
 export function BlogCard({ post }: { post: BlogPost }) {
   return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full">
+    <Link href={`/blog/${post.slug}`} className="reveal group block h-full">
       <Card className="overflow-hidden h-full flex flex-col hover:shadow-xl transition-all hover:-translate-y-1">
         <div className="relative aspect-[16/9] overflow-hidden bg-muted">
           {hasRealImage(post.coverImage) ? (
