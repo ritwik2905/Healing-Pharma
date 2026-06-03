@@ -23,7 +23,7 @@ const DEFAULT_SETTINGS = {
     initials: "SS",
     description:
       "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Pvt. Ltd. Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success.",
-    image: "",
+    image: "/team/managing-director.jpg",
   },
   contact: {
     address: "136, 1st Floor, Block AW, Sanjay Gandhi Transport Nagar, Delhi - 110042",

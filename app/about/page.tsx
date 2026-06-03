@@ -30,6 +30,8 @@ export default async function AboutPage() {
   const settings = await getSiteSettings()
   const chairman = settings?.chairman
   const directors: any[] = settings?.directors || []
+  // Show the catalogue photo even if the stored value is still empty.
+  const chairmanImage = hasRealImage(chairman?.image) ? chairman.image : "/team/managing-director.jpg"
 
   return (
     <main className="bg-background">
@@ -71,22 +73,31 @@ export default async function AboutPage() {
       {chairman && (
         <section className="py-16 lg:py-24">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="relative overflow-hidden p-8 lg:p-12 bg-gradient-to-br from-surface to-primary/5">
+            <Card className="glass-card relative overflow-hidden p-8 lg:p-12">
+              {/* Brand-tinted glow behind the frosted card */}
+              <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
+                <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-primary/15 blur-3xl" />
+                <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-accent/15 blur-3xl" />
+              </div>
               <Quote className="absolute top-6 right-6 w-20 h-20 text-primary/10" />
-              <div className="grid lg:grid-cols-[auto_1fr] gap-8 lg:gap-12 items-center">
+              <div className="grid lg:grid-cols-[240px_1fr] gap-8 lg:gap-12 items-center">
                 <div className="flex flex-col items-center text-center shrink-0">
-                  <div className="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-primary/20 bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    {hasRealImage(chairman.image) ? (
-                      <Image src={chairman.image} alt={chairman.name} fill className="object-cover" sizes="128px" />
-                    ) : (
-                      <span className="text-white text-4xl font-bold">{chairman.initials || "MD"}</span>
-                    )}
+                  <div className="relative w-44 h-56 lg:w-52 lg:h-64 rounded-2xl overflow-hidden shadow-2xl shadow-primary/20 ring-1 ring-white/50 bg-gradient-to-br from-primary/15 to-accent/15">
+                    <Image
+                      src={chairmanImage}
+                      alt={chairman.name}
+                      fill
+                      className="object-cover object-top"
+                      sizes="(max-width: 1024px) 176px, 208px"
+                    />
+                    {/* gradient brand strip at the base of the portrait */}
+                    <div className="absolute inset-x-0 bottom-0 h-1.5 bg-gradient-to-r from-primary to-accent" />
                   </div>
-                  <h3 className="mt-4 text-xl font-bold text-foreground">{chairman.name}</h3>
+                  <h3 className="mt-5 text-xl font-bold text-foreground">{chairman.name}</h3>
                   <p className="text-primary font-semibold text-sm">{chairman.title}</p>
                 </div>
                 <div>
-                  <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
+                  <span className="inline-block text-sm font-semibold uppercase tracking-wider text-brand-gradient mb-3">
                     From the Desk of Our Leadership
                   </span>
                   <p className="text-lg lg:text-xl text-foreground/90 leading-relaxed italic">

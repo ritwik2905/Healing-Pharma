@@ -5,6 +5,7 @@ import { isAdminAuthenticated } from "./admin-auth"
 import { db } from "./db"
 import { products } from "./schema"
 import { eq } from "drizzle-orm"
+import { resolveProductImage } from "./product-images"
 
 export interface Product {
   id: string
@@ -35,7 +36,7 @@ export async function getProducts(): Promise<Product[]> {
     batchNumber: r.batchNumber,
     composition: r.composition,
     dosage: r.dosage,
-    image: r.image,
+    image: resolveProductImage(r.name, r.image),
     price: r.price,
     inStock: r.inStock,
   }))
@@ -56,7 +57,7 @@ export async function getProductById(id: string): Promise<Product | null> {
     batchNumber: r.batchNumber,
     composition: r.composition,
     dosage: r.dosage,
-    image: r.image,
+    image: resolveProductImage(r.name, r.image),
     price: r.price,
     inStock: r.inStock,
   }
