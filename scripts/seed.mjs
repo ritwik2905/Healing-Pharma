@@ -125,7 +125,7 @@ async function seed() {
       batch_number: "ACP-2025-008",
       composition: "Aceclofenac 100mg + Paracetamol 325mg",
       dosage: "As directed by the physician. Usually 1 tablet twice daily after meals.",
-      image: "/placeholder.jpg",
+      image: "/products/acloheal-p.jpg",
       price: "₹105/-",
       in_stock: true
     },
@@ -139,7 +139,7 @@ async function seed() {
       batch_number: "ANP-2025-009",
       composition: "Nimesulide 100mg + Paracetamol 325mg",
       dosage: "As directed by the physician. Usually 1 tablet twice daily after meals.",
-      image: "/placeholder.jpg",
+      image: "/products/acloheal-np.jpg",
       price: "₹42/-",
       in_stock: true
     },
@@ -153,7 +153,7 @@ async function seed() {
       batch_number: "PH650-2025-010",
       composition: "Paracetamol 650mg",
       dosage: "As directed by the physician. Usually 1 tablet up to three times daily.",
-      image: "/placeholder.jpg",
+      image: "/products/paraheal-650.jpg",
       price: "₹105/-",
       in_stock: true
     },
@@ -167,7 +167,7 @@ async function seed() {
       batch_number: "DCH-2025-011",
       composition: "Diclofenac Sodium 75mg / 1ml",
       dosage: "Administered by a healthcare professional via I.M./I.V. route as directed.",
-      image: "/placeholder.jpg",
+      image: "/products/dicheal-injection.jpg",
       price: "₹22/-",
       in_stock: true
     },
@@ -181,7 +181,7 @@ async function seed() {
       batch_number: "CFD200-2025-012",
       composition: "Cefixime 200mg",
       dosage: "As directed by the physician. Usually 1 tablet twice daily.",
-      image: "/placeholder.jpg",
+      image: "/products/cefidoc-200.jpg",
       price: "₹113/-",
       in_stock: true
     },
@@ -195,7 +195,7 @@ async function seed() {
       batch_number: "CFDS-2025-013",
       composition: "Cefixime (as Trihydrate) 100mg/5ml (30ml)",
       dosage: "As directed by the physician based on body weight.",
-      image: "/placeholder.jpg",
+      image: "/products/cefidoc-suspension.jpg",
       price: "₹54/-",
       in_stock: true
     },
@@ -209,7 +209,7 @@ async function seed() {
       batch_number: "PDSR-2025-014",
       composition: "Pantoprazole 40mg + Domperidone 30mg",
       dosage: "As directed by the physician. Usually 1 capsule once daily before breakfast.",
-      image: "/placeholder.jpg",
+      image: "/products/pandoc-dsr.jpg",
       price: "₹145/-",
       in_stock: true
     },
@@ -223,7 +223,7 @@ async function seed() {
       batch_number: "OMD20-2025-015",
       composition: "Omeprazole 20mg",
       dosage: "As directed by the physician. Usually 1 capsule once daily before food.",
-      image: "/placeholder.jpg",
+      image: "/products/omedoc-20.jpg",
       price: "₹47/-",
       in_stock: true
     },
@@ -237,7 +237,7 @@ async function seed() {
       batch_number: "PNH40-2025-016",
       composition: "Pantoprazole 40mg injection",
       dosage: "Administered by a healthcare professional via I.V. route as directed.",
-      image: "/placeholder.jpg",
+      image: "/products/panoheal-40.jpg",
       price: "₹53/-",
       in_stock: true
     },
@@ -251,7 +251,7 @@ async function seed() {
       batch_number: "CFDC1-2025-017",
       composition: "Ceftriaxone 1gm injection",
       dosage: "Administered by a healthcare professional via I.V. route as directed.",
-      image: "/placeholder.jpg",
+      image: "/products/cefdoc-1gm.jpg",
       price: "₹66/-",
       in_stock: true
     },
@@ -265,7 +265,7 @@ async function seed() {
       batch_number: "HOX200-2025-018",
       composition: "Ofloxacin 200mg",
       dosage: "As directed by the physician. Usually 1 tablet twice daily.",
-      image: "/placeholder.jpg",
+      image: "/products/healoxin-200.jpg",
       price: "₹115/-",
       in_stock: true
     },
@@ -279,7 +279,7 @@ async function seed() {
       batch_number: "ZTH500-2025-019",
       composition: "Azithromycin 500mg",
       dosage: "As directed by the physician. Usually 1 tablet once daily.",
-      image: "/placeholder.jpg",
+      image: "/products/zitroheal-500.jpg",
       price: "₹69.15/-",
       in_stock: true
     },
@@ -293,7 +293,7 @@ async function seed() {
       batch_number: "CHBM-2025-020",
       composition: "Terbutaline Sulphate 2.5mg + Bromhexine Hydrochloride 8mg (flavoured syrup base, 100ml)",
       dosage: "As directed by the physician.",
-      image: "/placeholder.jpg",
+      image: "/products/cough-heal-bm.jpg",
       price: "₹120/-",
       in_stock: true
     },
@@ -307,7 +307,7 @@ async function seed() {
       batch_number: "HZN-2025-021",
       composition: "Cetirizine Hydrochloride 10mg",
       dosage: "As directed by the physician. Usually 1 tablet once daily.",
-      image: "/placeholder.jpg",
+      image: "/products/healzin.jpg",
       price: "Contact for Price",
       in_stock: true
     },
@@ -321,7 +321,7 @@ async function seed() {
       batch_number: "HEZ-2025-022",
       composition: "Fungal Diastase 100mg + Papain 60mg + Activated Charcoal 75mg",
       dosage: "As directed by the physician. Usually 1 tablet after meals.",
-      image: "/placeholder.jpg",
+      image: "/products/healenzyme.jpg",
       price: "Contact for Price",
       in_stock: true
     },
@@ -335,7 +335,7 @@ async function seed() {
       batch_number: "HBF12-2025-023",
       composition: "Thiamine Mononitrate 10mg + Riboflavine 10mg + Pyridoxine HCl 3mg + Cyanocobalamin 15mcg + Nicotinamide 15mg + Calcium Pantothenate 50mg",
       dosage: "As directed by the physician. Usually 1-2 tablets daily.",
-      image: "/placeholder.jpg",
+      image: "/products/healbion-forte-12.jpg",
       price: "Contact for Price",
       in_stock: true
     },
@@ -349,7 +349,7 @@ async function seed() {
       batch_number: "HMN-2025-024",
       composition: "Lycopene + Multivitamins + Multiminerals + Antioxidants with Zinc",
       dosage: "As directed by the physician. Usually 1 tablet daily.",
-      image: "/placeholder.jpg",
+      image: "/products/healmin.jpg",
       price: "₹120/-",
       in_stock: true
     }
@@ -388,7 +388,7 @@ async function seed() {
         title: "Managing Director",
         initials: "SS",
         description: "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Pvt. Ltd. Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success. Our products are manufactured at WHO-GMP compliant facilities under strict quality standards to ensure safety, efficacy and consistency, and we remain committed to building strong, transparent relationships with doctors, distributors, retailers and healthcare professionals across India.",
-        image: ""
+        image: "/team/managing-director.jpg"
       })
     },
     {

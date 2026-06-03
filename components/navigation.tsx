@@ -31,7 +31,7 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href))
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
+    <nav className="glass-nav sticky top-0 z-50 border-b border-border/60 shadow-sm shadow-primary/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -43,7 +43,7 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
               className="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded"
               priority
             />
-            <span className="font-bold text-base sm:text-xl text-foreground whitespace-nowrap">
+            <span className="font-bold text-base sm:text-xl text-brand-gradient whitespace-nowrap">
               {logo?.text || "Healingdoc Pharma"}
             </span>
           </Link>

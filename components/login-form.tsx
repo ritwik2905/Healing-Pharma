@@ -42,12 +42,12 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md p-8">
+    <Card className="glass-card relative z-10 w-full max-w-md p-8">
       <div className="text-center mb-8">
-        <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-accent/30">
           <span className="text-white font-bold text-2xl">H</span>
         </div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Admin Login</h1>
+        <h1 className="text-3xl font-bold text-brand-gradient mb-2">Admin Login</h1>
         <p className="text-muted-foreground">Sign in to manage products</p>
       </div>
 
@@ -88,16 +88,6 @@ export function LoginForm() {
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign In"}
         </Button>
-
-        <div className="bg-accent/10 border border-accent/20 rounded-lg p-4 mt-6">
-          <p className="text-sm text-muted-foreground">
-            <strong>Demo Credentials:</strong>
-            <br />
-            Username: admin
-            <br />
-            Password: Vipul@1124
-          </p>
-        </div>
       </form>
     </Card>
   )

@@ -4,30 +4,30 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color scheme to green and blue theme for pharmaceutical brand */
+  /* Brand palette — logo-matched green + Material blue, professional & accessible */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.16 0.01 250);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.16 0.01 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.5 0.18 160); /* Green */
+  --popover-foreground: oklch(0.16 0.01 250);
+  --primary: oklch(0.57 0.13 163); /* Logo green / teal */
   --primary-foreground: oklch(1 0 0);
-  --primary-dark: oklch(0.4 0.18 160); /* Darker Green */
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.145 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.55 0.15 230); /* Blue */
+  --primary-dark: oklch(0.47 0.13 163); /* Darker green */
+  --secondary: oklch(0.97 0.005 230);
+  --secondary-foreground: oklch(0.16 0.01 250);
+  --muted: oklch(0.968 0.006 230);
+  --muted-foreground: oklch(0.52 0.02 250);
+  --accent: oklch(0.58 0.16 248); /* Material blue */
   --accent-foreground: oklch(1 0 0);
-  --success: oklch(0.55 0.15 145);
-  --warning: oklch(0.65 0.15 85);
-  --surface: oklch(0.985 0 0);
+  --success: oklch(0.6 0.14 150);
+  --warning: oklch(0.7 0.15 75);
+  --surface: oklch(0.984 0.006 220);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.5 0.18 160);
+  --border: oklch(0.91 0.008 235);
+  --input: oklch(0.91 0.008 235);
+  --ring: oklch(0.58 0.16 248);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -51,23 +51,23 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.6 0.18 160);
-  --primary-foreground: oklch(1 0 0);
-  --primary-dark: oklch(0.5 0.18 160);
-  --secondary: oklch(0.269 0 0);
+  --primary: oklch(0.68 0.13 163);
+  --primary-foreground: oklch(0.16 0.02 250);
+  --primary-dark: oklch(0.56 0.13 163);
+  --secondary: oklch(0.27 0.01 250);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.65 0.15 230);
-  --accent-foreground: oklch(1 0 0);
-  --success: oklch(0.65 0.15 145);
-  --warning: oklch(0.75 0.15 85);
-  --surface: oklch(0.18 0 0);
+  --muted: oklch(0.27 0.01 250);
+  --muted-foreground: oklch(0.72 0.02 250);
+  --accent: oklch(0.68 0.15 248);
+  --accent-foreground: oklch(0.16 0.02 250);
+  --success: oklch(0.68 0.14 150);
+  --warning: oklch(0.78 0.15 75);
+  --surface: oklch(0.2 0.01 250);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.6 0.18 160);
+  --input: oklch(0.3 0.01 250);
+  --ring: oklch(0.68 0.15 248);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -134,5 +134,55 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* ── Glassmorphism ──────────────────────────────────────────────
+     Frosted, translucent surfaces tinted with the brand blue/green.
+     Always pair with a colourful/gradient backdrop so the blur shows. */
+  .glass {
+    background-color: color-mix(in oklch, var(--background) 62%, transparent);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid color-mix(in oklch, var(--background) 35%, transparent);
+  }
+
+  .glass-card {
+    position: relative;
+    background-color: color-mix(in oklch, var(--card) 70%, transparent);
+    backdrop-filter: blur(18px) saturate(155%);
+    -webkit-backdrop-filter: blur(18px) saturate(155%);
+    border: 1px solid color-mix(in oklch, var(--primary) 14%, transparent);
+    box-shadow:
+      0 10px 40px -12px color-mix(in oklch, var(--accent) 28%, transparent),
+      inset 0 1px 0 0 color-mix(in oklch, white 45%, transparent);
+  }
+
+  .dark .glass-card {
+    background-color: color-mix(in oklch, var(--card) 55%, transparent);
+    border-color: color-mix(in oklch, white 12%, transparent);
+    box-shadow:
+      0 10px 40px -12px color-mix(in oklch, var(--accent) 35%, transparent),
+      inset 0 1px 0 0 color-mix(in oklch, white 10%, transparent);
+  }
+
+  /* Sticky frosted header */
+  .glass-nav {
+    background-color: color-mix(in oklch, var(--background) 72%, transparent);
+    backdrop-filter: blur(16px) saturate(170%);
+    -webkit-backdrop-filter: blur(16px) saturate(170%);
+  }
+
+  /* Brand gradient text for headings/wordmark */
+  .text-brand-gradient {
+    background-image: linear-gradient(
+      90deg,
+      var(--primary) 0%,
+      var(--accent) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
