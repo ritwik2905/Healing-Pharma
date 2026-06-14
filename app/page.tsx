@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowRight, ShieldCheck, BadgeCheck, Truck, Globe, Sparkles } from "lucide-react"
+import { ArrowRight, ShieldCheck, BadgeCheck, Truck, Globe } from "lucide-react"
 import { getSiteSettings } from "@/lib/site-settings-actions"
 import { getProducts } from "@/lib/product-actions"
 import { getTestimonials } from "@/lib/testimonial-actions"
@@ -96,10 +96,10 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Framed photo + floating glass stats */}
-            <div className="animate-in fade-in zoom-in-95 fill-mode-both duration-1000 delay-200 relative">
-              <div className="glass-card relative rounded-[2rem] p-3">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] sm:aspect-[16/11] lg:aspect-[4/5]">
+            {/* Framed photo */}
+            <div className="animate-in fade-in zoom-in-95 fill-mode-both duration-1000 delay-200">
+              <div className="glass-card relative mx-auto max-w-xl rounded-[2rem] p-3 lg:max-w-none">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] sm:aspect-[16/10] lg:aspect-[5/4]">
                   <Image
                     src={heroImage}
                     alt="Healthcare professionals at Healingdoc Pharma"
@@ -109,24 +109,6 @@ export default async function Home() {
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/30 via-transparent to-transparent" />
-                </div>
-              </div>
-              <div className="glass-card animate-float absolute bottom-3 left-3 flex max-w-[14rem] items-center gap-3 rounded-2xl px-4 py-3 lg:-bottom-5 lg:-left-6">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success/15">
-                  <ShieldCheck className="h-5 w-5 text-success" />
-                </span>
-                <div>
-                  <div className="text-sm font-bold text-foreground">WHO-GMP Certified</div>
-                  <div className="text-xs text-muted-foreground">Quality you can trust</div>
-                </div>
-              </div>
-              <div className="glass-card animate-float-slow absolute right-3 top-3 hidden max-w-[12rem] items-center gap-2.5 rounded-2xl px-3.5 py-2.5 sm:flex lg:-top-5 lg:-right-5">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                </span>
-                <div>
-                  <div className="text-base font-bold text-primary">24+</div>
-                  <div className="text-[11px] text-muted-foreground">Quality Products</div>
                 </div>
               </div>
             </div>

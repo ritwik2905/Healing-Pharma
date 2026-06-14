@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Navigation } from "@/components/navigation"
 import { SiteFooter } from "@/components/site-footer"
+import { InitialLoader } from "@/components/initial-loader"
 import { getSiteSettings } from "@/lib/site-settings-actions"
 import { siteConfig, absoluteUrl } from "@/lib/seo"
 import "./globals.css"
@@ -109,6 +110,7 @@ export default async function RootLayout({
         {/* Fixed brand-tinted gradient mesh behind everything — gives the
             frosted-glass surfaces a colourful backdrop to blur against. */}
         <div className="site-bg" aria-hidden="true" />
+        <InitialLoader />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
