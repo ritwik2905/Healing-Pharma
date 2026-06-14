@@ -111,8 +111,8 @@ export default async function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/30 via-transparent to-transparent" />
                 </div>
               </div>
-              <div className="glass-card animate-float absolute -bottom-4 left-2 flex items-center gap-3 rounded-2xl px-5 py-4 sm:left-4 lg:-bottom-5 lg:-left-6">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-success/15">
+              <div className="glass-card animate-float absolute bottom-3 left-3 flex max-w-[14rem] items-center gap-3 rounded-2xl px-4 py-3 lg:-bottom-5 lg:-left-6">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success/15">
                   <ShieldCheck className="h-5 w-5 text-success" />
                 </span>
                 <div>
@@ -120,8 +120,8 @@ export default async function Home() {
                   <div className="text-xs text-muted-foreground">Quality you can trust</div>
                 </div>
               </div>
-              <div className="glass-card animate-float-slow absolute -top-4 right-2 flex items-center gap-2.5 rounded-2xl px-4 py-3 sm:right-4 lg:-top-5 lg:-right-5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15">
+              <div className="glass-card animate-float-slow absolute right-3 top-3 hidden max-w-[12rem] items-center gap-2.5 rounded-2xl px-3.5 py-2.5 sm:flex lg:-top-5 lg:-right-5">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15">
                   <Sparkles className="h-4 w-4 text-primary" />
                 </span>
                 <div>
