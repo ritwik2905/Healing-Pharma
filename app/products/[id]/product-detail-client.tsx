@@ -18,7 +18,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
   const daysUntilExpiry = Math.floor((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link href="/products">
           <Button variant="ghost" className="mb-8 gap-2">
@@ -29,7 +29,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
         <div className="grid lg:grid-cols-2 gap-12">
           <div className="relative">
-            <div className="relative aspect-square bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl overflow-hidden sticky top-24 p-6">
+            <div className="glass-card relative aspect-square overflow-hidden rounded-3xl border-0 sticky top-24 p-6">
               <ProductImage
                 src={product.image}
                 name={product.name}
@@ -55,7 +55,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
             <p className="text-3xl font-bold text-primary mb-6">{product.price}</p>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">{product.detailedDescription}</p>
 
-            <Card className="p-6 mb-6 bg-surface">
+            <Card className="soft-card border-0 p-6 mb-6">
               <div className="flex items-start gap-3">
                 <Pill className="w-6 h-6 text-primary shrink-0 mt-1" />
                 <div>
@@ -65,18 +65,18 @@ export function ProductDetailClient({ product }: { product: Product }) {
               </div>
             </Card>
 
-            <Card className="p-6 mb-6 bg-surface">
+            <Card className="soft-card border-0 p-6 mb-6">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-6 h-6 text-accent shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold text-foreground mb-2">Recommended Dosage</h3>
                   <p className="text-muted-foreground">{product.dosage}</p>
-                  <p className="text-sm text-warning mt-2">Always consult with a healthcare professional before use.</p>
+                  <p className="text-sm text-warning-foreground mt-2">Always consult with a healthcare professional before use.</p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6 mb-6">
+            <Card className="soft-card border-0 p-6 mb-6">
               <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                 <Package className="w-5 h-5 text-primary" />
                 Manufacturing Information
@@ -114,7 +114,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                 </div>
                 {daysUntilExpiry < 180 && daysUntilExpiry > 0 && (
                   <div className="bg-warning/10 border border-warning/20 rounded-lg p-4 mt-4">
-                    <p className="text-warning text-sm font-medium">
+                    <p className="text-warning-foreground text-sm font-medium">
                       Note: This product will expire in {daysUntilExpiry} days. Please use before expiry date.
                     </p>
                   </div>
@@ -127,17 +127,17 @@ export function ProductDetailClient({ product }: { product: Product }) {
               </div>
             </Card>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row">
               <Button
                 size="lg"
-                className="flex-1 gap-2"
+                className="w-full gap-2 sm:flex-1"
                 disabled={!product.inStock}
                 onClick={() => setShowPurchaseForm(true)}
               >
                 <PhoneCall className="w-4 h-4" />
                 {product.inStock ? "Contact for Purchase" : "Out of Stock"}
               </Button>
-              <Link href="/products" className="flex-1">
+              <Link href="/products" className="w-full sm:flex-1">
                 <Button size="lg" variant="outline" className="w-full bg-transparent">
                   View More Products
                 </Button>
@@ -146,7 +146,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
           </div>
         </div>
 
-        <Card className="mt-12 p-8 bg-gradient-to-br from-primary/5 to-accent/5">
+        <Card className="glass-card border-0 mt-12 p-8">
           <h3 className="text-2xl font-bold text-foreground mb-4">Need More Information?</h3>
           <p className="text-muted-foreground mb-6 leading-relaxed">
             For bulk orders, institutional purchases, or government supplies, please contact our sales team. We offer

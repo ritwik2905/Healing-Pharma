@@ -1,12 +1,12 @@
 import Link from "next/link"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, CalendarDays, User } from "lucide-react"
 import { getBlogPostBySlug } from "@/lib/blog-actions"
 import { hasRealImage } from "@/lib/image-utils"
 import { pageMetadata, siteConfig, absoluteUrl } from "@/lib/seo"
+import { PageHero } from "@/components/page-hero"
+import { SITE_IMAGES } from "@/lib/site-images"
 import type { Metadata } from "next"
 
 interface BlogPostPageProps {
@@ -71,11 +71,31 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <main className="bg-background">
+    <main>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      <PageHero
+        image={hasRealImage(post.coverImage) ? post.coverImage : SITE_IMAGES.blog.hero}
+        imageAlt={post.title}
+        eyebrow={post.category}
+        title={post.title}
+        align="left"
+        priority
+      >
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/90">
+          <span className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            {post.author}
+          </span>
+          <span className="flex items-center gap-2">
+            <CalendarDays className="h-4 w-4" />
+            {date}
+          </span>
+        </div>
+      </PageHero>
+
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <Link href="/blog">
           <Button variant="ghost" className="mb-8 gap-2 -ml-3">
@@ -83,34 +103,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             Back to Blog
           </Button>
         </Link>
-
-        <Badge className="bg-primary text-white mb-4">{post.category}</Badge>
-        <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 text-balance leading-tight">
-          {post.title}
-        </h1>
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground mb-8">
-          <span className="flex items-center gap-2">
-            <User className="w-4 h-4" />
-            {post.author}
-          </span>
-          <span className="flex items-center gap-2">
-            <CalendarDays className="w-4 h-4" />
-            {date}
-          </span>
-        </div>
-
-        {hasRealImage(post.coverImage) && (
-          <div className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-10 shadow-lg">
-            <Image
-              src={post.coverImage}
-              alt={post.title}
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 768px"
-              className="object-cover"
-            />
-          </div>
-        )}
 
         <div className="space-y-5 text-lg text-foreground/90 leading-relaxed">
           {post.content.split(/\n\n+/).map((para, i) => (

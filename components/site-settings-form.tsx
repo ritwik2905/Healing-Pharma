@@ -55,6 +55,7 @@ export function SiteSettingsForm() {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       image: formData.get("image") as string,
+      secondaryImage: (formData.get("secondaryImage") as string) || "",
     }
     const result = await updateHeroSection(hero)
     alert(result.success ? "Hero section updated!" : result.error || "Failed to update hero section")
@@ -199,7 +200,13 @@ export function SiteSettingsForm() {
         {/* HERO */}
         <TabsContent value="hero" className="mt-6">
           <Card className="p-6">
-            <h3 className="text-xl font-bold text-foreground mb-6">Edit Hero Section</h3>
+            <h3 className="text-xl font-bold text-foreground mb-1">Edit Homepage Hero</h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              Controls the headline and the two photos on the homepage. You can paste a local path
+              (e.g. <code className="rounded bg-muted px-1">/heroes/home-hero.jpg</code>) or a full link from a free stock
+              site like <strong>Pexels</strong> or <strong>Unsplash</strong> (e.g. {""}
+              <code className="rounded bg-muted px-1">https://images.pexels.com/photos/.../photo.jpeg</code>).
+            </p>
             <form onSubmit={handleHeroUpdate} className="space-y-4">
               <div>
                 <Label htmlFor="title">Title</Label>
@@ -210,8 +217,14 @@ export function SiteSettingsForm() {
                 <Textarea id="description" name="description" defaultValue={settings.hero.description} rows={4} required className="mt-2" />
               </div>
               <div>
-                <Label htmlFor="image">Image URL</Label>
-                <Input id="image" name="image" defaultValue={settings.hero.image} placeholder="/image-path.jpg" required className="mt-2" />
+                <Label htmlFor="image">Main Hero Image URL</Label>
+                <Input id="image" name="image" defaultValue={settings.hero.image} placeholder="/heroes/home-hero.jpg or https://images.pexels.com/..." required className="mt-2" />
+                <p className="text-sm text-muted-foreground mt-1">Large photo shown in the homepage hero. Landscape works best.</p>
+              </div>
+              <div>
+                <Label htmlFor="secondaryImage">Secondary Image URL (optional)</Label>
+                <Input id="secondaryImage" name="secondaryImage" defaultValue={settings.hero?.secondaryImage || ""} placeholder="/heroes/home-about.jpg or https://images.unsplash.com/..." className="mt-2" />
+                <p className="text-sm text-muted-foreground mt-1">Photo shown in the homepage “About” preview section.</p>
               </div>
               <Button type="submit" disabled={loading} className="gap-2">
                 <Save className="w-4 h-4" />

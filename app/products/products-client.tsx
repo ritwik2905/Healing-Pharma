@@ -3,10 +3,12 @@
 import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, X, LayoutGrid } from "lucide-react"
+import { Search, X, LayoutGrid, Package } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Product } from "@/lib/product-actions"
 import { ProductCard } from "@/components/product-card"
+import { PageHero } from "@/components/page-hero"
+import { SITE_IMAGES } from "@/lib/site-images"
 
 export function ProductsClient({ products }: { products: Product[] }) {
   const [searchQuery, setSearchQuery] = useState("")
@@ -61,22 +63,25 @@ export function ProductsClient({ products }: { products: Product[] }) {
   }
 
   return (
-    <main className="min-h-screen">
-      {/* Header Section */}
-      <section className="bg-gradient-to-br from-accent/10 via-primary/5 to-background py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl lg:text-6xl font-bold text-brand-gradient mb-6 text-balance animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">Our Products</h1>
-            <p className="text-xl text-muted-foreground leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-150">
-              Explore our comprehensive range of quality pharmaceutical products, manufactured to the highest standards
-              and available for government supplies, institutional sales, and general trade.
-            </p>
-          </div>
-        </div>
-      </section>
+    <main>
+      <PageHero
+        image={SITE_IMAGES.products.hero}
+        imageAlt="Colourful pharmaceutical tablets and capsules"
+        eyebrow="Our Catalogue"
+        eyebrowIcon={<Package className="h-4 w-4" />}
+        title="Our Products"
+        description="Explore our comprehensive range of quality pharmaceutical products, manufactured to the highest standards and available for government supplies, institutional sales, and general trade."
+        align="left"
+        stats={[
+          { value: `${products.length}`, label: "Products" },
+          { value: `${categories.length}`, label: "Categories" },
+          { value: "WHO-GMP", label: "Certified" },
+        ]}
+        priority
+      />
 
       {/* Products */}
-      <section className="py-12 lg:py-16 bg-background">
+      <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Search */}
           <div className="mb-8">
@@ -160,7 +165,7 @@ export function ProductsClient({ products }: { products: Product[] }) {
                 <div key={group.category} className="scroll-mt-24">
                   {/* Category heading */}
                   <div className="reveal flex items-center gap-4 mb-6 lg:mb-8">
-                    <h3 className="text-2xl lg:text-3xl font-bold text-brand-gradient whitespace-nowrap">
+                    <h3 className="text-2xl lg:text-3xl font-bold text-brand-gradient sm:whitespace-nowrap">
                       {group.category}
                     </h3>
                     <span className="inline-flex items-center justify-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">

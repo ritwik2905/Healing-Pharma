@@ -2,10 +2,12 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowRight, ShieldCheck, Heart, Handshake, Target, Quote } from "lucide-react"
+import { ArrowRight, ShieldCheck, Heart, Handshake, Target, Quote, Building2 } from "lucide-react"
 import { getSiteSettings } from "@/lib/site-settings-actions"
 import { COLOR_CLASSES, type ThemeColor } from "@/lib/site-content"
 import { hasRealImage } from "@/lib/image-utils"
+import { PageHero } from "@/components/page-hero"
+import { SITE_IMAGES } from "@/lib/site-images"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
@@ -14,12 +16,6 @@ export const metadata = pageMetadata({
     "Healingdoc Pharma Pvt. Ltd. is a rapidly growing pharmaceutical company committed to quality, affordable medicines manufactured at WHO-GMP certified facilities.",
   path: "/about",
 })
-
-const STATS = [
-  { value: "WHO-GMP", label: "Certified Manufacturing" },
-  { value: "24+", label: "Quality Products" },
-  { value: "Pan-India", label: "Distribution Network" },
-]
 
 const COMMITMENTS: { icon: typeof Heart; title: string; description: string; color: ThemeColor }[] = [
   { icon: ShieldCheck, title: "Uncompromising Quality", description: "Every product is manufactured under strict WHO-GMP standards, tested batch after batch for safety and consistency.", color: "primary" },
@@ -36,55 +32,38 @@ export default async function AboutPage() {
   const chairmanImage = hasRealImage(chairman?.image) ? chairman.image : "/team/managing-director.jpg"
 
   return (
-    <main className="bg-background">
-      {/* Hero band */}
-      <section className="relative bg-brand-gradient-hero text-white pt-16 lg:pt-24 pb-28 lg:pb-36 overflow-hidden">
-        <div className="absolute inset-0 opacity-10" aria-hidden>
-          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white blur-3xl" />
-          <div className="absolute -bottom-32 -left-16 w-80 h-80 rounded-full bg-accent blur-3xl" />
-        </div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block text-sm font-semibold uppercase tracking-wider text-white/80 mb-4 animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">
-            About Healingdoc Pharma
-          </span>
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-balance leading-[1.1] animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100">
-            Caring for Life, Every Day
-          </h1>
-          <p className="text-lg lg:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200">
-            A rapidly growing pharmaceutical company built on trust, quality and ethical business practices — delivering
-            affordable, innovative medicines across India.
-          </p>
-        </div>
-      </section>
-
-      {/* Overlapping stats */}
-      <section className="relative z-10 -mt-20 lg:-mt-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {STATS.map((s) => (
-              <Card key={s.label} className="reveal hover-lift p-6 text-center shadow-xl">
-                <div className="text-2xl lg:text-3xl font-bold text-primary mb-1">{s.value}</div>
-                <p className="text-sm text-muted-foreground">{s.label}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+    <main>
+      <PageHero
+        image={SITE_IMAGES.about.hero}
+        imageAlt="Team of healthcare professionals at Healingdoc Pharma"
+        eyebrow="About Healingdoc Pharma"
+        eyebrowIcon={<Building2 className="h-4 w-4" />}
+        imagePosition="center 28%"
+        title="Caring for Life, Every Day"
+        description="A rapidly growing pharmaceutical company built on trust, quality and ethical business practices — delivering affordable, innovative medicines across India."
+        stats={[
+          { value: "WHO-GMP", label: "Certified Manufacturing" },
+          { value: "24+", label: "Quality Products" },
+          { value: "Pan-India", label: "Distribution Network" },
+        ]}
+        size="lg"
+        priority
+      />
 
       {/* Managing Director's message */}
       {chairman && (
         <section className="py-16 lg:py-24">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="reveal glass-card relative overflow-hidden p-8 lg:p-12">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <Card className="reveal glass-card relative overflow-hidden border-0 p-8 lg:p-12">
               {/* Brand-tinted glow behind the frosted card */}
               <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
-                <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-primary/15 blur-3xl" />
-                <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-accent/15 blur-3xl" />
+                <div className="absolute -top-16 -right-10 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+                <div className="absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-accent/15 blur-3xl" />
               </div>
-              <Quote className="absolute top-6 right-6 w-20 h-20 text-primary/10" />
-              <div className="grid lg:grid-cols-[240px_1fr] gap-8 lg:gap-12 items-center">
-                <div className="flex flex-col items-center text-center shrink-0">
-                  <div className="relative w-44 h-56 lg:w-52 lg:h-64 rounded-2xl overflow-hidden shadow-2xl shadow-primary/20 ring-1 ring-white/50 bg-gradient-to-br from-primary/15 to-accent/15">
+              <Quote className="absolute right-6 top-6 h-20 w-20 text-primary/10" />
+              <div className="grid items-center gap-8 lg:grid-cols-[240px_1fr] lg:gap-12">
+                <div className="flex shrink-0 flex-col items-center text-center">
+                  <div className="relative h-56 w-44 overflow-hidden rounded-2xl bg-gradient-to-br from-primary/15 to-accent/15 shadow-2xl shadow-primary/20 ring-1 ring-white/50 lg:h-64 lg:w-52">
                     <Image
                       src={chairmanImage}
                       alt={chairman.name}
@@ -92,18 +71,17 @@ export default async function AboutPage() {
                       className="object-cover object-top"
                       sizes="(max-width: 1024px) 176px, 208px"
                     />
-                    {/* gradient brand strip at the base of the portrait */}
                     <div className="absolute inset-x-0 bottom-0 h-1.5 bg-gradient-to-r from-primary to-accent" />
                   </div>
                   <h3 className="mt-5 text-xl font-bold text-foreground">{chairman.name}</h3>
-                  <p className="text-primary font-semibold text-sm">{chairman.title}</p>
+                  <p className="text-sm font-semibold text-primary">{chairman.title}</p>
                 </div>
                 <div>
-                  <span className="inline-block text-sm font-semibold uppercase tracking-wider text-brand-gradient mb-3">
+                  <span className="mb-3 inline-block text-sm font-semibold uppercase tracking-wider text-brand-gradient">
                     From the Desk of Our Leadership
                   </span>
-                  <p className="text-lg lg:text-xl text-foreground/90 leading-relaxed italic">
-                    “{chairman.description}”
+                  <p className="text-lg italic leading-relaxed text-foreground/90 lg:text-xl">
+                    &ldquo;{chairman.description}&rdquo;
                   </p>
                 </div>
               </div>
@@ -114,16 +92,17 @@ export default async function AboutPage() {
 
       {/* Who we are — narrative + image */}
       <section className="pb-16 lg:pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <div className="reveal">
-              <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-accent to-primary" />
                 Who We Are
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand-gradient mb-5 text-balance">
+              <h2 className="mb-5 text-balance text-3xl font-bold text-brand-gradient lg:text-4xl">
                 A Trusted Name in the Pharmaceutical Industry
               </h2>
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
+              <div className="space-y-4 leading-relaxed text-muted-foreground">
                 <p>
                   Healingdoc Pharma Pvt. Ltd. is dedicated to delivering quality pharmaceutical and healthcare products
                   with a commitment to excellence, innovation and customer satisfaction. We continuously work towards
@@ -136,46 +115,50 @@ export default async function AboutPage() {
                 </p>
               </div>
               <div className="mt-6 flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4">
-                <ShieldCheck className="w-6 h-6 text-primary shrink-0 mt-0.5" />
+                <ShieldCheck className="mt-0.5 h-6 w-6 shrink-0 text-primary" />
                 <p className="text-sm text-foreground/80">
                   All products are manufactured in <strong>WHO-GMP certified facilities</strong> under strict quality
                   control standards.
                 </p>
               </div>
             </div>
-            <div className="reveal relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
-              <Image
-                src="/pharmacy-retail-store-medicine.jpg"
-                alt="Healingdoc Pharma quality medicines"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
+            <div className="reveal glass-card relative aspect-[4/3] overflow-hidden rounded-3xl border-0 p-2.5">
+              <div className="relative h-full w-full overflow-hidden rounded-2xl">
+                <Image
+                  src={SITE_IMAGES.about.story}
+                  alt="Quality control at a Healingdoc Pharma laboratory"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-accent/15" />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Commitments — list style (distinct from home's icon-card grid) */}
-      <section className="py-16 lg:py-24 bg-surface">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-10 lg:mb-14">
-            <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
+      {/* Commitments — list style */}
+      <section className="section-frost py-16 lg:py-24">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 max-w-2xl lg:mb-14">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+              <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-accent to-primary" />
               Our Commitments
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand-gradient text-balance">
+            <h2 className="text-balance text-3xl font-bold text-brand-gradient lg:text-4xl">
               The Principles That Guide Us
             </h2>
           </div>
-          <div className="divide-y divide-border rounded-2xl border border-border bg-background">
+          <div className="glass-card divide-y divide-border/70 overflow-hidden rounded-3xl border-0">
             {COMMITMENTS.map((c) => (
               <div key={c.title} className="reveal group flex items-start gap-5 p-6 lg:p-7">
-                <div className={`w-12 h-12 shrink-0 rounded-xl ${COLOR_CLASSES[c.color].softBg} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}>
-                  <c.icon className={`w-6 h-6 ${COLOR_CLASSES[c.color].text}`} />
+                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${COLOR_CLASSES[c.color].softBg} transition-transform duration-300 group-hover:scale-110`}>
+                  <c.icon className={`h-6 w-6 ${COLOR_CLASSES[c.color].text}`} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-foreground mb-1">{c.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{c.description}</p>
+                  <h3 className="mb-1 text-lg font-bold text-foreground">{c.title}</h3>
+                  <p className="leading-relaxed text-muted-foreground">{c.description}</p>
                 </div>
               </div>
             ))}
@@ -186,30 +169,30 @@ export default async function AboutPage() {
       {/* Directors (only if present) */}
       {directors.length > 0 && (
         <section className="py-16 lg:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mx-auto max-w-2xl mb-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand-gradient text-balance mx-auto">Our Leadership Team</h2>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <h2 className="mx-auto text-balance text-3xl font-bold text-brand-gradient lg:text-4xl">Our Leadership Team</h2>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {directors.map((director) => {
                 const color = (["primary", "accent", "success", "warning"].includes(director.color)
                   ? director.color
                   : "primary") as ThemeColor
                 return (
-                  <Card key={director.id} className="reveal hover-lift overflow-hidden">
-                    <div className="relative h-56 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+                  <Card key={director.id} className="reveal hover-lift glass-card overflow-hidden border-0">
+                    <div className="relative flex h-56 items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">
                       {hasRealImage(director.image) ? (
                         <Image src={director.image} alt={director.name} fill className="object-cover" sizes="(max-width: 1024px) 50vw, 33vw" />
                       ) : (
-                        <div className={`w-24 h-24 ${COLOR_CLASSES[color].solidBg} rounded-full flex items-center justify-center`}>
-                          <span className="text-white text-3xl font-bold">{director.initials}</span>
+                        <div className={`flex h-24 w-24 items-center justify-center rounded-full ${COLOR_CLASSES[color].solidBg}`}>
+                          <span className="text-3xl font-bold text-white">{director.initials}</span>
                         </div>
                       )}
                     </div>
                     <div className="p-5 text-center">
-                      <h3 className="text-lg font-bold text-foreground mb-1">{director.name}</h3>
-                      <p className={`${COLOR_CLASSES[color].text} font-semibold text-sm mb-2`}>{director.title}</p>
-                      <p className="text-muted-foreground text-sm leading-relaxed line-clamp-4">{director.description}</p>
+                      <h3 className="mb-1 text-lg font-bold text-foreground">{director.name}</h3>
+                      <p className={`${COLOR_CLASSES[color].text} mb-2 text-sm font-semibold`}>{director.title}</p>
+                      <p className="line-clamp-4 text-sm leading-relaxed text-muted-foreground">{director.description}</p>
                     </div>
                   </Card>
                 )
@@ -220,23 +203,25 @@ export default async function AboutPage() {
       )}
 
       {/* Mission + CTA band */}
-      <section className="py-16 lg:py-24 bg-brand-gradient text-white">
-        <div className="reveal max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block text-sm font-semibold uppercase tracking-wider text-white/80 mb-3">
+      <section className="relative isolate overflow-hidden bg-brand-gradient py-16 text-white lg:py-24">
+        <div className="absolute inset-0 -z-10 bg-dot-grid opacity-20" aria-hidden />
+        <div className="pointer-events-none absolute -top-20 right-10 h-72 w-72 rounded-full bg-white/10 blur-3xl animate-blob" aria-hidden />
+        <div className="reveal mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <span className="mb-3 inline-block text-sm font-semibold uppercase tracking-wider text-white/80">
             Our Mission
           </span>
-          <p className="text-2xl lg:text-3xl font-semibold leading-relaxed text-balance mb-8">
+          <p className="mb-8 text-balance text-2xl font-semibold leading-relaxed lg:text-3xl">
             To create a healthier future through quality medicines, strong partnerships and continuous growth.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+          <div className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
             <Link href="/products">
-              <Button size="lg" variant="secondary" className="gap-2 bg-white text-primary hover:bg-white/90 w-full sm:w-auto">
+              <Button size="lg" variant="secondary" className="w-full gap-2 bg-white text-primary hover:bg-white/90 sm:w-auto">
                 Explore Products
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <Link href="/contact">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white/10 bg-transparent">
+              <Button size="lg" variant="outline" className="w-full border-white bg-transparent text-white hover:bg-white/10 sm:w-auto">
                 Become a Partner
               </Button>
             </Link>

@@ -16,8 +16,8 @@ function initials(name: string) {
 
 export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <Card className="reveal hover-lift p-6 h-full flex flex-col">
-      <Quote className="w-8 h-8 text-primary/30 mb-3" />
+    <Card className="reveal hover-lift glass-card p-6 h-full flex flex-col border-0">
+      <Quote className="w-9 h-9 text-primary/35 mb-3" />
       <StarRating rating={testimonial.rating} className="mb-4" />
       <p className="text-muted-foreground leading-relaxed flex-1">{testimonial.message}</p>
       <div className="flex items-center gap-3 mt-6 pt-6 border-t border-border">

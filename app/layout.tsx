@@ -106,6 +106,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans antialiased flex min-h-screen flex-col`}>
+        {/* Fixed brand-tinted gradient mesh behind everything — gives the
+            frosted-glass surfaces a colourful backdrop to blur against. */}
+        <div className="site-bg" aria-hidden="true" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}

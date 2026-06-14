@@ -5,6 +5,9 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 import { addInquiry } from "@/lib/inquiry-actions"
 
 export function ContactForm() {
@@ -35,73 +38,67 @@ export function ContactForm() {
   }
 
   return (
-    <Card className="p-8">
+    <Card className="glass-card border-0 p-8">
       <h2 className="text-2xl font-bold text-foreground mb-6">Send us a Message</h2>
 
       {isSuccess && (
-        <div className="mb-6 p-4 bg-success/10 border border-success/20 rounded-lg">
-          <p className="text-success font-medium">Thank you! Your message has been sent successfully.</p>
+        <div className="mb-6 rounded-lg border border-success/30 bg-success/10 p-4">
+          <p className="font-medium text-success-foreground">
+            Thank you! Your message has been sent successfully.
+          </p>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-            Full Name *
-          </label>
-          <input
+        <div className="space-y-2">
+          <Label htmlFor="name">Full Name *</Label>
+          <Input
             type="text"
             id="name"
             required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
             placeholder="Enter your full name"
+            className="h-12 bg-background/70"
           />
         </div>
 
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-            Email Address *
-          </label>
-          <input
+        <div className="space-y-2">
+          <Label htmlFor="email">Email Address *</Label>
+          <Input
             type="email"
             id="email"
             required
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
             placeholder="your.email@example.com"
+            className="h-12 bg-background/70"
           />
         </div>
 
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
-            Phone Number *
-          </label>
-          <input
+        <div className="space-y-2">
+          <Label htmlFor="phone">Phone Number *</Label>
+          <Input
             type="tel"
             id="phone"
             required
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
             placeholder="+91 XXXXX XXXXX"
+            className="h-12 bg-background/70"
           />
         </div>
 
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-            Message *
-          </label>
-          <textarea
+        <div className="space-y-2">
+          <Label htmlFor="message">Message *</Label>
+          <Textarea
             id="message"
             required
             rows={5}
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-            className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground resize-none"
             placeholder="How can we help you?"
+            className="resize-none bg-background/70"
           />
         </div>
 

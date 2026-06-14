@@ -1,7 +1,9 @@
-import { MapPin, Phone, Mail, Fan as Fax, Clock } from "lucide-react"
+import { MapPin, Phone, Mail, Printer, Clock, MessageSquare } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { getSiteSettings } from "@/lib/site-settings-actions"
 import { ContactForm } from "@/components/contact-form"
+import { PageHero } from "@/components/page-hero"
+import { SITE_IMAGES } from "@/lib/site-images"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
@@ -22,97 +24,99 @@ export default async function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-brand-gradient text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">Contact Us</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-150">
-            Get in touch with us for any queries or assistance
-          </p>
-        </div>
-      </div>
+    <main>
+      <PageHero
+        image={SITE_IMAGES.contact.hero}
+        imageAlt="Business partnership handshake in a modern office"
+        eyebrow="Contact Us"
+        eyebrowIcon={<MessageSquare className="h-4 w-4" />}
+        title="Let's Start a Conversation"
+        description="Get in touch with us for product enquiries, partnerships or any assistance you need."
+        priority
+      />
 
       {/* Contact Information */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Details */}
-          <div className="space-y-8">
-            <div className="reveal">
-              <h2 className="text-3xl font-bold text-brand-gradient mb-6">Get In Touch</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                We're here to help and answer any questions you might have. We look forward to hearing from you.
-              </p>
-            </div>
+      <section className="py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-2">
+            {/* Contact Details */}
+            <div className="space-y-8">
+              <div className="reveal">
+                <h2 className="mb-4 text-3xl font-bold text-brand-gradient">Get In Touch</h2>
+                <p className="text-lg leading-relaxed text-muted-foreground">
+                  We&apos;re here to help and answer any questions you might have. We look forward to hearing from you.
+                </p>
+              </div>
 
-            <div className="space-y-6">
-              <Card className="reveal hover-lift p-6">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                    <MapPin className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-2">Address</h3>
-                    <p className="text-muted-foreground leading-relaxed">{contact.address}</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="reveal hover-lift p-6">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center shrink-0">
-                    <Phone className="w-6 h-6 text-success" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-2">Phone</h3>
-                    <p className="text-muted-foreground">{contact.phone}</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="reveal hover-lift p-6">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
-                    <Mail className="w-6 h-6 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-2">Email</h3>
-                    <p className="text-muted-foreground">{contact.email}</p>
-                  </div>
-                </div>
-              </Card>
-
-              {contact.fax && (
-                <Card className="reveal hover-lift p-6">
+              <div className="space-y-5">
+                <Card className="reveal hover-lift soft-card border-0 p-6">
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                      <Fax className="w-6 h-6 text-primary" />
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                      <MapPin className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-2">Fax</h3>
-                      <p className="text-muted-foreground">{contact.fax}</p>
+                      <h3 className="mb-2 font-semibold text-foreground">Address</h3>
+                      <p className="leading-relaxed text-muted-foreground">{contact.address}</p>
                     </div>
                   </div>
                 </Card>
-              )}
 
-              <Card className="reveal hover-lift p-6">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center shrink-0">
-                    <Clock className="w-6 h-6 text-success" />
+                <Card className="reveal hover-lift soft-card border-0 p-6">
+                  <div className="flex gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-success/10">
+                      <Phone className="h-6 w-6 text-success" />
+                    </div>
+                    <div>
+                      <h3 className="mb-2 font-semibold text-foreground">Phone</h3>
+                      <p className="text-muted-foreground">{contact.phone}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-2">Business Hours</h3>
-                    <p className="text-muted-foreground whitespace-pre-line leading-relaxed">{contact.hours}</p>
+                </Card>
+
+                <Card className="reveal hover-lift soft-card border-0 p-6">
+                  <div className="flex gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
+                      <Mail className="h-6 w-6 text-accent" />
+                    </div>
+                    <div>
+                      <h3 className="mb-2 font-semibold text-foreground">Email</h3>
+                      <p className="break-all text-muted-foreground">{contact.email}</p>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+
+                {contact.fax && (
+                  <Card className="reveal hover-lift soft-card border-0 p-6">
+                    <div className="flex gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                        <Printer className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="mb-2 font-semibold text-foreground">Fax</h3>
+                        <p className="text-muted-foreground">{contact.fax}</p>
+                      </div>
+                    </div>
+                  </Card>
+                )}
+
+                <Card className="reveal hover-lift soft-card border-0 p-6">
+                  <div className="flex gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-success/10">
+                      <Clock className="h-6 w-6 text-success" />
+                    </div>
+                    <div>
+                      <h3 className="mb-2 font-semibold text-foreground">Business Hours</h3>
+                      <p className="whitespace-pre-line leading-relaxed text-muted-foreground">{contact.hours}</p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
             </div>
-          </div>
 
-          <ContactForm />
+            <ContactForm />
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }

@@ -18,7 +18,13 @@ export function SectionHeading({ eyebrow, title, description, align = "center", 
       )}
     >
       {eyebrow && (
-        <span className="inline-block text-sm font-semibold uppercase tracking-wider text-primary mb-3">
+        <span
+          className={cn(
+            "mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary backdrop-blur-sm",
+            align === "center" && "mx-auto",
+          )}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-accent to-primary" />
           {eyebrow}
         </span>
       )}

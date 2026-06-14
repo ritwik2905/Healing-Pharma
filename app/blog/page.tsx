@@ -1,6 +1,8 @@
 import { BookOpen } from "lucide-react"
 import { getBlogPosts } from "@/lib/blog-actions"
 import { BlogCard } from "@/components/blog-card"
+import { PageHero } from "@/components/page-hero"
+import { SITE_IMAGES } from "@/lib/site-images"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
@@ -16,31 +18,31 @@ export default async function BlogPage() {
   const posts = await getBlogPosts()
 
   return (
-    <main className="bg-background">
-      {/* Header */}
-      <section className="bg-brand-gradient text-white py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-balance animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">Health Insights & Updates</h1>
-          <p className="text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-150">
-            Practical health tips, awareness articles and the latest news from Healingdoc Pharma.
-          </p>
-        </div>
-      </section>
+    <main>
+      <PageHero
+        image={SITE_IMAGES.blog.hero}
+        imageAlt="Stethoscope resting on a notebook"
+        eyebrow="From Our Blog"
+        eyebrowIcon={<BookOpen className="h-4 w-4" />}
+        title="Health Insights & Updates"
+        description="Practical health tips, awareness articles and the latest news from Healingdoc Pharma."
+        priority
+      />
 
       <section className="py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {posts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {posts.map((post) => (
                 <BlogCard key={post.id} post={post} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+            <div className="py-16 text-center">
+              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-muted">
                 <BookOpen className="h-8 w-8 text-muted-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground mb-2">No articles yet</h2>
+              <h2 className="mb-2 text-2xl font-bold text-foreground">No articles yet</h2>
               <p className="text-muted-foreground">Our team is working on fresh content. Check back soon.</p>
             </div>
           )}

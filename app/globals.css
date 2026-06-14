@@ -5,7 +5,7 @@
 
 :root {
   /* Brand palette — logo-matched green + Material blue, professional & accessible */
-  --background: oklch(1 0 0);
+  --background: oklch(0.99 0.004 230);
   --foreground: oklch(0.16 0.01 250);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.16 0.01 250);
@@ -21,7 +21,9 @@
   --accent: oklch(0.6 0.14 163); /* Logo green / teal (secondary brand) */
   --accent-foreground: oklch(1 0 0);
   --success: oklch(0.6 0.14 150);
+  --success-foreground: oklch(0.43 0.12 150); /* dark green — AA body text on light surfaces */
   --warning: oklch(0.7 0.15 75);
+  --warning-foreground: oklch(0.46 0.11 70); /* dark amber — AA body text on light surfaces */
   --surface: oklch(0.984 0.006 220);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
@@ -33,7 +35,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.5 0.18 160);
@@ -45,28 +47,30 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  --background: oklch(0.16 0.02 255);
+  --foreground: oklch(0.97 0.005 250);
+  --card: oklch(0.21 0.02 255);
+  --card-foreground: oklch(0.97 0.005 250);
+  --popover: oklch(0.21 0.02 255);
+  --popover-foreground: oklch(0.97 0.005 250);
   --primary: oklch(0.66 0.15 250);
   --primary-foreground: oklch(1 0 0);
   --primary-dark: oklch(0.56 0.15 250);
-  --secondary: oklch(0.27 0.01 250);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.27 0.01 250);
+  --secondary: oklch(0.27 0.02 255);
+  --secondary-foreground: oklch(0.97 0.005 250);
+  --muted: oklch(0.27 0.02 255);
   --muted-foreground: oklch(0.72 0.02 250);
   --accent: oklch(0.72 0.14 163);
   --accent-foreground: oklch(0.16 0.02 250);
   --success: oklch(0.68 0.14 150);
+  --success-foreground: oklch(0.8 0.13 150);
   --warning: oklch(0.78 0.15 75);
-  --surface: oklch(0.2 0.01 250);
-  --destructive: oklch(0.396 0.141 25.723);
+  --warning-foreground: oklch(0.84 0.12 80);
+  --surface: oklch(0.2 0.02 255);
+  --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.3 0.01 250);
+  --border: oklch(0.32 0.02 255);
+  --input: oklch(0.34 0.02 255);
   --ring: oklch(0.68 0.15 248);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -102,7 +106,9 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --color-surface: var(--surface);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
@@ -118,6 +124,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 10px);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -137,9 +144,14 @@
     text-size-adjust: 100%;
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    /* Solid base colour behind the fixed mesh — no white flash, no seams. */
+    background-color: var(--background);
   }
   body {
-    @apply bg-background text-foreground;
+    /* Transparent so the fixed `.site-bg` brand mesh shows through and the
+       glassmorphism reads against a colourful backdrop everywhere. */
+    @apply text-foreground;
+    background-color: transparent;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -161,7 +173,45 @@
   }
 }
 
-@layer components {
+/* Surface, background, hero & brand utilities live in the `utilities` layer
+   (not `components`) so they outrank Tailwind's `bg-*` utilities — e.g. the
+   base Card's opaque `bg-card` — and the frosted/translucent backgrounds
+   actually apply. (Tailwind v4 cascade: theme, base, components, utilities.) */
+@layer utilities {
+  /* ── Site background ─────────────────────────────────────────────────
+     A fixed, full-viewport brand-tinted gradient mesh. Sits behind every
+     page (z -10, pointer-events none) so content scrolls over it and the
+     frosted-glass surfaces always have a colourful backdrop to blur. */
+  .site-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    background:
+      radial-gradient(42rem 40rem at 8% -10%, color-mix(in oklch, var(--accent) 26%, transparent), transparent 60%),
+      radial-gradient(46rem 42rem at 100% 2%, color-mix(in oklch, var(--primary) 24%, transparent), transparent 58%),
+      radial-gradient(50rem 40rem at 50% 116%, color-mix(in oklch, var(--primary) 16%, transparent), transparent 60%),
+      linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--primary) 5%, var(--background)) 0%,
+        var(--background) 42%,
+        color-mix(in oklch, var(--accent) 6%, var(--background)) 100%
+      );
+  }
+  .dark .site-bg {
+    background:
+      radial-gradient(42rem 40rem at 8% -10%, color-mix(in oklch, var(--accent) 30%, transparent), transparent 58%),
+      radial-gradient(46rem 42rem at 100% 2%, color-mix(in oklch, var(--primary) 32%, transparent), transparent 56%),
+      radial-gradient(50rem 40rem at 50% 118%, color-mix(in oklch, var(--primary) 22%, transparent), transparent 60%),
+      linear-gradient(180deg, oklch(0.17 0.025 258) 0%, var(--background) 45%, oklch(0.15 0.02 250) 100%);
+  }
+
+  /* Faint dot grid — layered inside heroes for subtle texture. */
+  .bg-dot-grid {
+    background-image: radial-gradient(color-mix(in oklch, white 16%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
   /* ── Glassmorphism ──────────────────────────────────────────────
      Frosted, translucent surfaces tinted with the brand blue/green.
      Always pair with a colourful/gradient backdrop so the blur shows. */
@@ -174,21 +224,59 @@
 
   .glass-card {
     position: relative;
-    background-color: color-mix(in oklch, var(--card) 70%, transparent);
+    background-color: color-mix(in oklch, var(--card) 72%, transparent);
     backdrop-filter: blur(18px) saturate(155%);
     -webkit-backdrop-filter: blur(18px) saturate(155%);
     border: 1px solid color-mix(in oklch, var(--primary) 14%, transparent);
     box-shadow:
-      0 10px 40px -12px color-mix(in oklch, var(--accent) 28%, transparent),
-      inset 0 1px 0 0 color-mix(in oklch, white 45%, transparent);
+      0 10px 40px -14px color-mix(in oklch, var(--accent) 28%, transparent),
+      inset 0 1px 0 0 color-mix(in oklch, white 50%, transparent);
   }
 
   .dark .glass-card {
-    background-color: color-mix(in oklch, var(--card) 55%, transparent);
+    background-color: color-mix(in oklch, var(--card) 58%, transparent);
     border-color: color-mix(in oklch, white 12%, transparent);
     box-shadow:
-      0 10px 40px -12px color-mix(in oklch, var(--accent) 35%, transparent),
+      0 10px 40px -14px color-mix(in oklch, var(--accent) 35%, transparent),
       inset 0 1px 0 0 color-mix(in oklch, white 10%, transparent);
+  }
+
+  /* Glass tuned for dark/photographic backdrops — white text stays legible.
+     Use for hero badges, stat chips and pills sitting over hero imagery. */
+  .glass-dark {
+    background-color: color-mix(in oklch, var(--primary-dark) 42%, transparent);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid color-mix(in oklch, white 30%, transparent);
+  }
+
+  /* ── Soft UI ─────────────────────────────────────────────────────────
+     Opaque-leaning cards with layered, brand-tinted soft shadows and a
+     bright inner top edge — premium, tactile, highly readable. Use where
+     content density / legibility matters (product info, forms, list rows). */
+  .soft-card {
+    background-color: color-mix(in oklch, var(--card) 90%, var(--surface));
+    border: 1px solid color-mix(in oklch, var(--primary) 8%, var(--border));
+    border-radius: var(--radius-2xl);
+    box-shadow:
+      0 1px 2px color-mix(in oklch, var(--primary) 10%, transparent),
+      0 14px 34px -16px color-mix(in oklch, var(--primary) 26%, transparent),
+      inset 0 1px 0 color-mix(in oklch, white 70%, transparent);
+  }
+  .dark .soft-card {
+    background-color: color-mix(in oklch, var(--card) 92%, transparent);
+    box-shadow:
+      0 1px 2px color-mix(in oklch, black 40%, transparent),
+      0 16px 36px -16px color-mix(in oklch, black 60%, transparent),
+      inset 0 1px 0 color-mix(in oklch, white 8%, transparent);
+  }
+
+  /* Subtle frosted band for alternating full-width sections. */
+  .section-frost {
+    background-color: color-mix(in oklch, var(--surface) 55%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-block: 1px solid color-mix(in oklch, var(--primary) 7%, transparent);
   }
 
   /* Sticky frosted header */
@@ -196,6 +284,36 @@
     background-color: color-mix(in oklch, var(--background) 72%, transparent);
     backdrop-filter: blur(16px) saturate(170%);
     -webkit-backdrop-filter: blur(16px) saturate(170%);
+  }
+
+  /* ── Hero image scrim ────────────────────────────────────────────────
+     A brand-tinted overlay placed over hero photography. Keeps the photo
+     clearly visible (~70-80% tint) while guaranteeing white text is legible
+     and the banner stays on-theme (green → blue). */
+  .hero-scrim {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--primary-dark) 42%, transparent) 0%,
+        color-mix(in oklch, var(--primary-dark) 20%, transparent) 42%,
+        color-mix(in oklch, var(--primary-dark) 66%, transparent) 100%
+      ),
+      linear-gradient(
+        115deg,
+        color-mix(in oklch, var(--accent), black 10%) 0%,
+        color-mix(in oklch, var(--primary) 86%, transparent) 52%,
+        color-mix(in oklch, var(--primary-dark) 86%, transparent) 100%
+      );
+  }
+  /* Stronger left-weighted scrim for split / left-aligned hero text. */
+  .hero-scrim-left {
+    background:
+      linear-gradient(
+        100deg,
+        color-mix(in oklch, var(--primary-dark) 78%, transparent) 0%,
+        color-mix(in oklch, var(--primary) 64%, transparent) 45%,
+        color-mix(in oklch, var(--accent) 40%, transparent) 100%
+      );
   }
 
   /* Brand gradient text for headings/wordmark — mirrors the logo: green → blue */
@@ -209,18 +327,20 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    /* shrink the box to the text so the gradient sweeps across the letters
-       (not the full container) — every heading reads green→blue regardless of
-       length. Stays block-level, so it never collapses next to an eyebrow. */
     width: fit-content;
     max-width: 100%;
-    /* stop descenders (g, y, p) from being clipped by background-clip */
     padding-bottom: 0.06em;
+  }
+  /* Fallback: never render invisible text where background-clip:text is unsupported */
+  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    .text-brand-gradient {
+      color: var(--primary);
+      -webkit-text-fill-color: currentColor;
+    }
   }
 
   /* Brand gradient surface — the logo's green→blue, deepened so white text stays
-     legible. Used on the footer, hero banners and CTA bands so the whole site
-     matches the logo / theme colour exactly. */
+     legible. Used on the footer, CTA bands so the whole site matches the logo. */
   .bg-brand-gradient {
     background-image: linear-gradient(
       135deg,
@@ -239,6 +359,11 @@
       var(--primary) 60%,
       var(--primary-dark) 100%
     );
+  }
+
+  /* White text legibility helper over photography. */
+  .drop-hero {
+    text-shadow: 0 2px 18px color-mix(in oklch, black 35%, transparent);
   }
 }
 
@@ -264,7 +389,29 @@
   }
 }
 
-@layer components {
+@keyframes float-soft {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -12px;
+  }
+}
+
+@keyframes blob-drift {
+  0%,
+  100% {
+    translate: 0 0;
+    scale: 1;
+  }
+  50% {
+    translate: 4% -3%;
+    scale: 1.08;
+  }
+}
+
+@layer utilities {
   /* Hover lift with a soft brand-tinted shadow — for cards & tiles */
   .hover-lift {
     transition:
@@ -275,7 +422,20 @@
   @media (prefers-reduced-motion: no-preference) {
     .hover-lift:hover {
       transform: translateY(-6px);
-      box-shadow: 0 22px 45px -18px color-mix(in oklch, var(--primary) 45%, transparent);
+      box-shadow: 0 26px 50px -20px color-mix(in oklch, var(--primary) 48%, transparent);
+    }
+  }
+
+  /* Gentle floating for hero accent cards / badges. */
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-float {
+      animation: float-soft 6s ease-in-out infinite;
+    }
+    .animate-float-slow {
+      animation: float-soft 9s ease-in-out infinite;
+    }
+    .animate-blob {
+      animation: blob-drift 16s ease-in-out infinite;
     }
   }
 

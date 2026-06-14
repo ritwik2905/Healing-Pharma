@@ -14,7 +14,8 @@ const DEFAULT_SETTINGS = {
     title: "Delivering Trust Through Quality Healthcare",
     description:
       "Healingdoc Pharma Pvt. Ltd. is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
-    image: "/modern-pharmacy-healthcare-professional.jpg",
+    image: "/heroes/home-hero.jpg",
+    secondaryImage: "/heroes/home-about.jpg",
   },
   directors: [],
   chairman: {
@@ -66,7 +67,12 @@ export async function getSiteSettings() {
   }
 }
 
-export async function updateHeroSection(hero: { title: string; description: string; image: string }) {
+export async function updateHeroSection(hero: {
+  title: string
+  description: string
+  image: string
+  secondaryImage?: string
+}) {
   try {
     await upsertSetting("hero", hero)
     revalidatePath("/")
