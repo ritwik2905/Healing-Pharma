@@ -39,7 +39,7 @@ export default async function AboutPage() {
         eyebrow="About Healingdoc Pharma"
         eyebrowIcon={<Building2 className="h-4 w-4" />}
         imagePosition="center 28%"
-        title="Caring for Life, Every Day"
+        title="Care for Life, Every Day"
         description="A rapidly growing pharmaceutical company built on trust, quality and ethical business practices — delivering affordable, innovative medicines across India."
         stats={[
           { value: "WHO-GMP", label: "Certified Manufacturing" },

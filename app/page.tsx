@@ -81,15 +81,15 @@ export default async function Home() {
   return (
     <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[90vh] items-center overflow-hidden">
+      <section className="relative isolate flex min-h-[88svh] items-center overflow-hidden py-20 lg:min-h-[640px]">
         {/* Full-bleed background: auto-sliding image slideshow (or a video if set) */}
         <HeroSlideshow images={heroSlides} videoSrc={heroVideo} videoType={videoType} poster={heroImage} />
 
-        {/* Brand-tinted overlays for strong, photo-independent white-text legibility.
-            Deliberately NO light/near-white fade (it washed out the bottom text). */}
-        <div className="absolute inset-0 -z-20 bg-primary-dark/55" aria-hidden />
-        <div className="absolute inset-0 -z-20 bg-gradient-to-r from-primary-dark/90 via-primary-dark/45 to-transparent" aria-hidden />
-        <div className="absolute inset-0 -z-20 bg-gradient-to-b from-primary-dark/55 via-transparent to-primary-dark/65" aria-hidden />
+        {/* Brand-tinted overlays for strong, photo-independent white-text legibility
+            across every (possibly bright) slideshow image. */}
+        <div className="absolute inset-0 -z-20 bg-primary-dark/65" aria-hidden />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-r from-primary-dark/95 via-primary-dark/60 to-primary-dark/25" aria-hidden />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-b from-primary-dark/45 via-transparent to-primary-dark/70" aria-hidden />
 
         {/* Soft animated colour blobs */}
         <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
@@ -112,7 +112,7 @@ export default async function Home() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8 lg:py-28">
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-4 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8">
           {/* Copy */}
           <div className="max-w-2xl">
             <span className="animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
@@ -126,10 +126,10 @@ export default async function Home() {
                 className="text-success"
               />
             </p>
-            <h1 className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100 mb-6 text-balance text-4xl font-bold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+            <h1 className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100 mb-5 text-balance text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
               {hero.title}
             </h1>
-            <p className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200 mb-9 max-w-xl text-lg leading-relaxed text-white/90 sm:text-xl">
+            <p className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200 mb-7 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
               {hero.description}
             </p>
             <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-300 flex flex-col gap-3 sm:flex-row sm:gap-4">
@@ -157,7 +157,7 @@ export default async function Home() {
           </div>
 
           {/* Framed image on the right + floating medicine cards (desktop) */}
-          <div className="animate-in fade-in zoom-in-95 fill-mode-both duration-1000 delay-200 relative hidden lg:block">
+          <div className="animate-in fade-in zoom-in-95 fill-mode-both duration-1000 delay-200 relative mx-auto hidden w-full max-w-[19rem] xl:max-w-sm lg:block">
             <div className="glass-card relative rounded-[2rem] p-3 shadow-2xl shadow-black/40 ring-1 ring-white/20">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
                 <Image
@@ -173,7 +173,7 @@ export default async function Home() {
 
             {/* Floating medicine product cards */}
             {heroProducts[0] && (
-              <div className="absolute -bottom-6 -left-7 w-44 rotate-[-5deg] animate-float">
+              <div className="absolute -bottom-6 -left-6 w-36 rotate-[-5deg] animate-float">
                 <div className="glass-card rounded-2xl p-2.5 shadow-2xl shadow-black/40 ring-1 ring-white/30">
                   <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white">
                     <ProductImage src={heroProducts[0].image} name={heroProducts[0].name} sizes="180px" className="object-contain p-3" />
@@ -183,7 +183,7 @@ export default async function Home() {
               </div>
             )}
             {heroProducts[1] && (
-              <div className="absolute -right-5 -top-5 w-36 rotate-[6deg] animate-float-slow">
+              <div className="absolute -right-4 -top-4 w-28 rotate-[6deg] animate-float-slow">
                 <div className="glass-card rounded-2xl p-2 shadow-2xl shadow-black/40 ring-1 ring-white/30">
                   <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-white">
                     <ProductImage src={heroProducts[1].image} name={heroProducts[1].name} sizes="150px" className="object-contain p-2.5" />

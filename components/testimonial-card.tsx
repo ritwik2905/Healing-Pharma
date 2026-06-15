@@ -16,29 +16,33 @@ function initials(name: string) {
 
 export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <Card className="reveal hover-lift glass-card p-6 h-full flex flex-col border-0">
-      <Quote className="w-9 h-9 text-primary/35 mb-3" />
-      <StarRating rating={testimonial.rating} className="mb-4" />
-      <p className="text-muted-foreground leading-relaxed flex-1">{testimonial.message}</p>
-      <div className="flex items-center gap-3 mt-6 pt-6 border-t border-border">
+    <Card className="reveal hover-lift glass-card relative flex h-full flex-col gap-3 border-0 p-5 ring-1 ring-transparent transition hover:ring-2 hover:ring-primary/25">
+      <Quote className="absolute right-4 top-4 h-7 w-7 text-primary/15" />
+
+      {/* Person */}
+      <div className="flex items-center gap-3">
         {testimonial.image ? (
           <Image
             src={testimonial.image}
             alt={testimonial.name}
             width={48}
             height={48}
-            className="w-12 h-12 rounded-full object-cover"
+            className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-primary/15"
           />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-            <span className="text-primary font-bold">{initials(testimonial.name)}</span>
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 to-accent/15 ring-2 ring-primary/15">
+            <span className="font-bold text-primary">{initials(testimonial.name)}</span>
           </div>
         )}
-        <div>
-          <p className="font-semibold text-foreground">{testimonial.name}</p>
-          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+        <div className="min-w-0 flex-1 pr-6">
+          <p className="truncate font-semibold leading-tight text-foreground">{testimonial.name}</p>
+          <p className="truncate text-xs text-muted-foreground">{testimonial.role}</p>
+          <StarRating rating={testimonial.rating} className="mt-1" />
         </div>
       </div>
+
+      {/* Message */}
+      <p className="text-sm leading-relaxed text-muted-foreground">{testimonial.message}</p>
     </Card>
   )
 }
