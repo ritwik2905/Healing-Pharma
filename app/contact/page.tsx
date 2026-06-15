@@ -118,39 +118,46 @@ export default async function ContactPage() {
               </div>
             </div>
 
-            <ContactForm />
+            {/* Map — in place of the form, beside the contact details */}
+            <div className="reveal flex flex-col">
+              <div className="mb-6 flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                  <NavigationIcon className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-brand-gradient">Find Us</h2>
+                  <p className="text-sm text-muted-foreground">Visit our office</p>
+                </div>
+              </div>
+              {mapSrc ? (
+                <Card className="glass-card flex-1 overflow-hidden border-0 p-1.5">
+                  <div className="relative h-full min-h-[420px] w-full overflow-hidden rounded-2xl">
+                    <iframe
+                      title="Healingdoc Pharma Private Limited location"
+                      src={mapSrc}
+                      className="absolute inset-0 h-full w-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen
+                    />
+                  </div>
+                </Card>
+              ) : (
+                <Card className="soft-card flex flex-1 items-center justify-center border-0 p-8 text-center text-muted-foreground">
+                  Map location will appear here once set in the admin panel.
+                </Card>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Map */}
-      {mapSrc && (
-        <section className="pb-16 lg:pb-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="reveal mb-6 flex items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                <NavigationIcon className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-brand-gradient">Find Us</h2>
-                <p className="text-sm text-muted-foreground">{contact.address}</p>
-              </div>
-            </div>
-            <Card className="glass-card overflow-hidden border-0 p-1.5">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl sm:aspect-[21/9]">
-                <iframe
-                  title="Healingdoc Pharma Private Limited location"
-                  src={mapSrc}
-                  className="absolute inset-0 h-full w-full border-0"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
-              </div>
-            </Card>
-          </div>
-        </section>
-      )}
+      {/* Contact form — below the details + map */}
+      <section className="pb-16 lg:pb-24">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <ContactForm />
+        </div>
+      </section>
     </main>
   )
 }
