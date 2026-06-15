@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProductImage } from "@/components/product-image"
+import { ImageCropper } from "@/components/image-cropper"
 import { X, ChevronLeft, ChevronRight, Check, FileText, FlaskConical, ImageIcon, Plus } from "lucide-react"
 import { addProduct, updateProduct } from "@/lib/product-actions"
 import { cn } from "@/lib/utils"
@@ -349,14 +350,37 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-4">
                 <div>
+                  <Label>Product Image</Label>
+                  <p className="mb-3 mt-1 text-sm text-muted-foreground">
+                    Upload and crop a square photo, or paste an image URL below.
+                  </p>
+                  <ImageCropper onCropped={(dataUrl) => set({ image: dataUrl })} />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="h-px flex-1 bg-border" />
+                  <span className="text-xs uppercase tracking-wide text-muted-foreground">or</span>
+                  <span className="h-px flex-1 bg-border" />
+                </div>
+
+                <div>
                   <Label htmlFor="image">Image URL</Label>
-                  <Input
-                    id="image"
-                    value={formData.image}
-                    onChange={(e) => set({ image: e.target.value })}
-                    placeholder="/placeholder.jpg or https://..."
-                    className="mt-2"
-                  />
+                  {formData.image.startsWith("data:") ? (
+                    <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm">
+                      <span className="font-medium text-foreground">Cropped image ready</span>
+                      <Button type="button" variant="ghost" size="sm" onClick={() => set({ image: "/placeholder.jpg" })}>
+                        Clear
+                      </Button>
+                    </div>
+                  ) : (
+                    <Input
+                      id="image"
+                      value={formData.image}
+                      onChange={(e) => set({ image: e.target.value })}
+                      placeholder="/placeholder.jpg or https://..."
+                      className="mt-2"
+                    />
+                  )}
                   <p className="mt-1 text-sm text-muted-foreground">Leave the default to use an auto-matched image.</p>
                 </div>
               </div>

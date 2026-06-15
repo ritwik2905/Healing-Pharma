@@ -6,8 +6,9 @@
  *   - A full `<iframe ... src="...">` snippet (we extract the src)
  *   - A ready-made embed URL (…/maps/embed… or …output=embed)
  *   - "lat,lng" coordinates, e.g. "28.7515,77.1129"
+ *   - A normal Google Maps / goo.gl link (we pull coordinates out of it, or
+ *     append output=embed to the link itself)
  *   - A plain address / place name
- *   - A normal Google Maps link (used as a query fallback)
  *
  * Returns `null` when there is nothing usable to embed.
  */
@@ -29,6 +30,24 @@ export function toMapEmbedSrc(input?: string | null): string | null {
     return `https://www.google.com/maps?q=${coords}&z=15&output=embed`
   }
 
-  // 4) Anything else (address, place name, or a maps link) → query embed.
+  // 4) A Google Maps / goo.gl link. Pasting the whole URL into q= makes Google
+  //    search for the literal URL text (wrong place), so instead pull the real
+  //    coordinates out of the link when we can.
+  if (/^https?:\/\/[^\s]*(google\.[a-z.]+\/maps|maps\.google\.|maps\.app\.goo\.gl|goo\.gl\/maps)/i.test(raw)) {
+    const coords =
+      raw.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)?.slice(1, 3) ||
+      raw.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)?.slice(1, 3) ||
+      raw.match(/[?&](?:q|ll|center|destination)=(-?\d+\.\d+)(?:%2C|,)(-?\d+\.\d+)/i)?.slice(1, 3)
+    if (coords) {
+      return `https://www.google.com/maps?q=${coords[0]},${coords[1]}&z=15&output=embed`
+    }
+    // No parseable coordinates — append output=embed to the link itself. This
+    // renders for full /maps/place/… URLs; very short share links
+    // (maps.app.goo.gl/…) can't be resolved client-side, so the admin UI steers
+    // users toward lat,lng or the "Embed a map" link instead.
+    return raw.includes("?") ? `${raw}&output=embed` : `${raw}?output=embed`
+  }
+
+  // 5) Anything else (address or place name) → keyless query embed.
   return `https://www.google.com/maps?q=${encodeURIComponent(raw)}&z=14&output=embed`
 }

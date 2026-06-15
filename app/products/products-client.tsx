@@ -10,11 +10,19 @@ import { ProductCard } from "@/components/product-card"
 import { PageHero } from "@/components/page-hero"
 import { SITE_IMAGES } from "@/lib/site-images"
 
-export function ProductsClient({ products }: { products: Product[] }) {
+export function ProductsClient({
+  products,
+  allCategories = [],
+}: {
+  products: Product[]
+  allCategories?: string[]
+}) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
 
-  // Unique categories in first-appearance order, each with its total count.
+  // Unique categories, each with its total count. Categories that products use
+  // come first (in first-appearance order); admin-created categories with no
+  // products yet are appended so they still show as filter chips (count 0).
   const categories = useMemo(() => {
     const order: string[] = []
     const counts: Record<string, number> = {}
@@ -25,8 +33,15 @@ export function ProductsClient({ products }: { products: Product[] }) {
       }
       counts[p.category] += 1
     }
+    for (const name of allCategories) {
+      const clean = name?.trim()
+      if (clean && !(clean in counts)) {
+        counts[clean] = 0
+        order.push(clean)
+      }
+    }
     return order.map((name) => ({ name, count: counts[name] }))
-  }, [products])
+  }, [products, allCategories])
 
   const filteredProducts = useMemo(() => {
     const q = searchQuery.trim().toLowerCase()

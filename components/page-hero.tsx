@@ -169,9 +169,10 @@ export function PageHero({
         )}
       </div>
 
-      {/* Soft landing into the page background */}
+      {/* Soft landing into the page background — taller, 3-stop fade so the photo
+          blends all the way to its bottom edge with no visible seam. */}
       <div
-        className="absolute inset-x-0 bottom-0 z-0 h-16 bg-gradient-to-b from-transparent to-background"
+        className="absolute inset-x-0 bottom-0 z-0 h-24 bg-gradient-to-b from-transparent via-background/50 to-background sm:h-28"
         aria-hidden
       />
     </section>

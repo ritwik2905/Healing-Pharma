@@ -372,9 +372,17 @@ async function seed() {
     {
       key: "hero",
       value: JSON.stringify({
-        title: "Delivering Trust Through Quality Healthcare",
-        description: "Healingdoc Pharma Private Limited is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
-        image: "/modern-pharmacy-healthcare-professional.jpg"
+        title: "Better Medicines. Healthier Lives.",
+        description: "WHO-GMP certified formulations across pain relief, anti-infectives, dermatology, gastro and nutraceuticals — crafted with uncompromising quality and made affordable for the people we serve.",
+        image: "/heroes/home-hero.jpg",
+        secondaryImage: "/heroes/home-about.jpg",
+        video: "",
+        slides: [
+          "/heroes/home-hero.jpg",
+          "/heroes/products-hero.jpg",
+          "/heroes/about-story.jpg",
+          "/heroes/services-hero.jpg"
+        ]
       })
     },
     {
@@ -387,7 +395,7 @@ async function seed() {
         name: "Mr. Sumen Ranjan Sen Gupta",
         title: "Managing Director",
         initials: "SS",
-        description: "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Private Limited Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success. Our products are manufactured at WHO-GMP compliant facilities under strict quality standards to ensure safety, efficacy and consistency, and we remain committed to building strong, transparent relationships with doctors, distributors, retailers and healthcare professionals across India.",
+        description: "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Private Limited. Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success. Our products are manufactured at WHO-GMP compliant facilities under strict quality standards to ensure safety, efficacy and consistency, and we remain committed to building strong, transparent relationships with doctors, distributors, retailers and healthcare professionals across India.",
         image: "/team/managing-director.jpg"
       })
     },

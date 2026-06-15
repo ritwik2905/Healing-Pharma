@@ -11,12 +11,13 @@ const DEFAULT_SETTINGS = {
     image: "",
   },
   hero: {
-    title: "Delivering Trust Through Quality Healthcare",
+    title: "Better Medicines. Healthier Lives.",
     description:
-      "Healingdoc Pharma Private Limited is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
+      "WHO-GMP certified formulations across pain relief, anti-infectives, dermatology, gastro and nutraceuticals — crafted with uncompromising quality and made affordable for the people we serve.",
     image: "/heroes/home-hero.jpg",
     secondaryImage: "/heroes/home-about.jpg",
     video: "",
+    slides: [],
   },
   directors: [],
   chairman: {
@@ -34,6 +35,14 @@ const DEFAULT_SETTINGS = {
     fax: "",
     hours: "Monday - Saturday: 9:00 AM - 6:00 PM\nSunday: Closed",
     mapUrl: "",
+  },
+  social: {
+    facebook: "",
+    instagram: "",
+    youtube: "",
+    linkedin: "",
+    twitter: "",
+    whatsapp: "",
   },
 }
 
@@ -75,6 +84,7 @@ export async function updateHeroSection(hero: {
   image: string
   secondaryImage?: string
   video?: string
+  slides?: string[]
 }) {
   try {
     await upsertSetting("hero", hero)
@@ -111,6 +121,24 @@ export async function updateContactInfo(contact: any) {
   } catch (error) {
     console.error("Error updating contact info:", error)
     return { success: false, error: "Failed to update contact info" }
+  }
+}
+
+export async function updateSocial(social: {
+  facebook?: string
+  instagram?: string
+  youtube?: string
+  linkedin?: string
+  twitter?: string
+  whatsapp?: string
+}) {
+  try {
+    await upsertSetting("social", social)
+    revalidatePath("/", "layout")
+    return { success: true }
+  } catch (error) {
+    console.error("Error updating social links:", error)
+    return { success: false, error: "Failed to update social links" }
   }
 }
 

@@ -64,10 +64,10 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                  "rounded-md px-3 py-2 text-sm font-medium transition-colors",
                   isActive(link.href)
-                    ? "text-primary bg-primary/10"
-                    : "text-foreground hover:text-primary hover:bg-muted",
+                    ? "bg-primary/10 text-primary"
+                    : "text-foreground hover:bg-primary/10 hover:text-primary",
                 )}
               >
                 {link.label}
@@ -96,10 +96,10 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "px-3 py-2.5 rounded-md text-base font-medium transition-colors",
+                    "rounded-md px-3 py-2.5 text-base font-medium transition-colors",
                     isActive(link.href)
-                      ? "text-primary bg-primary/10"
-                      : "text-foreground hover:text-primary hover:bg-muted",
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground hover:bg-primary/10 hover:text-primary",
                   )}
                 >
                   {link.label}

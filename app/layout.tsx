@@ -80,6 +80,7 @@ export default async function RootLayout({
   const settings = await getSiteSettings()
   const logo = settings?.logo || { text: "Healingdoc Pharma", image: "/logo.jpeg" }
   const contact = settings?.contact
+  const social = settings?.social
 
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -117,7 +118,7 @@ export default async function RootLayout({
         />
         <Navigation logo={logo} />
         <div className="flex-1">{children}</div>
-        <SiteFooter logo={logo} contact={contact} />
+        <SiteFooter logo={logo} contact={contact} social={social} />
         <Analytics />
       </body>
     </html>

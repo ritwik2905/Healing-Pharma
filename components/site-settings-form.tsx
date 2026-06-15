@@ -9,13 +9,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Save, ImageIcon, Users, Phone, Building2, Plus, Trash2 } from "lucide-react"
+import { Save, ImageIcon, Users, Phone, Building2, Plus, Trash2, Share2 } from "lucide-react"
 import {
   getSiteSettings,
   updateHeroSection,
   updateDirectors,
   updateContactInfo,
   updateLogo,
+  updateSocial,
 } from "@/lib/site-settings-actions"
 import { useRouter } from "next/navigation"
 
@@ -57,6 +58,10 @@ export function SiteSettingsForm() {
       image: formData.get("image") as string,
       secondaryImage: (formData.get("secondaryImage") as string) || "",
       video: (formData.get("video") as string) || "",
+      slides: ((formData.get("slides") as string) || "")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean),
     }
     const result = await updateHeroSection(hero)
     alert(result.success ? "Hero section updated!" : result.error || "Failed to update hero section")
@@ -149,6 +154,24 @@ export function SiteSettingsForm() {
     setLoading(false)
   }
 
+  const handleSocialUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    const formData = new FormData(e.currentTarget)
+    const social = {
+      facebook: (formData.get("facebook") as string) || "",
+      instagram: (formData.get("instagram") as string) || "",
+      youtube: (formData.get("youtube") as string) || "",
+      linkedin: (formData.get("linkedin") as string) || "",
+      twitter: (formData.get("twitter") as string) || "",
+      whatsapp: (formData.get("whatsapp") as string) || "",
+    }
+    const result = await updateSocial(social)
+    alert(result.success ? "Social links updated!" : result.error || "Failed to update social links")
+    if (result.success) router.refresh()
+    setLoading(false)
+  }
+
   if (!settings) {
     return <div className="py-12 text-center text-muted-foreground">Loading settings...</div>
   }
@@ -173,6 +196,10 @@ export function SiteSettingsForm() {
             <TabsTrigger value="contact" className="gap-2">
               <Phone className="w-4 h-4" />
               Contact
+            </TabsTrigger>
+            <TabsTrigger value="social" className="gap-2">
+              <Share2 className="w-4 h-4" />
+              Social
             </TabsTrigger>
           </TabsList>
         </div>
@@ -221,7 +248,24 @@ export function SiteSettingsForm() {
               <div>
                 <Label htmlFor="image">Main Hero Image URL</Label>
                 <Input id="image" name="image" defaultValue={settings.hero.image} placeholder="/heroes/home-hero.jpg or https://images.pexels.com/..." required className="mt-2" />
-                <p className="text-sm text-muted-foreground mt-1">Large photo shown in the homepage hero. Landscape works best.</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Used as the first slide / fallback for the homepage hero background. Landscape works best.
+                </p>
+              </div>
+              <div>
+                <Label htmlFor="slides">Background Slideshow Images (optional)</Label>
+                <Textarea
+                  id="slides"
+                  name="slides"
+                  defaultValue={(settings.hero?.slides || []).join("\n")}
+                  rows={4}
+                  placeholder={"/heroes/home-hero.jpg\n/heroes/products-hero.jpg\nhttps://images.pexels.com/.../photo.jpeg"}
+                  className="mt-2"
+                />
+                <p className="text-sm text-muted-foreground mt-1">
+                  One image URL per line — the hero background auto-slides through them (3–5 works best). Leave empty to
+                  use the main image plus a few default photos. Ignored when a background video is set.
+                </p>
               </div>
               <div>
                 <Label htmlFor="secondaryImage">Secondary Image URL (optional)</Label>
@@ -388,6 +432,49 @@ export function SiteSettingsForm() {
               <Button type="submit" disabled={loading} className="gap-2">
                 <Save className="w-4 h-4" />
                 Save Contact Info
+              </Button>
+            </form>
+          </Card>
+        </TabsContent>
+
+        {/* SOCIAL */}
+        <TabsContent value="social" className="mt-6">
+          <Card className="p-6">
+            <h3 className="text-xl font-bold text-foreground mb-1">Social Links</h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              Paste the full URL of each profile. Only the ones you fill in are shown in the site footer. Leave a field
+              empty to hide that icon.
+            </p>
+            <form onSubmit={handleSocialUpdate} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="facebook">Facebook</Label>
+                  <Input id="facebook" name="facebook" defaultValue={settings.social?.facebook || ""} placeholder="https://facebook.com/yourpage" className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="instagram">Instagram</Label>
+                  <Input id="instagram" name="instagram" defaultValue={settings.social?.instagram || ""} placeholder="https://instagram.com/yourhandle" className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="youtube">YouTube</Label>
+                  <Input id="youtube" name="youtube" defaultValue={settings.social?.youtube || ""} placeholder="https://youtube.com/@yourchannel" className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="linkedin">LinkedIn</Label>
+                  <Input id="linkedin" name="linkedin" defaultValue={settings.social?.linkedin || ""} placeholder="https://linkedin.com/company/..." className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="twitter">X (Twitter)</Label>
+                  <Input id="twitter" name="twitter" defaultValue={settings.social?.twitter || ""} placeholder="https://x.com/yourhandle" className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="whatsapp">WhatsApp</Label>
+                  <Input id="whatsapp" name="whatsapp" defaultValue={settings.social?.whatsapp || ""} placeholder="https://wa.me/919667949517" className="mt-2" />
+                </div>
+              </div>
+              <Button type="submit" disabled={loading} className="gap-2">
+                <Save className="w-4 h-4" />
+                Save Social Links
               </Button>
             </form>
           </Card>

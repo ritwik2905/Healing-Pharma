@@ -10,6 +10,10 @@ import { getBlogPosts } from "@/lib/blog-actions"
 import { FEATURES, SERVICES, COLOR_CLASSES } from "@/lib/site-content"
 import { SITE_IMAGES } from "@/lib/site-images"
 import { ProductCard } from "@/components/product-card"
+import { ProductImage } from "@/components/product-image"
+import { ProductMarquee } from "@/components/product-marquee"
+import { RotatingWords } from "@/components/rotating-words"
+import { HeroSlideshow } from "@/components/hero-slideshow"
 import { TestimonialCard } from "@/components/testimonial-card"
 import { BlogCard } from "@/components/blog-card"
 import { SectionHeading } from "@/components/section-heading"
@@ -45,48 +49,47 @@ export default async function Home() {
   const latestPosts = posts.slice(0, 3)
 
   const hero = settings?.hero || {
-    title: "Delivering Trust Through Quality Healthcare",
+    title: "Better Medicines. Healthier Lives.",
     description:
-      "Healingdoc Pharma Private Limited is committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities.",
+      "WHO-GMP certified formulations across pain relief, anti-infectives, dermatology, gastro and nutraceuticals — crafted with uncompromising quality and made affordable for the people we serve.",
     image: SITE_IMAGES.home.hero,
   }
   const heroImage = hero.image || SITE_IMAGES.home.hero
   const aboutImage = (hero as { secondaryImage?: string }).secondaryImage || SITE_IMAGES.home.about
   const heroVideo = (hero as { video?: string }).video || ""
+  const videoType = /\.webm(\?|$)/i.test(heroVideo)
+    ? "video/webm"
+    : /\.ogg(\?|$)/i.test(heroVideo)
+      ? "video/ogg"
+      : "video/mp4"
   const logoSrc = settings?.logo?.image || "/logo.jpeg"
+  // Real medicine images to feature in the hero collage.
+  const heroProducts = allProducts.slice(0, 3)
+  // Background slideshow: admin-supplied slides, else a curated set of pharma photos.
+  const heroSlideSetting = Array.isArray((hero as { slides?: string[] }).slides)
+    ? (hero as { slides?: string[] }).slides!.map((s) => s?.trim()).filter(Boolean)
+    : []
+  const heroSlides = Array.from(
+    new Set(
+      (heroSlideSetting.length
+        ? heroSlideSetting
+        : [heroImage, SITE_IMAGES.products.hero, SITE_IMAGES.about.story, SITE_IMAGES.services.hero]
+      ).filter(Boolean),
+    ),
+  )
 
   return (
     <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[88vh] items-center overflow-hidden">
-        {/* Full-bleed background: video if provided, otherwise the hero image */}
-        <div className="absolute inset-0 -z-30" aria-hidden>
-          {heroVideo ? (
-            <video
-              className="h-full w-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster={heroImage}
-            >
-              <source src={heroVideo} />
-            </video>
-          ) : (
-            <Image
-              src={heroImage}
-              alt="Healthcare professionals at Healingdoc Pharma Private Limited"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-          )}
-        </div>
+      <section className="relative isolate flex min-h-[90vh] items-center overflow-hidden">
+        {/* Full-bleed background: auto-sliding image slideshow (or a video if set) */}
+        <HeroSlideshow images={heroSlides} videoSrc={heroVideo} videoType={videoType} poster={heroImage} />
 
-        {/* Tint + bottom fade so white text stays legible and the section blends into the page */}
-        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-primary-dark/90 via-primary-dark/70 to-primary/45" aria-hidden />
-        <div className="absolute inset-0 -z-20 bg-gradient-to-t from-background via-background/15 to-transparent" aria-hidden />
+        {/* Brand-tinted overlays for strong, photo-independent white-text legibility.
+            Deliberately NO light/near-white fade (it washed out the bottom text). */}
+        <div className="absolute inset-0 -z-20 bg-primary-dark/55" aria-hidden />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-r from-primary-dark/90 via-primary-dark/45 to-transparent" aria-hidden />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-b from-primary-dark/55 via-transparent to-primary-dark/65" aria-hidden />
 
         {/* Soft animated colour blobs */}
         <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
@@ -94,9 +97,9 @@ export default async function Home() {
           <div className="absolute bottom-0 -right-24 h-[28rem] w-[28rem] rounded-full bg-primary/25 blur-3xl animate-blob" />
         </div>
 
-        {/* Logo watermark */}
+        {/* Logo watermark — visible on all breakpoints, scaled down on small screens */}
         <div
-          className="pointer-events-none absolute -right-12 top-1/2 -z-10 hidden -translate-y-1/2 select-none opacity-[0.08] lg:block"
+          className="pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.06]"
           aria-hidden
         >
           <Image
@@ -104,21 +107,29 @@ export default async function Home() {
             alt=""
             width={620}
             height={620}
-            className="h-[32rem] w-[32rem] object-contain brightness-0 invert"
+            className="h-72 w-72 object-contain brightness-0 invert sm:h-96 sm:w-96 lg:h-[34rem] lg:w-[34rem]"
           />
         </div>
 
         {/* Content */}
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
-          <div className="max-w-3xl">
-            <span className="animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8 lg:py-28">
+          {/* Copy */}
+          <div className="max-w-2xl">
+            <span className="animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
               <ShieldCheck className="h-4 w-4 text-success" />
               WHO-GMP Certified Manufacturing
             </span>
+            <p className="drop-hero animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 delay-75 mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-white/90">
+              Trusted across{" "}
+              <RotatingWords
+                words={["Pain Relief", "Anti-Infectives", "Dermatology", "Gastro Care", "Respiratory Care", "Nutraceuticals"]}
+                className="text-success"
+              />
+            </p>
             <h1 className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100 mb-6 text-balance text-4xl font-bold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
               {hero.title}
             </h1>
-            <p className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200 mb-9 max-w-2xl text-lg leading-relaxed text-white/90 sm:text-xl">
+            <p className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200 mb-9 max-w-xl text-lg leading-relaxed text-white/90 sm:text-xl">
               {hero.description}
             </p>
             <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-300 flex flex-col gap-3 sm:flex-row sm:gap-4">
@@ -138,21 +149,56 @@ export default async function Home() {
                 </Button>
               </Link>
             </div>
-            <div className="animate-in fade-in fill-mode-both duration-700 delay-500 mt-9 flex flex-wrap gap-x-7 gap-y-2 text-sm text-white/85">
+            <div className="drop-hero animate-in fade-in fill-mode-both duration-700 delay-500 mt-9 flex flex-wrap gap-x-7 gap-y-2 text-sm text-white/90">
               <span className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-white" /> Quality Assured</span>
               <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-white" /> Pan-India Supply</span>
               <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-white" /> Ethical Practices</span>
             </div>
           </div>
+
+          {/* Framed image on the right + floating medicine cards (desktop) */}
+          <div className="animate-in fade-in zoom-in-95 fill-mode-both duration-1000 delay-200 relative hidden lg:block">
+            <div className="glass-card relative rounded-[2rem] p-3 shadow-2xl shadow-black/40 ring-1 ring-white/20">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
+                <Image
+                  src={aboutImage}
+                  alt="Quality medicines at Healingdoc Pharma Private Limited"
+                  fill
+                  sizes="(max-width: 1024px) 0vw, 40vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/40 via-transparent to-transparent" />
+              </div>
+            </div>
+
+            {/* Floating medicine product cards */}
+            {heroProducts[0] && (
+              <div className="absolute -bottom-6 -left-7 w-44 rotate-[-5deg] animate-float">
+                <div className="glass-card rounded-2xl p-2.5 shadow-2xl shadow-black/40 ring-1 ring-white/30">
+                  <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white">
+                    <ProductImage src={heroProducts[0].image} name={heroProducts[0].name} sizes="180px" className="object-contain p-3" />
+                  </div>
+                  <p className="mt-1.5 truncate px-1 text-xs font-bold text-foreground">{heroProducts[0].name}</p>
+                </div>
+              </div>
+            )}
+            {heroProducts[1] && (
+              <div className="absolute -right-5 -top-5 w-36 rotate-[6deg] animate-float-slow">
+                <div className="glass-card rounded-2xl p-2 shadow-2xl shadow-black/40 ring-1 ring-white/30">
+                  <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-white">
+                    <ProductImage src={heroProducts[1].image} name={heroProducts[1].name} sizes="150px" className="object-contain p-2.5" />
+                  </div>
+                  <p className="mt-1.5 truncate px-1 text-[11px] font-bold text-foreground">{heroProducts[1].name}</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Scroll cue */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center" aria-hidden>
-          <span className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/40 p-1.5">
-            <span className="h-2 w-1 animate-bounce rounded-full bg-white/80" />
-          </span>
-        </div>
       </section>
+
+      {/* ── Product ticker ───────────────────────────────────────────── */}
+      <ProductMarquee names={allProducts.map((p) => p.name)} />
 
       {/* ── Credentials strip ────────────────────────────────────────── */}
       <section className="section-frost">
@@ -183,7 +229,7 @@ export default async function Home() {
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {FEATURES.map((f) => (
-              <Card key={f.title} className="reveal hover-lift soft-card group border-0 p-6 text-center">
+              <Card key={f.title} className="reveal hover-lift soft-card group border-0 p-6 text-center ring-1 ring-transparent transition hover:ring-2 hover:ring-primary/30">
                 <div className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${COLOR_CLASSES[f.color].softBg} transition-transform duration-300 group-hover:scale-110`}>
                   <f.icon className={`h-7 w-7 ${COLOR_CLASSES[f.color].text}`} />
                 </div>
@@ -229,7 +275,7 @@ export default async function Home() {
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {SERVICES.map((s) => (
-              <Card key={s.title} className="reveal hover-lift soft-card group border-0 p-6">
+              <Card key={s.title} className="reveal hover-lift soft-card group border-0 p-6 ring-1 ring-transparent transition hover:ring-2 hover:ring-accent/30">
                 <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${COLOR_CLASSES[s.color].solidBg} transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}>
                   <s.icon className="h-6 w-6 text-white" />
                 </div>

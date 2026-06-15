@@ -1,4 +1,5 @@
 import { getProducts } from "@/lib/product-actions"
+import { getCategories } from "@/lib/category-actions"
 import { ProductsClient } from "./products-client"
 import { pageMetadata } from "@/lib/seo"
 
@@ -10,6 +11,6 @@ export const metadata = pageMetadata({
 })
 
 export default async function ProductsPage() {
-  const products = await getProducts()
-  return <ProductsClient products={products} />
+  const [products, categories] = await Promise.all([getProducts(), getCategories()])
+  return <ProductsClient products={products} allCategories={categories} />
 }
