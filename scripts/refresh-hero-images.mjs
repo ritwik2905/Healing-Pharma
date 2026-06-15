@@ -20,7 +20,7 @@ async function run() {
   const base = existing && typeof existing === "object" ? existing : {
     title: "Delivering Trust Through Quality Healthcare",
     description:
-      "Healingdoc Pharma Pvt. Ltd. is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
+      "Healingdoc Pharma Private Limited is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
   }
 
   const next = { ...base, image: NEW_HERO_IMAGE, secondaryImage: NEW_HERO_SECONDARY }

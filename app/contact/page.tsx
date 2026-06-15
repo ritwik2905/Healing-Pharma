@@ -1,15 +1,16 @@
-import { MapPin, Phone, Mail, Printer, Clock, MessageSquare } from "lucide-react"
+import { MapPin, Phone, Mail, Printer, Clock, MessageSquare, Navigation as NavigationIcon } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { getSiteSettings } from "@/lib/site-settings-actions"
 import { ContactForm } from "@/components/contact-form"
 import { PageHero } from "@/components/page-hero"
 import { SITE_IMAGES } from "@/lib/site-images"
 import { pageMetadata } from "@/lib/seo"
+import { toMapEmbedSrc } from "@/lib/map-utils"
 
 export const metadata = pageMetadata({
   title: "Contact Us",
   description:
-    "Get in touch with Healingdoc Pharma Pvt. Ltd. for product enquiries, distribution partnerships, institutional and government supplies. Call, email or visit our Delhi office.",
+    "Get in touch with Healingdoc Pharma Private Limited for product enquiries, distribution partnerships, institutional and government supplies. Call, email or visit our Delhi office.",
   path: "/contact",
 })
 
@@ -22,6 +23,10 @@ export default async function ContactPage() {
     fax: "+91 11 1234 5679",
     hours: "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 9:00 AM - 2:00 PM\nSunday: Closed",
   }
+
+  // Admin sets the location ("lat,lng", an embed link/iframe, or an address);
+  // fall back to embedding the postal address so a map always shows.
+  const mapSrc = toMapEmbedSrc(contact.mapUrl) || toMapEmbedSrc(contact.address)
 
   return (
     <main>
@@ -117,6 +122,35 @@ export default async function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* Map */}
+      {mapSrc && (
+        <section className="pb-16 lg:pb-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="reveal mb-6 flex items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                <NavigationIcon className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-brand-gradient">Find Us</h2>
+                <p className="text-sm text-muted-foreground">{contact.address}</p>
+              </div>
+            </div>
+            <Card className="glass-card overflow-hidden border-0 p-1.5">
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl sm:aspect-[21/9]">
+                <iframe
+                  title="Healingdoc Pharma Private Limited location"
+                  src={mapSrc}
+                  className="absolute inset-0 h-full w-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+            </Card>
+          </div>
+        </section>
+      )}
     </main>
   )
 }

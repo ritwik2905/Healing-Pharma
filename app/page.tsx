@@ -18,7 +18,7 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "Quality, Affordable Medicines — WHO-GMP Certified",
   description:
-    "Healingdoc Pharma Pvt. Ltd. delivers WHO-GMP certified, affordable medicines across India — pain relief, anti-infectives, dermatology, gastro, respiratory care and nutraceuticals. Government supplies, institutional sales & GEM registered.",
+    "Healingdoc Pharma Private Limited delivers WHO-GMP certified, affordable medicines across India — pain relief, anti-infectives, dermatology, gastro, respiratory care and nutraceuticals. Government supplies, institutional sales & GEM registered.",
   path: "/",
 })
 
@@ -47,72 +47,110 @@ export default async function Home() {
   const hero = settings?.hero || {
     title: "Delivering Trust Through Quality Healthcare",
     description:
-      "Healingdoc Pharma Pvt. Ltd. is committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities.",
+      "Healingdoc Pharma Private Limited is committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities.",
     image: SITE_IMAGES.home.hero,
   }
   const heroImage = hero.image || SITE_IMAGES.home.hero
   const aboutImage = (hero as { secondaryImage?: string }).secondaryImage || SITE_IMAGES.home.about
+  const heroVideo = (hero as { video?: string }).video || ""
+  const logoSrc = settings?.logo?.image || "/logo.jpeg"
 
   return (
     <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
-          <div className="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-accent/20 blur-3xl animate-blob" />
-          <div className="absolute top-10 -right-24 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-blob" />
+      <section className="relative isolate flex min-h-[88vh] items-center overflow-hidden">
+        {/* Full-bleed background: video if provided, otherwise the hero image */}
+        <div className="absolute inset-0 -z-30" aria-hidden>
+          {heroVideo ? (
+            <video
+              className="h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={heroImage}
+            >
+              <source src={heroVideo} />
+            </video>
+          ) : (
+            <Image
+              src={heroImage}
+              alt="Healthcare professionals at Healingdoc Pharma Private Limited"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          )}
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
-            {/* Copy */}
-            <div>
-              <span className="animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary backdrop-blur-sm">
-                <ShieldCheck className="h-4 w-4 text-success" />
-                WHO-GMP Certified Manufacturing
-              </span>
-              <h1 className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100 mb-6 text-balance text-4xl font-bold leading-[1.1] text-brand-gradient sm:text-5xl lg:text-6xl">
-                {hero.title}
-              </h1>
-              <p className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200 mb-8 max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-                {hero.description}
-              </p>
-              <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-300 flex flex-col gap-3 sm:flex-row sm:gap-4">
-                <Link href="/products">
-                  <Button size="lg" className="w-full gap-2 sm:w-auto">
-                    Explore Products
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link href="/contact">
-                  <Button size="lg" variant="outline" className="w-full bg-transparent sm:w-auto">
-                    Become a Partner
-                  </Button>
-                </Link>
-              </div>
-              <div className="animate-in fade-in fill-mode-both duration-700 delay-500 mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-                <span className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-primary" /> Quality Assured</span>
-                <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-primary" /> Pan-India Supply</span>
-                <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Ethical Practices</span>
-              </div>
-            </div>
+        {/* Tint + bottom fade so white text stays legible and the section blends into the page */}
+        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-primary-dark/90 via-primary-dark/70 to-primary/45" aria-hidden />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-t from-background via-background/15 to-transparent" aria-hidden />
 
-            {/* Framed photo */}
-            <div className="animate-in fade-in zoom-in-95 fill-mode-both duration-1000 delay-200">
-              <div className="glass-card relative mx-auto max-w-xl rounded-[2rem] p-3 lg:max-w-none">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] sm:aspect-[16/10] lg:aspect-[5/4]">
-                  <Image
-                    src={heroImage}
-                    alt="Healthcare professionals at Healingdoc Pharma"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/30 via-transparent to-transparent" />
-                </div>
-              </div>
+        {/* Soft animated colour blobs */}
+        <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
+          <div className="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-accent/25 blur-3xl animate-blob" />
+          <div className="absolute bottom-0 -right-24 h-[28rem] w-[28rem] rounded-full bg-primary/25 blur-3xl animate-blob" />
+        </div>
+
+        {/* Logo watermark */}
+        <div
+          className="pointer-events-none absolute -right-12 top-1/2 -z-10 hidden -translate-y-1/2 select-none opacity-[0.08] lg:block"
+          aria-hidden
+        >
+          <Image
+            src={logoSrc}
+            alt=""
+            width={620}
+            height={620}
+            className="h-[32rem] w-[32rem] object-contain brightness-0 invert"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
+          <div className="max-w-3xl">
+            <span className="animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
+              <ShieldCheck className="h-4 w-4 text-success" />
+              WHO-GMP Certified Manufacturing
+            </span>
+            <h1 className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-100 mb-6 text-balance text-4xl font-bold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+              {hero.title}
+            </h1>
+            <p className="drop-hero animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-200 mb-9 max-w-2xl text-lg leading-relaxed text-white/90 sm:text-xl">
+              {hero.description}
+            </p>
+            <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 delay-300 flex flex-col gap-3 sm:flex-row sm:gap-4">
+              <Link href="/products">
+                <Button size="lg" className="w-full gap-2 bg-white text-primary shadow-xl shadow-black/20 hover:bg-white/90 sm:w-auto">
+                  Explore Products
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full border-white/70 bg-white/5 text-white backdrop-blur-sm hover:bg-white/15 hover:text-white sm:w-auto"
+                >
+                  Become a Partner
+                </Button>
+              </Link>
+            </div>
+            <div className="animate-in fade-in fill-mode-both duration-700 delay-500 mt-9 flex flex-wrap gap-x-7 gap-y-2 text-sm text-white/85">
+              <span className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-white" /> Quality Assured</span>
+              <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-white" /> Pan-India Supply</span>
+              <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-white" /> Ethical Practices</span>
             </div>
           </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center" aria-hidden>
+          <span className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/40 p-1.5">
+            <span className="h-2 w-1 animate-bounce rounded-full bg-white/80" />
+          </span>
         </div>
       </section>
 

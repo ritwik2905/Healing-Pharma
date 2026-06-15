@@ -13,7 +13,7 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "About Us",
   description:
-    "Healingdoc Pharma Pvt. Ltd. is a rapidly growing pharmaceutical company committed to quality, affordable medicines manufactured at WHO-GMP certified facilities.",
+    "Healingdoc Pharma Private Limited is a rapidly growing pharmaceutical company committed to quality, affordable medicines manufactured at WHO-GMP certified facilities.",
   path: "/about",
 })
 
@@ -104,7 +104,7 @@ export default async function AboutPage() {
               </h2>
               <div className="space-y-4 leading-relaxed text-muted-foreground">
                 <p>
-                  Healingdoc Pharma Pvt. Ltd. is dedicated to delivering quality pharmaceutical and healthcare products
+                  Healingdoc Pharma Private Limited is dedicated to delivering quality pharmaceutical and healthcare products
                   with a commitment to excellence, innovation and customer satisfaction. We continuously work towards
                   providing affordable and effective medicines that support better healthcare outcomes.
                 </p>

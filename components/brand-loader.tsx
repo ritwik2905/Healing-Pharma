@@ -45,7 +45,12 @@ export function BrandLoader({ className }: { className?: string }) {
       </div>
 
       <div className="space-y-3">
-        <div className="text-xl font-bold text-brand-gradient">Healingdoc Pharma</div>
+        <div className="leading-tight">
+          <div className="text-xl font-bold text-brand-gradient">Healingdoc Pharma</div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+            Private Limited
+          </div>
+        </div>
         <div className="mx-auto h-1 w-40 overflow-hidden rounded-full bg-primary/15">
           <div className="animate-loader-bar h-full w-1/2 rounded-full bg-gradient-to-r from-accent to-primary" />
         </div>

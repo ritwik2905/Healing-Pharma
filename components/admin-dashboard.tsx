@@ -20,8 +20,10 @@ import {
   Star,
   BookOpen,
   Quote,
+  FolderTree,
 } from "lucide-react"
 import { ProductForm } from "@/components/product-form"
+import { CategoryManager } from "@/components/category-manager"
 import { TestimonialForm } from "@/components/testimonial-form"
 import { BlogForm } from "@/components/blog-form"
 import { logoutAdmin } from "@/lib/admin-auth"
@@ -52,6 +54,7 @@ interface AdminDashboardProps {
   inquiries: Inquiry[]
   testimonials: Testimonial[]
   blogPosts: BlogPost[]
+  categories: string[]
 }
 
 function ModalShell({ children }: { children: React.ReactNode }) {
@@ -62,7 +65,7 @@ function ModalShell({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function AdminDashboard({ products, inquiries, testimonials, blogPosts }: AdminDashboardProps) {
+export function AdminDashboard({ products, inquiries, testimonials, blogPosts, categories }: AdminDashboardProps) {
   const router = useRouter()
 
   const [showForm, setShowForm] = useState(false)
@@ -169,6 +172,10 @@ export function AdminDashboard({ products, inquiries, testimonials, blogPosts }:
                 <Package className="w-4 h-4" />
                 Products
               </TabsTrigger>
+              <TabsTrigger value="categories" className="gap-2">
+                <FolderTree className="w-4 h-4" />
+                Categories
+              </TabsTrigger>
               <TabsTrigger value="testimonials" className="gap-2">
                 <Star className="w-4 h-4" />
                 Testimonials
@@ -242,7 +249,7 @@ export function AdminDashboard({ products, inquiries, testimonials, blogPosts }:
 
             {showForm && (
               <ModalShell>
-                <ProductForm product={editingProduct} onClose={handleProductFormClose} />
+                <ProductForm product={editingProduct} categories={categories} onClose={handleProductFormClose} />
               </ModalShell>
             )}
 
@@ -332,6 +339,11 @@ export function AdminDashboard({ products, inquiries, testimonials, blogPosts }:
                 </table>
               </div>
             </Card>
+          </TabsContent>
+
+          {/* CATEGORIES */}
+          <TabsContent value="categories">
+            <CategoryManager initialCategories={categories} />
           </TabsContent>
 
           {/* TESTIMONIALS */}

@@ -56,6 +56,7 @@ export function SiteSettingsForm() {
       description: formData.get("description") as string,
       image: formData.get("image") as string,
       secondaryImage: (formData.get("secondaryImage") as string) || "",
+      video: (formData.get("video") as string) || "",
     }
     const result = await updateHeroSection(hero)
     alert(result.success ? "Hero section updated!" : result.error || "Failed to update hero section")
@@ -126,6 +127,7 @@ export function SiteSettingsForm() {
       email: formData.get("email") as string,
       fax: (formData.get("fax") as string) || "",
       hours: formData.get("hours") as string,
+      mapUrl: (formData.get("mapUrl") as string) || "",
     }
     const result = await updateContactInfo(contact)
     alert(result.success ? "Contact information updated!" : result.error || "Failed to update contact information")
@@ -225,6 +227,14 @@ export function SiteSettingsForm() {
                 <Label htmlFor="secondaryImage">Secondary Image URL (optional)</Label>
                 <Input id="secondaryImage" name="secondaryImage" defaultValue={settings.hero?.secondaryImage || ""} placeholder="/heroes/home-about.jpg or https://images.unsplash.com/..." className="mt-2" />
                 <p className="text-sm text-muted-foreground mt-1">Photo shown in the homepage “About” preview section.</p>
+              </div>
+              <div>
+                <Label htmlFor="video">Background Video URL (optional)</Label>
+                <Input id="video" name="video" defaultValue={settings.hero?.video || ""} placeholder="/heroes/hero.mp4 or https://.../hero.mp4" className="mt-2" />
+                <p className="text-sm text-muted-foreground mt-1">
+                  If set, a muted looping video plays as the full-screen hero background instead of the main image. Use a
+                  direct <code className="rounded bg-muted px-1">.mp4</code>/<code className="rounded bg-muted px-1">.webm</code> link. The main image above is used as the poster while it loads.
+                </p>
               </div>
               <Button type="submit" disabled={loading} className="gap-2">
                 <Save className="w-4 h-4" />
@@ -358,6 +368,22 @@ export function SiteSettingsForm() {
                 <Label htmlFor="hours">Business Hours</Label>
                 <Textarea id="hours" name="hours" defaultValue={settings.contact.hours} rows={3} required className="mt-2" />
                 <p className="text-sm text-muted-foreground mt-1">Use line breaks for different days.</p>
+              </div>
+              <div>
+                <Label htmlFor="mapUrl">Google Maps Location (optional)</Label>
+                <Textarea
+                  id="mapUrl"
+                  name="mapUrl"
+                  defaultValue={settings.contact?.mapUrl || ""}
+                  rows={2}
+                  placeholder='28.7515, 77.1129  —  or paste the full "Embed a map" link / iframe from Google Maps'
+                  className="mt-2"
+                />
+                <p className="text-sm text-muted-foreground mt-1">
+                  Sets the map shown on the Contact page. Paste any of: <strong>latitude, longitude</strong> (e.g.
+                  {" "}<code className="rounded bg-muted px-1">28.7515, 77.1129</code>), a Google Maps{" "}
+                  <strong>Share → Embed a map</strong> link/iframe, or your address. Leave empty to use the address above.
+                </p>
               </div>
               <Button type="submit" disabled={loading} className="gap-2">
                 <Save className="w-4 h-4" />

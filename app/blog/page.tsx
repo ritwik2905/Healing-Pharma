@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "Blog",
   description:
-    "Health tips, awareness articles and company updates from Healingdoc Pharma Pvt. Ltd.",
+    "Health tips, awareness articles and company updates from Healingdoc Pharma Private Limited",
   path: "/blog",
 })
 

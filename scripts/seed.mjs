@@ -15,7 +15,7 @@ async function seed() {
   await sql`DELETE FROM blog_posts`;
   console.log("Cleared existing data.");
 
-  // Seed products (from Healingdoc Pharma Pvt. Ltd. product catalogue)
+  // Seed products (from Healingdoc Pharma Private Limited product catalogue)
   const products = [
     {
       name: "Acloheal-SP Tablets",
@@ -373,7 +373,7 @@ async function seed() {
       key: "hero",
       value: JSON.stringify({
         title: "Delivering Trust Through Quality Healthcare",
-        description: "Healingdoc Pharma Pvt. Ltd. is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
+        description: "Healingdoc Pharma Private Limited is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
         image: "/modern-pharmacy-healthcare-professional.jpg"
       })
     },
@@ -387,7 +387,7 @@ async function seed() {
         name: "Mr. Sumen Ranjan Sen Gupta",
         title: "Managing Director",
         initials: "SS",
-        description: "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Pvt. Ltd. Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success. Our products are manufactured at WHO-GMP compliant facilities under strict quality standards to ensure safety, efficacy and consistency, and we remain committed to building strong, transparent relationships with doctors, distributors, retailers and healthcare professionals across India.",
+        description: "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Private Limited Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success. Our products are manufactured at WHO-GMP compliant facilities under strict quality standards to ensure safety, efficacy and consistency, and we remain committed to building strong, transparent relationships with doctors, distributors, retailers and healthcare professionals across India.",
         image: "/team/managing-director.jpg"
       })
     },
@@ -469,7 +469,7 @@ async function seed() {
       slug: "what-who-gmp-certification-means-for-you",
       title: "What WHO-GMP Certification Means for You",
       excerpt: "Every Healingdoc Pharma product is manufactured at WHO-GMP compliant facilities. Here is what that quality standard actually guarantees.",
-      content: "WHO-GMP (World Health Organization - Good Manufacturing Practices) is a globally recognised quality system that governs how medicines are produced and controlled.\n\nWhen a product carries the WHO-GMP mark, it means the manufacturing facility follows strict standards covering raw-material sourcing, hygiene, equipment calibration, batch documentation and final quality testing. Every batch is traceable and tested for safety, efficacy and consistency before it reaches a patient.\n\nAt Healingdoc Pharma Pvt. Ltd., we partner only with WHO-GMP certified manufacturing units. This ensures that whether you are a doctor prescribing our medicines, a distributor stocking them, or a patient taking them, you receive a product of consistent, verifiable quality.\n\nQuality is not a one-time check for us - it is built into every step of the journey from raw material to your hands.",
+      content: "WHO-GMP (World Health Organization - Good Manufacturing Practices) is a globally recognised quality system that governs how medicines are produced and controlled.\n\nWhen a product carries the WHO-GMP mark, it means the manufacturing facility follows strict standards covering raw-material sourcing, hygiene, equipment calibration, batch documentation and final quality testing. Every batch is traceable and tested for safety, efficacy and consistency before it reaches a patient.\n\nAt Healingdoc Pharma Private Limited, we partner only with WHO-GMP certified manufacturing units. This ensures that whether you are a doctor prescribing our medicines, a distributor stocking them, or a patient taking them, you receive a product of consistent, verifiable quality.\n\nQuality is not a one-time check for us - it is built into every step of the journey from raw material to your hands.",
       coverImage: "/modern-pharmacy-healthcare-professional.jpg",
       author: "Healingdoc Pharma",
       category: "Quality",

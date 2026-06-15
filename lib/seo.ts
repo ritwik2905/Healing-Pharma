@@ -6,10 +6,10 @@ const rawUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.healingdocpharma
 
 export const siteConfig = {
   name: "Healingdoc Pharma",
-  legalName: "Healingdoc Pharma Pvt. Ltd.",
+  legalName: "Healingdoc Pharma Private Limited",
   url: rawUrl.replace(/\/$/, ""),
   description:
-    "Healingdoc Pharma Pvt. Ltd. is a WHO-GMP certified pharmaceutical company delivering quality, affordable and innovative medicines across India — covering pain relief, anti-infectives, dermatology, gastro, respiratory care and nutraceuticals.",
+    "Healingdoc Pharma Private Limited is a WHO-GMP certified pharmaceutical company delivering quality, affordable and innovative medicines across India — covering pain relief, anti-infectives, dermatology, gastro, respiratory care and nutraceuticals.",
   ogImage: "/modern-pharmacy-healthcare-professional.jpg",
   keywords: [
     "Healingdoc Pharma",

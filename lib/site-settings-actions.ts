@@ -13,9 +13,10 @@ const DEFAULT_SETTINGS = {
   hero: {
     title: "Delivering Trust Through Quality Healthcare",
     description:
-      "Healingdoc Pharma Pvt. Ltd. is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
+      "Healingdoc Pharma Private Limited is a rapidly growing pharmaceutical company committed to high-quality, affordable and innovative medicines, manufactured at WHO-GMP certified facilities under strict quality control.",
     image: "/heroes/home-hero.jpg",
     secondaryImage: "/heroes/home-about.jpg",
+    video: "",
   },
   directors: [],
   chairman: {
@@ -23,7 +24,7 @@ const DEFAULT_SETTINGS = {
     title: "Managing Director",
     initials: "SS",
     description:
-      "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Pvt. Ltd. Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success.",
+      "It gives me immense pleasure to present the product portfolio of Healingdoc Pharma Private Limited. Our company is committed to delivering high-quality, affordable and innovative healthcare solutions with a strong focus on patient well-being and customer satisfaction. We believe that trust, quality and ethical business practices are the foundation of long-term success.",
     image: "/team/managing-director.jpg",
   },
   contact: {
@@ -32,6 +33,7 @@ const DEFAULT_SETTINGS = {
     email: "healingdocpharma@gmail.com",
     fax: "",
     hours: "Monday - Saturday: 9:00 AM - 6:00 PM\nSunday: Closed",
+    mapUrl: "",
   },
 }
 
@@ -72,6 +74,7 @@ export async function updateHeroSection(hero: {
   description: string
   image: string
   secondaryImage?: string
+  video?: string
 }) {
   try {
     await upsertSetting("hero", hero)

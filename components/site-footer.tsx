@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { MapPin, Phone, Mail, ArrowUpRight, ShieldCheck } from "lucide-react"
+import { brandParts } from "@/lib/utils"
 
 interface SiteFooterProps {
   logo?: { text: string; image: string }
@@ -26,7 +27,9 @@ const RESOURCE_LINKS = [
 
 export function SiteFooter({ logo, contact }: SiteFooterProps) {
   const pathname = usePathname()
-  const brand = logo?.text || "Healingdoc Pharma"
+  const { main: brandMain, sub: brandSub } = brandParts(logo?.text)
+  const brand = brandSub ? `${brandMain} ${brandSub}` : brandMain
+  const logoSrc = logo?.image || "/logo.jpeg"
   const year = new Date().getFullYear()
 
   // The admin panel has its own chrome — hide the public footer there.
@@ -45,6 +48,19 @@ export function SiteFooter({ logo, contact }: SiteFooterProps) {
         <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -bottom-32 right-0 w-[28rem] h-[28rem] rounded-full bg-white/10 blur-3xl" />
       </div>
+      {/* Logo watermark */}
+      <div
+        className="pointer-events-none absolute -bottom-10 -right-6 -z-0 select-none opacity-[0.06] sm:bottom-0 sm:right-6"
+        aria-hidden
+      >
+        <Image
+          src={logoSrc}
+          alt=""
+          width={420}
+          height={420}
+          className="h-56 w-56 object-contain brightness-0 invert sm:h-80 sm:w-80"
+        />
+      </div>
       {/* Bright top hairline */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
 
@@ -55,14 +71,21 @@ export function SiteFooter({ logo, contact }: SiteFooterProps) {
             <Link href="/" className="flex items-center gap-3 mb-5 w-fit group">
               <span className="rounded-xl bg-white p-1.5 shadow-lg shadow-black/10 ring-1 ring-white/40 transition-transform group-hover:scale-105">
                 <Image
-                  src={logo?.image || "/logo.jpeg"}
+                  src={logoSrc}
                   alt={brand}
                   width={40}
                   height={40}
                   className="w-9 h-9 object-contain rounded-lg"
                 />
               </span>
-              <span className="font-bold text-lg leading-tight">{brand}</span>
+              <span className="flex flex-col leading-none">
+                <span className="font-bold text-lg leading-tight">{brandMain}</span>
+                {brandSub && (
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/75">
+                    {brandSub}
+                  </span>
+                )}
+              </span>
             </Link>
             <p className="text-white/85 text-sm leading-relaxed max-w-xs">
               Delivering trust through quality healthcare. WHO-GMP certified pharmaceutical products for a healthier

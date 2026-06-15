@@ -5,6 +5,7 @@ import { getInquiries } from "@/lib/inquiry-actions"
 import { getProducts } from "@/lib/product-actions"
 import { getTestimonials } from "@/lib/testimonial-actions"
 import { getBlogPosts } from "@/lib/blog-actions"
+import { getCategories } from "@/lib/category-actions"
 
 export const metadata = {
   title: "Admin Panel - Healingdoc Pharma",
@@ -21,11 +22,12 @@ export default async function AdminPage() {
     redirect("/admin/login")
   }
 
-  const [products, inquiries, testimonials, blogPosts] = await Promise.all([
+  const [products, inquiries, testimonials, blogPosts, categories] = await Promise.all([
     getProducts(),
     getInquiries(),
     getTestimonials(),
     getBlogPosts({ includeUnpublished: true }),
+    getCategories(),
   ])
 
   return (
@@ -35,6 +37,7 @@ export default async function AdminPage() {
         inquiries={inquiries}
         testimonials={testimonials}
         blogPosts={blogPosts}
+        categories={categories}
       />
     </main>
   )

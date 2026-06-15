@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
-import { cn } from "@/lib/utils"
+import { cn, brandParts } from "@/lib/utils"
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -30,6 +30,8 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href))
 
+  const { main: brandMain, sub: brandSub } = brandParts(logo?.text)
+
   return (
     <nav className="glass-nav sticky top-0 z-50 border-b border-border/60 shadow-sm shadow-primary/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,8 +45,15 @@ export function Navigation({ logo }: { logo?: { text: string; image: string } })
               className="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded"
               priority
             />
-            <span className="font-bold text-base sm:text-xl text-brand-gradient text-brand-gradient-animated whitespace-nowrap">
-              {logo?.text || "Healingdoc Pharma"}
+            <span className="flex flex-col leading-none">
+              <span className="font-bold text-base sm:text-xl text-brand-gradient text-brand-gradient-animated whitespace-nowrap">
+                {brandMain}
+              </span>
+              {brandSub && (
+                <span className="text-[9px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                  {brandSub}
+                </span>
+              )}
             </span>
           </Link>
 

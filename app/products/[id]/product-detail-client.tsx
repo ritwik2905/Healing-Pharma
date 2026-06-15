@@ -6,16 +6,12 @@ import { Button } from "@/components/ui/button"
 import { ProductImage } from "@/components/product-image"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Calendar, Package, Pill, AlertCircle, FileDown, PhoneCall } from "lucide-react"
+import { ArrowLeft, Pill, AlertCircle, FileDown, PhoneCall } from "lucide-react"
 import { PurchaseInquiryForm } from "@/components/purchase-inquiry-form"
 import type { Product } from "@/lib/product-actions"
 
 export function ProductDetailClient({ product }: { product: Product }) {
   const [showPurchaseForm, setShowPurchaseForm] = useState(false)
-
-  const today = new Date()
-  const expiryDate = new Date(product.expiryDate)
-  const daysUntilExpiry = Math.floor((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
   return (
     <main className="min-h-screen">
@@ -73,57 +69,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
                   <p className="text-muted-foreground">{product.dosage}</p>
                   <p className="text-sm text-warning-foreground mt-2">Always consult with a healthcare professional before use.</p>
                 </div>
-              </div>
-            </Card>
-
-            <Card className="soft-card border-0 p-6 mb-6">
-              <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                <Package className="w-5 h-5 text-primary" />
-                Manufacturing Information
-              </h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-border">
-                  <span className="text-muted-foreground">Batch Number</span>
-                  <span className="font-semibold text-foreground">{product.batchNumber}</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-border">
-                  <span className="text-muted-foreground flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Manufacture Date
-                  </span>
-                  <span className="font-semibold text-foreground">
-                    {new Date(product.manufactureDate).toLocaleDateString("en-IN", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-3">
-                  <span className="text-muted-foreground flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Expiry Date
-                  </span>
-                  <span className="font-semibold text-foreground">
-                    {new Date(product.expiryDate).toLocaleDateString("en-IN", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </span>
-                </div>
-                {daysUntilExpiry < 180 && daysUntilExpiry > 0 && (
-                  <div className="bg-warning/10 border border-warning/20 rounded-lg p-4 mt-4">
-                    <p className="text-warning-foreground text-sm font-medium">
-                      Note: This product will expire in {daysUntilExpiry} days. Please use before expiry date.
-                    </p>
-                  </div>
-                )}
-                {daysUntilExpiry <= 0 && (
-                  <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mt-4">
-                    <p className="text-destructive text-sm font-medium">Warning: This product has expired.</p>
-                  </div>
-                )}
               </div>
             </Card>
 
