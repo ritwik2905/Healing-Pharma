@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
+import { IMAGE_BLUR } from "@/lib/image-utils"
 
 /**
  * Full-bleed hero background that auto-crossfades through several images.
@@ -44,8 +45,10 @@ export function HeroSlideshow({
             fill
             priority={i === 0}
             sizes="100vw"
+            placeholder="blur"
+            blurDataURL={IMAGE_BLUR}
             className={cn(
-              "object-cover transition-opacity duration-1000 ease-in-out",
+              "object-cover object-center transition-opacity duration-1000 ease-in-out",
               videoSrc || i === active ? "opacity-100" : "opacity-0",
             )}
           />

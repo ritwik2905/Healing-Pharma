@@ -9,6 +9,7 @@ import { getTestimonials } from "@/lib/testimonial-actions"
 import { getBlogPosts } from "@/lib/blog-actions"
 import { FEATURES, SERVICES, COLOR_CLASSES } from "@/lib/site-content"
 import { SITE_IMAGES } from "@/lib/site-images"
+import { IMAGE_BLUR } from "@/lib/image-utils"
 import { ProductCard } from "@/components/product-card"
 import { ProductImage } from "@/components/product-image"
 import { ProductMarquee } from "@/components/product-marquee"
@@ -81,7 +82,7 @@ export default async function Home() {
   return (
     <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[88svh] items-center overflow-hidden py-20 lg:min-h-[640px]">
+      <section className="relative isolate flex min-h-[600px] items-center overflow-hidden lg:min-h-[86vh]">
         {/* Full-bleed background: auto-sliding image slideshow (or a video if set) */}
         <HeroSlideshow images={heroSlides} videoSrc={heroVideo} videoType={videoType} poster={heroImage} />
 
@@ -112,7 +113,7 @@ export default async function Home() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-4 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8">
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8 lg:py-20">
           {/* Copy */}
           <div className="max-w-2xl">
             <span className="animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
@@ -165,6 +166,8 @@ export default async function Home() {
                   alt="Quality medicines at Healingdoc Pharma Private Limited"
                   fill
                   sizes="(max-width: 1024px) 0vw, 40vw"
+                  placeholder="blur"
+                  blurDataURL={IMAGE_BLUR}
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/40 via-transparent to-transparent" />

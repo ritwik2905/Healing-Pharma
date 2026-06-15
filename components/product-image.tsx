@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { Pill } from "lucide-react"
-import { hasRealImage } from "@/lib/image-utils"
+import { hasRealImage, IMAGE_BLUR } from "@/lib/image-utils"
 import { cn } from "@/lib/utils"
 
 interface ProductImageProps {
@@ -19,7 +19,18 @@ interface ProductImageProps {
  */
 export function ProductImage({ src, name, sizes, priority, className, compact }: ProductImageProps) {
   if (hasRealImage(src)) {
-    return <Image src={src as string} alt={name} fill sizes={sizes} priority={priority} className={className} />
+    const isData = (src as string).startsWith("data:")
+    return (
+      <Image
+        src={src as string}
+        alt={name}
+        fill
+        sizes={sizes}
+        priority={priority}
+        className={className}
+        {...(isData ? {} : { placeholder: "blur" as const, blurDataURL: IMAGE_BLUR })}
+      />
+    )
   }
 
   return (
