@@ -33,6 +33,7 @@ export default async function ContactPage() {
       <PageHero
         image={SITE_IMAGES.contact.hero}
         imageAlt="Business partnership handshake in a modern office"
+        imagePosition="center 15%"
         eyebrow="Contact Us"
         eyebrowIcon={<MessageSquare className="h-4 w-4" />}
         title="Let's Start a Conversation"

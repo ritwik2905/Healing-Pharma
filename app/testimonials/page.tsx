@@ -24,6 +24,7 @@ export default async function TestimonialsPage() {
       <PageHero
         image={SITE_IMAGES.testimonials.hero}
         imageAlt="Confident team of healthcare professionals"
+        imagePosition="center top"
         eyebrow="Testimonials"
         eyebrowIcon={<MessageSquareQuote className="h-4 w-4" />}
         title="What Our Partners Say"

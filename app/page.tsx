@@ -23,7 +23,7 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "Quality, Affordable Medicines — WHO-GMP Certified",
   description:
-    "Healingdoc Pharma Private Limited delivers WHO-GMP certified, affordable medicines across India — pain relief, anti-infectives, dermatology, gastro, respiratory care and nutraceuticals. Government supplies, institutional sales & GEM registered.",
+    "Healingdoc Pharma Private Limited delivers WHO-GMP certified, affordable medicines across India — pain relief, anti-infectives, gastro, anti-allergy, dermatology and nutraceuticals. Government supplies, institutional sales & GEM registered.",
   path: "/",
 })
 
@@ -123,7 +123,7 @@ export default async function Home() {
             <p className="drop-hero animate-in fade-in slide-in-from-bottom-3 fill-mode-both duration-700 delay-75 mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-white/90">
               Trusted across{" "}
               <RotatingWords
-                words={["Pain Relief", "Anti-Infectives", "Dermatology", "Gastro Care", "Respiratory Care", "Nutraceuticals"]}
+                words={["Pain Relief", "Anti-Infectives", "Gastro Care", "Anti-Allergy", "Dermatology", "Nutraceuticals"]}
                 className="text-success"
               />
             </p>
@@ -329,7 +329,7 @@ export default async function Home() {
                 <div className="mb-7 grid grid-cols-2 gap-4">
                   {[
                     { value: "WHO-GMP", label: "Certified Facilities" },
-                    { value: "24+", label: "Quality Products" },
+                    { value: "18+", label: "Quality Products" },
                     { value: "Pan-India", label: "Distribution" },
                     { value: "100%", label: "Ethical Practices" },
                   ].map((s) => (

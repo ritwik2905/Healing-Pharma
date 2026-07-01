@@ -43,7 +43,7 @@ export default async function AboutPage() {
         description="A rapidly growing pharmaceutical company built on trust, quality and ethical business practices — delivering affordable, innovative medicines across India."
         stats={[
           { value: "WHO-GMP", label: "Certified Manufacturing" },
-          { value: "24+", label: "Quality Products" },
+          { value: "18+", label: "Quality Products" },
           { value: "Pan-India", label: "Distribution Network" },
         ]}
         size="lg"
