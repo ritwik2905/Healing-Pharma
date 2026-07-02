@@ -28,6 +28,12 @@ export default async function ContactPage() {
   // fall back to embedding the postal address so a map always shows.
   const mapSrc = toMapEmbedSrc(contact.mapUrl) || toMapEmbedSrc(contact.address)
 
+  // Split the (possibly comma-separated) phone value into individually dialable numbers.
+  const phones = (contact.phone || "")
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean)
+
   return (
     <main>
       <PageHero
@@ -74,7 +80,15 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <h3 className="mb-2 font-semibold text-foreground">Phone</h3>
-                      <p className="text-muted-foreground">{contact.phone}</p>
+                      <p className="flex flex-wrap gap-x-3 text-muted-foreground">
+                        {phones.length > 0
+                          ? phones.map((num) => (
+                              <a key={num} href={`tel:${num.replace(/\s+/g, "")}`} className="hover:text-primary">
+                                {num}
+                              </a>
+                            ))
+                          : contact.phone}
+                      </p>
                     </div>
                   </div>
                 </Card>
@@ -86,7 +100,11 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <h3 className="mb-2 font-semibold text-foreground">Email</h3>
-                      <p className="break-all text-muted-foreground">{contact.email}</p>
+                      <p className="break-all text-muted-foreground">
+                        <a href={`mailto:${contact.email}`} className="hover:text-accent">
+                          {contact.email}
+                        </a>
+                      </p>
                     </div>
                   </div>
                 </Card>

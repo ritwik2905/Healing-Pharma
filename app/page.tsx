@@ -20,6 +20,11 @@ import { BlogCard } from "@/components/blog-card"
 import { SectionHeading } from "@/components/section-heading"
 import { pageMetadata } from "@/lib/seo"
 
+// The home page renders Featured Product cards whose links use live DB product
+// IDs. Those IDs advance whenever the catalogue is re-seeded, so a static build
+// would bake stale links that 404. Render per request to stay in sync with the DB.
+export const dynamic = "force-dynamic"
+
 export const metadata = pageMetadata({
   title: "Quality, Affordable Medicines — WHO-GMP Certified",
   description:

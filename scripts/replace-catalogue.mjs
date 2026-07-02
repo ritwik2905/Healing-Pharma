@@ -21,6 +21,9 @@ async function run() {
   console.log("Replacing product catalogue...");
 
   await sql`DELETE FROM products`;
+  // Reset the serial so re-inserts start at id 1 again. Without this, the id
+  // keeps climbing on every run, which needlessly churns product URLs.
+  await sql`ALTER SEQUENCE products_id_seq RESTART WITH 1`;
   console.log("Cleared existing products.");
 
   for (const p of products) {

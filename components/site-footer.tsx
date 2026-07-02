@@ -41,7 +41,6 @@ const RESOURCE_LINKS = [
   { href: "/blog", label: "Blog" },
   { href: "/testimonials", label: "Testimonials" },
   { href: "/products", label: "Catalogue" },
-  { href: "/admin/login", label: "Admin" },
 ]
 
 export function SiteFooter({ logo, contact, social }: SiteFooterProps) {
@@ -59,6 +58,20 @@ export function SiteFooter({ logo, contact, social }: SiteFooterProps) {
     .map((p) => p.trim())
     .filter(Boolean)
 
+  // An admin may paste a bare handle ("healingdoc"), a scheme-less domain
+  // ("facebook.com/healingdoc") or, for WhatsApp, just a phone number. Without a
+  // scheme the browser resolves these relative to the current page and 404s, so
+  // normalise every value into an absolute URL before it becomes an href.
+  const normalizeSocialHref = (label: string, value: string) => {
+    const v = value.trim()
+    if (/^https?:\/\//i.test(v)) return v
+    if (label === "WhatsApp") {
+      const digits = v.replace(/[^\d]/g, "")
+      if (digits) return `https://wa.me/${digits}`
+    }
+    return `https://${v.replace(/^\/+/, "")}`
+  }
+
   const socialLinks = [
     { href: social?.facebook, label: "Facebook", icon: Facebook },
     { href: social?.instagram, label: "Instagram", icon: Instagram },
@@ -66,7 +79,9 @@ export function SiteFooter({ logo, contact, social }: SiteFooterProps) {
     { href: social?.linkedin, label: "LinkedIn", icon: Linkedin },
     { href: social?.twitter, label: "X", icon: Twitter },
     { href: social?.whatsapp, label: "WhatsApp", icon: MessageCircle },
-  ].filter((s): s is { href: string; label: string; icon: typeof Facebook } => Boolean(s.href && s.href.trim()))
+  ]
+    .filter((s): s is { href: string; label: string; icon: typeof Facebook } => Boolean(s.href && s.href.trim()))
+    .map((s) => ({ ...s, href: normalizeSocialHref(s.label, s.href) }))
 
   return (
     <footer className="relative overflow-hidden bg-[#0b1b3c] text-white">

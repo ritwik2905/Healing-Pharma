@@ -19,21 +19,30 @@ export function ContactForm() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setIsError(false)
 
-    const result = await addInquiry({
-      type: "contact",
-      ...formData,
-    })
+    try {
+      const result = await addInquiry({
+        type: "contact",
+        ...formData,
+      })
 
-    setIsSubmitting(false)
-    if (result.success) {
-      setIsSuccess(true)
-      setFormData({ name: "", email: "", phone: "", message: "" })
-      setTimeout(() => setIsSuccess(false), 5000)
+      if (result.success) {
+        setIsSuccess(true)
+        setFormData({ name: "", email: "", phone: "", message: "" })
+        setTimeout(() => setIsSuccess(false), 5000)
+      } else {
+        setIsError(true)
+      }
+    } catch {
+      setIsError(true)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -45,6 +54,14 @@ export function ContactForm() {
         <div className="mb-6 rounded-lg border border-success/30 bg-success/10 p-4">
           <p className="font-medium text-success-foreground">
             Thank you! Your message has been sent successfully.
+          </p>
+        </div>
+      )}
+
+      {isError && (
+        <div className="mb-6 rounded-lg border border-destructive/30 bg-destructive/10 p-4">
+          <p className="font-medium text-destructive">
+            Something went wrong and your message could not be sent. Please try again, or reach us directly by phone or email.
           </p>
         </div>
       )}

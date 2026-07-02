@@ -23,24 +23,33 @@ export function PurchaseInquiryForm({ productId, productName, onClose }: Purchas
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setIsError(false)
 
-    const result = await addInquiry({
-      type: "purchase",
-      productId,
-      productName,
-      ...formData,
-    })
+    try {
+      const result = await addInquiry({
+        type: "purchase",
+        productId,
+        productName,
+        ...formData,
+      })
 
-    setIsSubmitting(false)
-    if (result.success) {
-      setIsSuccess(true)
-      setTimeout(() => {
-        onClose()
-      }, 2000)
+      if (result.success) {
+        setIsSuccess(true)
+        setTimeout(() => {
+          onClose()
+        }, 2000)
+      } else {
+        setIsError(true)
+      }
+    } catch {
+      setIsError(true)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -70,6 +79,14 @@ export function PurchaseInquiryForm({ productId, productName, onClose }: Purchas
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
+              {isError && (
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4">
+                  <p className="font-medium text-destructive">
+                    Something went wrong and your inquiry could not be sent. Please try again, or contact us directly.
+                  </p>
+                </div>
+              )}
+
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                   Full Name *

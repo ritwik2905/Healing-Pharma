@@ -24,42 +24,58 @@ export interface Product {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const rows = await db.select().from(products)
-  return rows.map((r) => ({
-    id: r.id.toString(),
-    name: r.name,
-    category: r.category,
-    description: r.description,
-    detailedDescription: r.detailedDescription,
-    manufactureDate: r.manufactureDate,
-    expiryDate: r.expiryDate,
-    batchNumber: r.batchNumber,
-    composition: r.composition,
-    dosage: r.dosage,
-    image: resolveProductImage(r.name, r.image),
-    price: r.price,
-    inStock: r.inStock,
-  }))
+  try {
+    const rows = await db.select().from(products)
+    return rows.map((r) => ({
+      id: r.id.toString(),
+      name: r.name,
+      category: r.category,
+      description: r.description,
+      detailedDescription: r.detailedDescription,
+      manufactureDate: r.manufactureDate,
+      expiryDate: r.expiryDate,
+      batchNumber: r.batchNumber,
+      composition: r.composition,
+      dosage: r.dosage,
+      image: resolveProductImage(r.name, r.image),
+      price: r.price,
+      inStock: r.inStock,
+    }))
+  } catch (error) {
+    // Now that /products and / render dynamically, a transient DB error must not
+    // crash the whole page — degrade to an empty catalogue instead of a 500.
+    console.error("Failed to get products:", error)
+    return []
+  }
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
-  const rows = await db.select().from(products).where(eq(products.id, parseInt(id)))
-  if (rows.length === 0) return null
-  const r = rows[0]
-  return {
-    id: r.id.toString(),
-    name: r.name,
-    category: r.category,
-    description: r.description,
-    detailedDescription: r.detailedDescription,
-    manufactureDate: r.manufactureDate,
-    expiryDate: r.expiryDate,
-    batchNumber: r.batchNumber,
-    composition: r.composition,
-    dosage: r.dosage,
-    image: resolveProductImage(r.name, r.image),
-    price: r.price,
-    inStock: r.inStock,
+  // A non-numeric id (e.g. /products/foo) would make parseInt return NaN and the
+  // query error out; treat it as "not found" so the detail page 404s cleanly.
+  const numericId = parseInt(id, 10)
+  if (Number.isNaN(numericId)) return null
+  try {
+    const rows = await db.select().from(products).where(eq(products.id, numericId))
+    if (rows.length === 0) return null
+    const r = rows[0]
+    return {
+      id: r.id.toString(),
+      name: r.name,
+      category: r.category,
+      description: r.description,
+      detailedDescription: r.detailedDescription,
+      manufactureDate: r.manufactureDate,
+      expiryDate: r.expiryDate,
+      batchNumber: r.batchNumber,
+      composition: r.composition,
+      dosage: r.dosage,
+      image: resolveProductImage(r.name, r.image),
+      price: r.price,
+      inStock: r.inStock,
+    }
+  } catch (error) {
+    console.error("Failed to get product:", error)
+    return null
   }
 }
 

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ProductImage } from "@/components/product-image"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Pill, AlertCircle, FileDown, PhoneCall } from "lucide-react"
+import { ArrowLeft, Pill, AlertCircle, PhoneCall } from "lucide-react"
 import { PurchaseInquiryForm } from "@/components/purchase-inquiry-form"
 import type { Product } from "@/lib/product-actions"
 
@@ -104,10 +104,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
                 Contact Sales
               </Button>
             </Link>
-            <Button variant="outline" className="gap-2 bg-transparent">
-              <FileDown className="w-4 h-4" />
-              Download Product Sheet
-            </Button>
           </div>
         </Card>
       </div>

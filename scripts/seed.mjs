@@ -14,6 +14,11 @@ async function seed() {
   await sql`DELETE FROM site_settings`;
   await sql`DELETE FROM testimonials`;
   await sql`DELETE FROM blog_posts`;
+  // Reset serials so a fresh seed always starts ids at 1 (keeps product URLs stable).
+  await sql`ALTER SEQUENCE products_id_seq RESTART WITH 1`;
+  await sql`ALTER SEQUENCE site_settings_id_seq RESTART WITH 1`;
+  await sql`ALTER SEQUENCE testimonials_id_seq RESTART WITH 1`;
+  await sql`ALTER SEQUENCE blog_posts_id_seq RESTART WITH 1`;
   console.log("Cleared existing data.");
 
   // Products come from the shared catalogue-data module (single source of truth).

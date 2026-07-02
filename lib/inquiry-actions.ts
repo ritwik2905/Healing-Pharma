@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { db } from "./db"
 import { inquiries } from "./schema"
 import { eq } from "drizzle-orm"
+import { isAdminAuthenticated } from "./admin-auth"
 
 export interface Inquiry {
   id: string
@@ -18,6 +19,9 @@ export interface Inquiry {
 }
 
 export async function getInquiries(): Promise<Inquiry[]> {
+  // Inquiries contain customer PII (name, email, phone, message). Only the
+  // authenticated admin dashboard may read them.
+  if (!(await isAdminAuthenticated())) return []
   const rows = await db.select().from(inquiries)
   return rows.map((r) => ({
     id: r.id.toString(),
@@ -53,6 +57,9 @@ export async function addInquiry(inquiry: Omit<Inquiry, "id" | "timestamp">) {
 }
 
 export async function deleteInquiry(id: string) {
+  // Deleting an enquiry is an admin-only action; addInquiry stays public so the
+  // contact / purchase forms work for anonymous visitors.
+  if (!(await isAdminAuthenticated())) return { success: false, error: "Unauthorized" }
   try {
     await db.delete(inquiries).where(eq(inquiries.id, parseInt(id)))
 
