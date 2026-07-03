@@ -85,19 +85,6 @@ export function SiteFooter({ logo, contact, social }: SiteFooterProps) {
 
   return (
     <footer className="relative overflow-hidden bg-[#0b1b3c] text-white">
-      {/* Logo watermark — large, centred, faint */}
-      <div
-        className="pointer-events-none absolute inset-0 -z-0 flex items-center justify-center overflow-hidden"
-        aria-hidden
-      >
-        <Image
-          src={logoSrc}
-          alt=""
-          width={760}
-          height={760}
-          className="w-[min(82%,600px)] max-w-none object-contain opacity-[0.04] brightness-0 invert"
-        />
-      </div>
       {/* Bright top hairline */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
