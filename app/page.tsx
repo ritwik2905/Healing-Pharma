@@ -253,8 +253,7 @@ export default async function Home() {
       <section className="py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            eyebrow="Our Products"
-            title="Featured Products"
+            title="Our Products"
             description="A glimpse of our comprehensive range of quality pharmaceutical formulations."
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
