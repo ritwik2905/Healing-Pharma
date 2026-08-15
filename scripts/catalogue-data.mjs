@@ -19,7 +19,8 @@ export const categories = [
   "Nutraceuticals",
 ]
 
-// The 18 products from the INDICATION document. Grouped by category in the same
+// The products from the INDICATION document, plus any added since. Grouped by
+// category in the same
 // order as `categories` above (products are grouped on the /products page in the
 // order they first appear, so insertion order controls the section order).
 export const products = [
@@ -118,6 +119,21 @@ export const products = [
   },
 
   // ── Anti-Infective ─────────────────────────────────────────────────────
+  {
+    name: "Moxidoc-625 Tablets",
+    category: "Anti-Infective",
+    description: "Amoxycillin & Potassium Clavulanate Tablets IP 625mg for a broad range of bacterial infections.",
+    detailed_description:
+      "Moxidoc-625 combines Amoxycillin 500mg and Potassium Clavulanate 125mg. Amoxycillin is a broad-spectrum penicillin antibiotic that stops bacteria from building their cell wall, while Clavulanic acid is a beta-lactamase inhibitor that protects it from bacteria which would otherwise resist it. Indicated for respiratory tract infections, ENT infections such as sinusitis, tonsillitis and otitis media, urinary tract infections, and skin, soft tissue, dental and bone infections. Manufactured at WHO-GMP certified facilities.",
+    manufacture_date: "2025-02-10",
+    expiry_date: "2027-02-10",
+    batch_number: "MXD625-2025-025",
+    composition: "Amoxycillin 500mg + Potassium Clavulanate 125mg",
+    dosage: "As directed by the physician. Usually 1 tablet twice daily after meals.",
+    image: "/products/moxidoc-625.jpg",
+    price: "₹166.77/-",
+    in_stock: true,
+  },
   {
     name: "Cefidoc-200 Tablets",
     category: "Anti-Infective",
@@ -270,7 +286,7 @@ export const products = [
     batch_number: "HDC-2025-003",
     composition: "Ofloxacin 0.75% + Ornidazole 2.0% + Itraconazole 1.0% + Clobetasol Propionate 0.05% (15gm)",
     dosage: "Apply a thin layer on the affected area as directed by the physician. For external use only.",
-    image: "/products/healderm-cream.jpg",
+    image: "/products/healderm.jpg",
     price: "₹115/-",
     in_stock: true,
   },
@@ -285,7 +301,7 @@ export const products = [
     batch_number: "LDC-2025-004",
     composition: "Luliconazole 1% w/w (30gm)",
     dosage: "Apply once daily to the affected and surrounding area for the prescribed duration. For external use only.",
-    image: "/products/lulidrum.jpg",
+    image: "/products/luliderm.jpg",
     price: "₹263/-",
     in_stock: true,
   },

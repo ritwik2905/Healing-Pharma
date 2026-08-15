@@ -9,7 +9,8 @@
     "start": "next start",
     "db:push": "drizzle-kit push",
     "db:seed": "node scripts/seed.mjs",
-    "db:replace": "node scripts/replace-catalogue.mjs"
+    "db:replace": "node scripts/replace-catalogue.mjs",
+    "db:sync": "node scripts/sync-catalogue.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

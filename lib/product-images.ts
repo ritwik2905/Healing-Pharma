@@ -7,8 +7,8 @@ import { hasRealImage } from "./image-utils"
 const PRODUCT_IMAGES: Record<string, string> = {
   "acloheal-sp tablets": "/products/acloheal-sp.jpg",
   "acloheal-mr tablets": "/products/acloheal-mr.jpg",
-  "healderm cream": "/products/healderm-cream.jpg",
-  "luliderm cream": "/products/lulidrum.jpg",
+  "healderm cream": "/products/healderm.jpg",
+  "luliderm cream": "/products/luliderm.jpg",
   "healergy-lc tablets": "/products/healergy-lc.jpg",
   "healoxin-oz tablets": "/products/healoxin-oz.jpg",
   "diclodoc gel": "/products/dicloheal-gel.jpg",
@@ -16,6 +16,7 @@ const PRODUCT_IMAGES: Record<string, string> = {
   "acloheal-np tablets": "/products/acloheal-np.jpg",
   "paraheal-650 tablets": "/products/paraheal-650.jpg",
   "cefidoc-200 tablets": "/products/cefidoc-200.jpg",
+  "moxidoc-625 tablets": "/products/moxidoc-625.jpg",
   "pandoc-dsr capsules": "/products/pandoc-dsr.jpg",
   "omedoc-20 capsules": "/products/omedoc-20.jpg",
   "panoheal-40 injection": "/products/panoheal-40.jpg",
