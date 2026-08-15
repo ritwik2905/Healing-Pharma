@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { ProductImage } from "@/components/product-image"
@@ -22,7 +22,7 @@ import {
   Quote,
   FolderTree,
 } from "lucide-react"
-import { ProductForm } from "@/components/product-form"
+import { ProductForm, PRODUCT_DRAFT_KEY, clearProductDraft } from "@/components/product-form"
 import { CategoryManager } from "@/components/category-manager"
 import { TestimonialForm } from "@/components/testimonial-form"
 import { BlogForm } from "@/components/blog-form"
@@ -100,6 +100,39 @@ export function AdminDashboard({ products, inquiries, testimonials, blogPosts, c
     setShowForm(false)
     setEditingProduct(null)
     router.refresh()
+  }
+
+  // Mobile browsers often discard this page while the OS photo picker is open,
+  // which silently threw away a half-finished product edit. ProductForm mirrors
+  // its state into sessionStorage, so on reload we put the admin straight back
+  // into the form they were in.
+  const draftChecked = useRef(false)
+  useEffect(() => {
+    if (draftChecked.current) return
+    draftChecked.current = true
+    try {
+      const raw = sessionStorage.getItem(PRODUCT_DRAFT_KEY)
+      if (!raw) return
+      const draft = JSON.parse(raw)
+      if (!draft?.formData) return
+      const target = draft.productId ? products.find((p) => p.id === draft.productId) : null
+      // A draft for a product that has since been deleted is dropped.
+      if (draft.productId && !target) {
+        clearProductDraft()
+        return
+      }
+      setEditingProduct(target ?? null)
+      setShowForm(true)
+    } catch {
+      clearProductDraft()
+    }
+  }, [products])
+
+  const openProductForm = (target: Product | null) => {
+    // An explicit Add/Edit click starts fresh — never inherit an older draft.
+    clearProductDraft()
+    setEditingProduct(target)
+    setShowForm(true)
   }
 
   // ---- Inquiries ----
@@ -235,13 +268,7 @@ export function AdminDashboard({ products, inquiries, testimonials, blogPosts, c
 
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6 lg:mb-8">
               <h2 className="text-2xl font-bold text-foreground">Products</h2>
-              <Button
-                onClick={() => {
-                  setEditingProduct(null)
-                  setShowForm(true)
-                }}
-                className="gap-2 w-full sm:w-auto"
-              >
+              <Button onClick={() => openProductForm(null)} className="gap-2 w-full sm:w-auto">
                 <Plus className="w-4 h-4" />
                 Add New Product
               </Button>
@@ -312,14 +339,7 @@ export function AdminDashboard({ products, inquiries, testimonials, blogPosts, c
                         </td>
                         <td className="p-4">
                           <div className="flex items-center justify-end gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                setEditingProduct(product)
-                                setShowForm(true)
-                              }}
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => openProductForm(product)}>
                               <Edit className="w-4 h-4" />
                             </Button>
                             <Button

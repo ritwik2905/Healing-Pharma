@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProductImage } from "@/components/product-image"
 import { ImageCropper } from "@/components/image-cropper"
-import { X, ChevronLeft, ChevronRight, Check, FileText, FlaskConical, ImageIcon, Plus } from "lucide-react"
+import { X, ChevronLeft, ChevronRight, Check, FileText, FlaskConical, ImageIcon, Plus, AlertCircle } from "lucide-react"
 import { addProduct, updateProduct } from "@/lib/product-actions"
 import { cn } from "@/lib/utils"
 
@@ -43,6 +43,41 @@ const STEPS = [
   { title: "Image & Review", description: "Photo & confirm", icon: ImageIcon },
 ] as const
 
+const LAST_STEP = STEPS.length - 1
+
+// Mobile browsers routinely discard the page while the OS photo picker is open,
+// which used to wipe a half-finished edit (and the crop) with no warning. The
+// draft is mirrored into sessionStorage so the dashboard can reopen the form
+// exactly where the admin left it. See `readProductDraft` in admin-dashboard.
+export const PRODUCT_DRAFT_KEY = "hd:product-form-draft"
+
+export function clearProductDraft() {
+  try {
+    sessionStorage.removeItem(PRODUCT_DRAFT_KEY)
+  } catch {
+    /* private mode / storage disabled — drafts are a nicety, never required */
+  }
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  name: "Product name",
+  category: "Category",
+  description: "Short description",
+  detailedDescription: "Detailed description",
+  composition: "Composition",
+  dosage: "Dosage",
+  price: "Price",
+  batchNumber: "Batch number",
+  manufactureDate: "Manufacture date",
+  expiryDate: "Expiry date",
+}
+
+const STEP_FIELDS: string[][] = [
+  ["name", "category", "description", "detailedDescription"],
+  ["composition", "dosage", "price", "batchNumber", "manufactureDate", "expiryDate"],
+  [],
+]
+
 export function ProductForm({ product, categories = [], onClose }: ProductFormProps) {
   const [step, setStep] = useState(0)
   const [formData, setFormData] = useState({
@@ -60,8 +95,39 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
     inStock: product?.inStock ?? true,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [showErrors, setShowErrors] = useState(false)
   // Free-type a brand-new category that isn't in the dropdown yet.
   const [customCategory, setCustomCategory] = useState(false)
+
+  // Restore an interrupted edit (see PRODUCT_DRAFT_KEY above).
+  const restored = useRef(false)
+  useEffect(() => {
+    if (restored.current) return
+    restored.current = true
+    try {
+      const raw = sessionStorage.getItem(PRODUCT_DRAFT_KEY)
+      if (!raw) return
+      const draft = JSON.parse(raw)
+      if (draft?.productId !== (product?.id ?? null)) return
+      if (draft.formData) setFormData((prev) => ({ ...prev, ...draft.formData }))
+      if (typeof draft.step === "number") setStep(Math.min(Math.max(draft.step, 0), LAST_STEP))
+    } catch {
+      /* corrupt draft — start from the product as loaded */
+    }
+  }, [product?.id])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        PRODUCT_DRAFT_KEY,
+        JSON.stringify({ productId: product?.id ?? null, step, formData }),
+      )
+    } catch {
+      /* quota exceeded (very large crop) — saving still works, only the
+         crash-recovery draft is skipped */
+    }
+  }, [product?.id, step, formData])
 
   // Always include the product's current category so editing never loses it.
   const categoryOptions = Array.from(
@@ -70,52 +136,97 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
 
   const set = (patch: Partial<typeof formData>) => setFormData((prev) => ({ ...prev, ...patch }))
 
-  const isStepValid = (s: number) => {
-    const d = formData
-    if (s === 0) return [d.name, d.category, d.description, d.detailedDescription].every((v) => v.trim())
-    if (s === 1)
-      return [d.composition, d.dosage, d.price, d.batchNumber, d.manufactureDate, d.expiryDate].every((v) =>
-        String(v).trim(),
-      )
-    return true
-  }
+  const missingIn = (s: number) =>
+    STEP_FIELDS[s].filter((f) => !String(formData[f as keyof typeof formData] ?? "").trim())
 
+  const isStepValid = (s: number) => missingIn(s).length === 0
   const allValid = [0, 1, 2].every(isStepValid)
+  const missingHere = missingIn(step)
 
-  const goNext = () => {
-    if (isStepValid(step) && step < STEPS.length - 1) setStep(step + 1)
+  const goTo = (s: number) => {
+    setSaveError(null)
+    setStep(Math.min(Math.max(s, 0), LAST_STEP))
   }
-  const goBack = () => step > 0 && setStep(step - 1)
+  // Moving forward is never blocked — the admin must always be able to reach the
+  // Image step, even if an older product is missing a batch number or a date.
+  const goNext = () => goTo(step + 1)
+  const goBack = () => goTo(step - 1)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // If a field on an earlier step is missing, jump back to it.
+  const closeAndClear = () => {
+    clearProductDraft()
+    onClose()
+  }
+
+  const save = async () => {
     const firstInvalid = [0, 1, 2].find((s) => !isStepValid(s))
     if (firstInvalid !== undefined) {
+      setShowErrors(true)
       setStep(firstInvalid)
       return
     }
 
+    setSaveError(null)
     setIsSubmitting(true)
-    const result = product ? await updateProduct(product.id, formData) : await addProduct(formData)
-    if (result.success) onClose()
-    else alert(result.error || "Failed to save product")
-    setIsSubmitting(false)
+    try {
+      const result = product ? await updateProduct(product.id, formData) : await addProduct(formData)
+      if (result.success) {
+        clearProductDraft()
+        onClose()
+        return
+      }
+      setSaveError(result.error || "Failed to save product.")
+    } catch (err) {
+      // A rejected Server Action (payload too large, network drop, expired
+      // session) used to leave the button stuck on "Saving..." with no reason
+      // shown. Surface it instead.
+      console.error("Failed to save product:", err)
+      setSaveError(
+        "Couldn't reach the server. If you just cropped a large photo, try a tighter crop — otherwise check your connection and log in again.",
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Only the final step may save. Without this, pressing Enter on step 1 or 2
+    // of an existing product (where every field is already filled) submitted the
+    // form and closed the whole modal before the admin ever reached the image.
+    if (step < LAST_STEP) {
+      goNext()
+      return
+    }
+    void save()
+  }
+
+  // Enter inside a single-line field means "next", never "save and close".
+  // (Textareas keep their newline; the category dropdown is portaled out of the
+  // form, so Radix's own Enter handling is untouched.)
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key !== "Enter") return
+    if ((e.target as HTMLElement).tagName !== "INPUT") return
+    e.preventDefault()
+    if (step < LAST_STEP) goNext()
+  }
+
+  const invalidClass = (field: string) =>
+    showErrors && !String(formData[field as keyof typeof formData] ?? "").trim()
+      ? "border-destructive focus-visible:ring-destructive"
+      : ""
 
   return (
     <Card className="w-full max-w-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">{product ? "Edit Product" : "Add New Product"}</h2>
-        <Button variant="ghost" size="sm" onClick={onClose}>
+        <Button variant="ghost" size="sm" onClick={closeAndClear} aria-label="Close">
           <X className="h-5 w-5" />
         </Button>
       </div>
 
-      {/* Stepper */}
+      {/* Stepper — every step stays reachable at any time. */}
       <ol className="mb-8 flex items-center gap-2">
         {STEPS.map((s, i) => {
-          const completed = i < step || (i === step && false)
           const isDone = i < step
           const active = i === step
           const Icon = s.icon
@@ -123,12 +234,10 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
             <li key={s.title} className="flex flex-1 items-center gap-2">
               <button
                 type="button"
-                onClick={() => i < step && setStep(i)}
-                disabled={i > step}
+                onClick={() => goTo(i)}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-xl px-2 py-1.5 text-left transition-colors",
-                  i < step && "cursor-pointer hover:bg-muted",
-                  i > step && "cursor-not-allowed",
+                  "flex items-center gap-2.5 rounded-xl px-2 py-1.5 text-left transition-colors hover:bg-muted",
+                  !active && "cursor-pointer",
                 )}
               >
                 <span
@@ -161,7 +270,14 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
         })}
       </ol>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="space-y-6">
+        {showErrors && missingHere.length > 0 && (
+          <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>Still required: {missingHere.map((f) => FIELD_LABELS[f]).join(", ")}.</span>
+          </div>
+        )}
+
         {/* STEP 1 — Basics */}
         {step === 0 && (
           <div className="space-y-6">
@@ -172,7 +288,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   id="name"
                   value={formData.name}
                   onChange={(e) => set({ name: e.target.value })}
-                  className="mt-2"
+                  className={cn("mt-2", invalidClass("name"))}
                 />
               </div>
 
@@ -201,7 +317,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                 ) : (
                   <>
                     <Select value={formData.category} onValueChange={(v) => set({ category: v })}>
-                      <SelectTrigger id="category" className="mt-2 w-full">
+                      <SelectTrigger id="category" className={cn("mt-2 w-full", invalidClass("category"))}>
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -238,7 +354,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                 id="description"
                 value={formData.description}
                 onChange={(e) => set({ description: e.target.value })}
-                className="mt-2"
+                className={cn("mt-2", invalidClass("description"))}
               />
             </div>
 
@@ -249,7 +365,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                 value={formData.detailedDescription}
                 onChange={(e) => set({ detailedDescription: e.target.value })}
                 rows={4}
-                className="mt-2"
+                className={cn("mt-2", invalidClass("detailedDescription"))}
               />
             </div>
           </div>
@@ -265,7 +381,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   id="composition"
                   value={formData.composition}
                   onChange={(e) => set({ composition: e.target.value })}
-                  className="mt-2"
+                  className={cn("mt-2", invalidClass("composition"))}
                 />
               </div>
               <div>
@@ -274,7 +390,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   id="dosage"
                   value={formData.dosage}
                   onChange={(e) => set({ dosage: e.target.value })}
-                  className="mt-2"
+                  className={cn("mt-2", invalidClass("dosage"))}
                 />
               </div>
             </div>
@@ -287,7 +403,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   value={formData.price}
                   onChange={(e) => set({ price: e.target.value })}
                   placeholder="₹0.00"
-                  className="mt-2"
+                  className={cn("mt-2", invalidClass("price"))}
                 />
               </div>
               <div>
@@ -296,7 +412,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   id="batchNumber"
                   value={formData.batchNumber}
                   onChange={(e) => set({ batchNumber: e.target.value })}
-                  className="mt-2"
+                  className={cn("mt-2", invalidClass("batchNumber"))}
                 />
               </div>
             </div>
@@ -309,7 +425,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   type="date"
                   value={formData.manufactureDate}
                   onChange={(e) => set({ manufactureDate: e.target.value })}
-                  className="mt-2"
+                  className={cn("mt-2", invalidClass("manufactureDate"))}
                 />
               </div>
               <div>
@@ -319,7 +435,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   type="date"
                   value={formData.expiryDate}
                   onChange={(e) => set({ expiryDate: e.target.value })}
-                  className="mt-2"
+                  className={cn("mt-2", invalidClass("expiryDate"))}
                 />
               </div>
             </div>
@@ -367,7 +483,9 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   <Label htmlFor="image">Image URL</Label>
                   {formData.image.startsWith("data:") ? (
                     <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm">
-                      <span className="font-medium text-foreground">Cropped image ready</span>
+                      <span className="font-medium text-foreground">
+                        Cropped image ready ({Math.round(formData.image.length / 1024)}KB)
+                      </span>
                       <Button type="button" variant="ghost" size="sm" onClick={() => set({ image: "/placeholder.jpg" })}>
                         Clear
                       </Button>
@@ -409,9 +527,16 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
           </div>
         )}
 
+        {saveError && (
+          <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{saveError}</span>
+          </div>
+        )}
+
         {/* Footer controls */}
         <div className="flex items-center justify-between gap-4 border-t border-border pt-5">
-          <Button type="button" variant="ghost" onClick={step === 0 ? onClose : goBack} className="gap-2">
+          <Button type="button" variant="ghost" onClick={step === 0 ? closeAndClear : goBack} className="gap-2">
             {step === 0 ? (
               "Cancel"
             ) : (
@@ -426,18 +551,24 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
             Step {step + 1} of {STEPS.length}
           </span>
 
-          {step < STEPS.length - 1 ? (
-            <Button type="button" onClick={goNext} disabled={!isStepValid(step)} className="gap-2">
+          {step < LAST_STEP ? (
+            <Button type="button" onClick={goNext} className="gap-2">
               Next
               <ChevronRight className="h-4 w-4" />
             </Button>
           ) : (
-            <Button type="submit" disabled={isSubmitting || !allValid} className="gap-2">
+            <Button type="button" onClick={() => void save()} disabled={isSubmitting} className="gap-2">
               <Check className="h-4 w-4" />
               {isSubmitting ? "Saving..." : product ? "Update Product" : "Add Product"}
             </Button>
           )}
         </div>
+
+        {step === LAST_STEP && !allValid && (
+          <p className="text-right text-xs text-muted-foreground">
+            Some required fields are still empty — saving will take you back to them.
+          </p>
+        )}
       </form>
     </Card>
   )

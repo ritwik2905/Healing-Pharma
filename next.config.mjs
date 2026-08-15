@@ -13,6 +13,14 @@ const nextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
+  experimental: {
+    serverActions: {
+      // Cropped product/blog/testimonial photos are posted to the Server Action
+      // as base64 data URLs. The 1MB default silently rejects anything but a
+      // small crop, which looked like "saving the image does nothing".
+      bodySizeLimit: "8mb",
+    },
+  },
 }
 
 export default nextConfig
