@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProductImage } from "@/components/product-image"
 import { ImageCropper } from "@/components/image-cropper"
-import { X, ChevronLeft, ChevronRight, Check, FileText, FlaskConical, ImageIcon, Plus, AlertCircle } from "lucide-react"
+import { X, Check, FileText, FlaskConical, ImageIcon, Plus, AlertCircle } from "lucide-react"
 import { addProduct, updateProduct } from "@/lib/product-actions"
 import { cn } from "@/lib/utils"
 
@@ -37,18 +37,10 @@ interface ProductFormProps {
   onClose: () => void
 }
 
-const STEPS = [
-  { title: "Basics", description: "Name & description", icon: FileText },
-  { title: "Specifications", description: "Composition, price, dates", icon: FlaskConical },
-  { title: "Image & Review", description: "Photo & confirm", icon: ImageIcon },
-] as const
-
-const LAST_STEP = STEPS.length - 1
-
 // Mobile browsers routinely discard the page while the OS photo picker is open,
 // which used to wipe a half-finished edit (and the crop) with no warning. The
 // draft is mirrored into sessionStorage so the dashboard can reopen the form
-// exactly where the admin left it. See `readProductDraft` in admin-dashboard.
+// exactly where the admin left it. See the draft effect in admin-dashboard.
 export const PRODUCT_DRAFT_KEY = "hd:product-form-draft"
 
 export function clearProductDraft() {
@@ -59,27 +51,20 @@ export function clearProductDraft() {
   }
 }
 
-const FIELD_LABELS: Record<string, string> = {
-  name: "Product name",
-  category: "Category",
-  description: "Short description",
-  detailedDescription: "Detailed description",
-  composition: "Composition",
-  dosage: "Dosage",
-  price: "Price",
-  batchNumber: "Batch number",
-  manufactureDate: "Manufacture date",
-  expiryDate: "Expiry date",
-}
-
-const STEP_FIELDS: string[][] = [
-  ["name", "category", "description", "detailedDescription"],
-  ["composition", "dosage", "price", "batchNumber", "manufactureDate", "expiryDate"],
-  [],
+const REQUIRED: { field: keyof Omit<Product, "id" | "image" | "inStock">; label: string }[] = [
+  { field: "name", label: "Product name" },
+  { field: "category", label: "Category" },
+  { field: "description", label: "Short description" },
+  { field: "detailedDescription", label: "Detailed description" },
+  { field: "composition", label: "Composition" },
+  { field: "dosage", label: "Dosage" },
+  { field: "price", label: "Price" },
+  { field: "batchNumber", label: "Batch number" },
+  { field: "manufactureDate", label: "Manufacture date" },
+  { field: "expiryDate", label: "Expiry date" },
 ]
 
 export function ProductForm({ product, categories = [], onClose }: ProductFormProps) {
-  const [step, setStep] = useState(0)
   const [formData, setFormData] = useState({
     name: product?.name || "",
     category: product?.category || "",
@@ -100,6 +85,8 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
   // Free-type a brand-new category that isn't in the dropdown yet.
   const [customCategory, setCustomCategory] = useState(false)
 
+  const formRef = useRef<HTMLFormElement | null>(null)
+
   // Restore an interrupted edit (see PRODUCT_DRAFT_KEY above).
   const restored = useRef(false)
   useEffect(() => {
@@ -111,7 +98,6 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
       const draft = JSON.parse(raw)
       if (draft?.productId !== (product?.id ?? null)) return
       if (draft.formData) setFormData((prev) => ({ ...prev, ...draft.formData }))
-      if (typeof draft.step === "number") setStep(Math.min(Math.max(draft.step, 0), LAST_STEP))
     } catch {
       /* corrupt draft — start from the product as loaded */
     }
@@ -119,15 +105,12 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
 
   useEffect(() => {
     try {
-      sessionStorage.setItem(
-        PRODUCT_DRAFT_KEY,
-        JSON.stringify({ productId: product?.id ?? null, step, formData }),
-      )
+      sessionStorage.setItem(PRODUCT_DRAFT_KEY, JSON.stringify({ productId: product?.id ?? null, formData }))
     } catch {
       /* quota exceeded (very large crop) — saving still works, only the
          crash-recovery draft is skipped */
     }
-  }, [product?.id, step, formData])
+  }, [product?.id, formData])
 
   // Always include the product's current category so editing never loses it.
   const categoryOptions = Array.from(
@@ -136,21 +119,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
 
   const set = (patch: Partial<typeof formData>) => setFormData((prev) => ({ ...prev, ...patch }))
 
-  const missingIn = (s: number) =>
-    STEP_FIELDS[s].filter((f) => !String(formData[f as keyof typeof formData] ?? "").trim())
-
-  const isStepValid = (s: number) => missingIn(s).length === 0
-  const allValid = [0, 1, 2].every(isStepValid)
-  const missingHere = missingIn(step)
-
-  const goTo = (s: number) => {
-    setSaveError(null)
-    setStep(Math.min(Math.max(s, 0), LAST_STEP))
-  }
-  // Moving forward is never blocked — the admin must always be able to reach the
-  // Image step, even if an older product is missing a batch number or a date.
-  const goNext = () => goTo(step + 1)
-  const goBack = () => goTo(step - 1)
+  const missing = REQUIRED.filter((r) => !String(formData[r.field] ?? "").trim())
 
   const closeAndClear = () => {
     clearProductDraft()
@@ -158,10 +127,13 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
   }
 
   const save = async () => {
-    const firstInvalid = [0, 1, 2].find((s) => !isStepValid(s))
-    if (firstInvalid !== undefined) {
+    if (missing.length > 0) {
       setShowErrors(true)
-      setStep(firstInvalid)
+      // Put the first empty field on screen and in focus rather than just
+      // refusing to save.
+      const el = formRef.current?.querySelector<HTMLElement>(`[data-field="${missing[0].field}"]`)
+      el?.scrollIntoView({ behavior: "smooth", block: "center" })
+      el?.focus({ preventScroll: true })
       return
     }
 
@@ -190,105 +162,106 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Only the final step may save. Without this, pressing Enter on step 1 or 2
-    // of an existing product (where every field is already filled) submitted the
-    // form and closed the whole modal before the admin ever reached the image.
-    if (step < LAST_STEP) {
-      goNext()
-      return
-    }
     void save()
   }
 
-  // Enter inside a single-line field means "next", never "save and close".
-  // (Textareas keep their newline; the category dropdown is portaled out of the
-  // form, so Radix's own Enter handling is untouched.)
+  // Enter in a single-line field must not submit the form — an accidental
+  // Enter used to save and close the modal mid-edit. Textareas keep their
+  // newline; the category dropdown is portaled out of the form, so Radix's own
+  // Enter handling is untouched.
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key !== "Enter") return
     if ((e.target as HTMLElement).tagName !== "INPUT") return
     e.preventDefault()
-    if (step < LAST_STEP) goNext()
   }
 
-  const invalidClass = (field: string) =>
+  const invalid = (field: string) =>
     showErrors && !String(formData[field as keyof typeof formData] ?? "").trim()
-      ? "border-destructive focus-visible:ring-destructive"
-      : ""
+
+  const fieldClass = (field: string) =>
+    invalid(field) ? "border-destructive focus-visible:ring-destructive" : ""
 
   return (
-    <Card className="w-full max-w-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-foreground">{product ? "Edit Product" : "Add New Product"}</h2>
+    <Card className="w-full max-w-4xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">{product ? "Edit Product" : "Add New Product"}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Everything is on this one page — edit any field, change the photo, then save.
+          </p>
+        </div>
         <Button variant="ghost" size="sm" onClick={closeAndClear} aria-label="Close">
           <X className="h-5 w-5" />
         </Button>
       </div>
 
-      {/* Stepper — every step stays reachable at any time. */}
-      <ol className="mb-8 flex items-center gap-2">
-        {STEPS.map((s, i) => {
-          const isDone = i < step
-          const active = i === step
-          const Icon = s.icon
-          return (
-            <li key={s.title} className="flex flex-1 items-center gap-2">
-              <button
-                type="button"
-                onClick={() => goTo(i)}
-                className={cn(
-                  "flex items-center gap-2.5 rounded-xl px-2 py-1.5 text-left transition-colors hover:bg-muted",
-                  !active && "cursor-pointer",
+      <form ref={formRef} onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="space-y-8">
+        {/* ── Product image ─────────────────────────────────────────────── */}
+        <Section icon={ImageIcon} title="Product Image" description="Upload and crop a square photo, or paste a URL.">
+          <div className="grid gap-6 md:grid-cols-[1fr_240px]">
+            <div className="space-y-4">
+              <ImageCropper onCropped={(dataUrl) => set({ image: dataUrl })} />
+
+              <div className="flex items-center gap-3">
+                <span className="h-px flex-1 bg-border" />
+                <span className="text-xs uppercase tracking-wide text-muted-foreground">or</span>
+                <span className="h-px flex-1 bg-border" />
+              </div>
+
+              <div>
+                <Label htmlFor="image">Image URL</Label>
+                {formData.image.startsWith("data:") ? (
+                  <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm">
+                    <span className="font-medium text-foreground">
+                      Cropped image ready ({Math.round(formData.image.length / 1024)}KB)
+                    </span>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => set({ image: "/placeholder.jpg" })}>
+                      Clear
+                    </Button>
+                  </div>
+                ) : (
+                  <Input
+                    id="image"
+                    value={formData.image}
+                    onChange={(e) => set({ image: e.target.value })}
+                    placeholder="/placeholder.jpg or https://..."
+                    className="mt-2"
+                  />
                 )}
-              >
-                <span
-                  className={cn(
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors",
-                    active && "border-primary bg-primary text-white",
-                    isDone && "border-success bg-success text-white",
-                    !active && !isDone && "border-border bg-card text-muted-foreground",
-                  )}
-                >
-                  {isDone ? <Check className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
-                </span>
-                <span className="hidden sm:block">
-                  <span
-                    className={cn(
-                      "block text-sm font-semibold",
-                      active ? "text-foreground" : "text-muted-foreground",
-                    )}
-                  >
-                    {s.title}
-                  </span>
-                  <span className="block text-xs text-muted-foreground">{s.description}</span>
-                </span>
-              </button>
-              {i < STEPS.length - 1 && (
-                <span className={cn("h-0.5 flex-1 rounded-full", i < step ? "bg-success" : "bg-border")} />
-              )}
-            </li>
-          )
-        })}
-      </ol>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Leave the default to use an auto-matched catalogue image.
+                </p>
+              </div>
+            </div>
 
-      <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="space-y-6">
-        {showErrors && missingHere.length > 0 && (
-          <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <span>Still required: {missingHere.map((f) => FIELD_LABELS[f]).join(", ")}.</span>
+            <div>
+              <span className="mb-2 block text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Preview
+              </span>
+              <div className="relative aspect-square overflow-hidden rounded-2xl border border-border bg-surface">
+                <ProductImage
+                  src={formData.image}
+                  name={formData.name || "Product"}
+                  sizes="(max-width: 768px) 100vw, 240px"
+                  className="object-contain p-4"
+                />
+              </div>
+            </div>
           </div>
-        )}
+        </Section>
 
-        {/* STEP 1 — Basics */}
-        {step === 0 && (
+        {/* ── Basics ────────────────────────────────────────────────────── */}
+        <Section icon={FileText} title="Product Details" description="Name, category and the descriptions shown online.">
           <div className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <div>
                 <Label htmlFor="name">Product Name *</Label>
                 <Input
                   id="name"
+                  data-field="name"
                   value={formData.name}
                   onChange={(e) => set({ name: e.target.value })}
-                  className={cn("mt-2", invalidClass("name"))}
+                  className={cn("mt-2", fieldClass("name"))}
                 />
               </div>
 
@@ -298,6 +271,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                   <div className="mt-2 flex gap-2">
                     <Input
                       id="category"
+                      data-field="category"
                       value={formData.category}
                       onChange={(e) => set({ category: e.target.value })}
                       placeholder="New category name"
@@ -317,7 +291,7 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                 ) : (
                   <>
                     <Select value={formData.category} onValueChange={(v) => set({ category: v })}>
-                      <SelectTrigger id="category" className={cn("mt-2 w-full", invalidClass("category"))}>
+                      <SelectTrigger id="category" data-field="category" className={cn("mt-2 w-full", fieldClass("category"))}>
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -352,9 +326,10 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
               <Label htmlFor="description">Short Description *</Label>
               <Input
                 id="description"
+                data-field="description"
                 value={formData.description}
                 onChange={(e) => set({ description: e.target.value })}
-                className={cn("mt-2", invalidClass("description"))}
+                className={cn("mt-2", fieldClass("description"))}
               />
             </div>
 
@@ -362,35 +337,42 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
               <Label htmlFor="detailedDescription">Detailed Description *</Label>
               <Textarea
                 id="detailedDescription"
+                data-field="detailedDescription"
                 value={formData.detailedDescription}
                 onChange={(e) => set({ detailedDescription: e.target.value })}
                 rows={4}
-                className={cn("mt-2", invalidClass("detailedDescription"))}
+                className={cn("mt-2", fieldClass("detailedDescription"))}
               />
             </div>
           </div>
-        )}
+        </Section>
 
-        {/* STEP 2 — Specifications */}
-        {step === 1 && (
+        {/* ── Specifications ────────────────────────────────────────────── */}
+        <Section
+          icon={FlaskConical}
+          title="Specifications"
+          description="Composition, price and your internal batch records."
+        >
           <div className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <div>
                 <Label htmlFor="composition">Composition *</Label>
                 <Input
                   id="composition"
+                  data-field="composition"
                   value={formData.composition}
                   onChange={(e) => set({ composition: e.target.value })}
-                  className={cn("mt-2", invalidClass("composition"))}
+                  className={cn("mt-2", fieldClass("composition"))}
                 />
               </div>
               <div>
                 <Label htmlFor="dosage">Dosage *</Label>
                 <Input
                   id="dosage"
+                  data-field="dosage"
                   value={formData.dosage}
                   onChange={(e) => set({ dosage: e.target.value })}
-                  className={cn("mt-2", invalidClass("dosage"))}
+                  className={cn("mt-2", fieldClass("dosage"))}
                 />
               </div>
             </div>
@@ -400,19 +382,21 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                 <Label htmlFor="price">Price *</Label>
                 <Input
                   id="price"
+                  data-field="price"
                   value={formData.price}
                   onChange={(e) => set({ price: e.target.value })}
                   placeholder="₹0.00"
-                  className={cn("mt-2", invalidClass("price"))}
+                  className={cn("mt-2", fieldClass("price"))}
                 />
               </div>
               <div>
                 <Label htmlFor="batchNumber">Batch Number *</Label>
                 <Input
                   id="batchNumber"
+                  data-field="batchNumber"
                   value={formData.batchNumber}
                   onChange={(e) => set({ batchNumber: e.target.value })}
-                  className={cn("mt-2", invalidClass("batchNumber"))}
+                  className={cn("mt-2", fieldClass("batchNumber"))}
                 />
               </div>
             </div>
@@ -422,20 +406,22 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
                 <Label htmlFor="manufactureDate">Manufacture Date *</Label>
                 <Input
                   id="manufactureDate"
+                  data-field="manufactureDate"
                   type="date"
                   value={formData.manufactureDate}
                   onChange={(e) => set({ manufactureDate: e.target.value })}
-                  className={cn("mt-2", invalidClass("manufactureDate"))}
+                  className={cn("mt-2", fieldClass("manufactureDate"))}
                 />
               </div>
               <div>
                 <Label htmlFor="expiryDate">Expiry Date *</Label>
                 <Input
                   id="expiryDate"
+                  data-field="expiryDate"
                   type="date"
                   value={formData.expiryDate}
                   onChange={(e) => set({ expiryDate: e.target.value })}
-                  className={cn("mt-2", invalidClass("expiryDate"))}
+                  className={cn("mt-2", fieldClass("expiryDate"))}
                 />
               </div>
             </div>
@@ -458,72 +444,12 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
               </Label>
             </div>
           </div>
-        )}
+        </Section>
 
-        {/* STEP 3 — Image & Review */}
-        {step === 2 && (
-          <div className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-4">
-                <div>
-                  <Label>Product Image</Label>
-                  <p className="mb-3 mt-1 text-sm text-muted-foreground">
-                    Upload and crop a square photo, or paste an image URL below.
-                  </p>
-                  <ImageCropper onCropped={(dataUrl) => set({ image: dataUrl })} />
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <span className="h-px flex-1 bg-border" />
-                  <span className="text-xs uppercase tracking-wide text-muted-foreground">or</span>
-                  <span className="h-px flex-1 bg-border" />
-                </div>
-
-                <div>
-                  <Label htmlFor="image">Image URL</Label>
-                  {formData.image.startsWith("data:") ? (
-                    <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm">
-                      <span className="font-medium text-foreground">
-                        Cropped image ready ({Math.round(formData.image.length / 1024)}KB)
-                      </span>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => set({ image: "/placeholder.jpg" })}>
-                        Clear
-                      </Button>
-                    </div>
-                  ) : (
-                    <Input
-                      id="image"
-                      value={formData.image}
-                      onChange={(e) => set({ image: e.target.value })}
-                      placeholder="/placeholder.jpg or https://..."
-                      className="mt-2"
-                    />
-                  )}
-                  <p className="mt-1 text-sm text-muted-foreground">Leave the default to use an auto-matched image.</p>
-                </div>
-              </div>
-              <div className="relative aspect-square overflow-hidden rounded-2xl border border-border bg-surface">
-                <ProductImage
-                  src={formData.image}
-                  name={formData.name || "Product"}
-                  sizes="(max-width: 768px) 100vw, 320px"
-                  className="object-contain p-4"
-                />
-              </div>
-            </div>
-
-            {/* Review summary */}
-            <div className="rounded-2xl border border-border bg-muted/30 p-5">
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">Review</h3>
-              <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
-                <ReviewRow label="Name" value={formData.name} />
-                <ReviewRow label="Category" value={formData.category} />
-                <ReviewRow label="Price" value={formData.price} />
-                <ReviewRow label="In stock" value={formData.inStock ? "Yes" : "No"} />
-                <ReviewRow label="Composition" value={formData.composition} />
-                <ReviewRow label="Dosage" value={formData.dosage} />
-              </dl>
-            </div>
+        {showErrors && missing.length > 0 && (
+          <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>Still required: {missing.map((m) => m.label).join(", ")}.</span>
           </div>
         )}
 
@@ -534,51 +460,44 @@ export function ProductForm({ product, categories = [], onClose }: ProductFormPr
           </div>
         )}
 
-        {/* Footer controls */}
-        <div className="flex items-center justify-between gap-4 border-t border-border pt-5">
-          <Button type="button" variant="ghost" onClick={step === 0 ? closeAndClear : goBack} className="gap-2">
-            {step === 0 ? (
-              "Cancel"
-            ) : (
-              <>
-                <ChevronLeft className="h-4 w-4" />
-                Back
-              </>
-            )}
+        {/* Footer controls — sticky so Save is always reachable in a long form. */}
+        <div className="sticky bottom-0 -mx-6 -mb-6 flex items-center justify-end gap-3 border-t border-border bg-card/95 px-6 py-4 backdrop-blur sm:-mx-8 sm:-mb-8 sm:px-8">
+          <Button type="button" variant="ghost" onClick={closeAndClear}>
+            Cancel
           </Button>
-
-          <span className="text-sm text-muted-foreground">
-            Step {step + 1} of {STEPS.length}
-          </span>
-
-          {step < LAST_STEP ? (
-            <Button type="button" onClick={goNext} className="gap-2">
-              Next
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          ) : (
-            <Button type="button" onClick={() => void save()} disabled={isSubmitting} className="gap-2">
-              <Check className="h-4 w-4" />
-              {isSubmitting ? "Saving..." : product ? "Update Product" : "Add Product"}
-            </Button>
-          )}
+          <Button type="submit" disabled={isSubmitting} className="gap-2">
+            <Check className="h-4 w-4" />
+            {isSubmitting ? "Saving..." : product ? "Update Product" : "Add Product"}
+          </Button>
         </div>
-
-        {step === LAST_STEP && !allValid && (
-          <p className="text-right text-xs text-muted-foreground">
-            Some required fields are still empty — saving will take you back to them.
-          </p>
-        )}
       </form>
     </Card>
   )
 }
 
-function ReviewRow({ label, value }: { label: string; value: string }) {
+function Section({
+  icon: Icon,
+  title,
+  description,
+  children,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  description: string
+  children: React.ReactNode
+}) {
   return (
-    <div className="flex justify-between gap-3 border-b border-border/60 py-1.5 text-sm sm:border-b-0">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="max-w-[60%] truncate text-right font-medium text-foreground">{value || "—"}</dd>
-    </div>
+    <section className="rounded-2xl border border-border bg-muted/20 p-5 sm:p-6">
+      <div className="mb-5 flex items-center gap-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <Icon className="h-4 w-4" />
+        </span>
+        <div>
+          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+          <p className="text-xs text-muted-foreground">{description}</p>
+        </div>
+      </div>
+      {children}
+    </section>
   )
 }
